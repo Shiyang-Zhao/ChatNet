@@ -1,8 +1,6 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.utils import timezone
-
-User = get_user_model()
 
 
 class Chat(models.Model):
@@ -13,7 +11,7 @@ class Chat(models.Model):
         (GROUP, "Group"),
     ]
 
-    participants = models.ManyToManyField(User, related_name="chats")
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="chats")
     chat_type = models.CharField(max_length=10, choices=CHAT_TYPES, default=PRIVATE)
     created_at = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=255)

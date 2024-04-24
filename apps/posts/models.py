@@ -1,10 +1,9 @@
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
-from django.contrib.auth import get_user_model
 from django.urls import reverse
 import os
 
-User = get_user_model()
 
 
 class Post(models.Model):
@@ -12,7 +11,7 @@ class Post(models.Model):
     file = models.FileField(null=True, blank=True, upload_to="Files")
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     likes = models.IntegerField(default=0)
     comments_count = models.IntegerField(default=0)

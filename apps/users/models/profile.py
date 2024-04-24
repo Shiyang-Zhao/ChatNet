@@ -1,10 +1,10 @@
 from django.db import models
-from django.contrib.auth import get_user_model  # Get the custom user model
+from django.conf import settings
 
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        get_user_model(), on_delete=models.CASCADE, related_name="profile"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
     bio = models.TextField(blank=True)
     profile_image = models.ImageField(upload_to="profile_images/", blank=True)
