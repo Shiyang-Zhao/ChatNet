@@ -21,6 +21,23 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
 
 
+class ReplyCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "posts/post_detail.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.parent_comment = get_object_or_404(
+            Comment, pk=self.kwargs.get("comment_pk")
+        )
+        form.instance.post = form.instance.parent_comment.post
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
+
+
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     form_class = CommentForm

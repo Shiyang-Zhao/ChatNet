@@ -6,3 +6,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ["content", "attachments", "visibility"]
+
+
+class ReplyForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["content", "attachments", "visibility"]

@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from ..models.post import Post
 from ..forms.post import PostForm
-from ..forms.comment import CommentForm
+from ..forms.comment import CommentForm, ReplyForm
 
 
 class PostListView(ListView):
@@ -30,6 +30,7 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         post = self.get_object()
         context["comment_create_form"] = CommentForm()
+        context["reply_create_form"] = ReplyForm()
         context["comments"] = post.comments.all()
 
         return context

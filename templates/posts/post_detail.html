@@ -50,6 +50,13 @@
             <p><strong>{{ comment.author.username }}</strong> on {{ comment.date_posted|date:"F j, Y, g:i a" }}</p>
             <p>{{ comment.content }}</p> <!-- Display the comment content -->
 
+            <!-- Display a form to reply to this comment -->
+            <h4>Reply</h4>
+            <form method="post" action="{% url 'reply-create' post_pk=post.pk comment_pk=comment.pk %}">
+                {% csrf_token %} <!-- CSRF protection -->
+                {{ reply_create_form|crispy }}
+                <button type="submit" class="btn btn-primary">Submit Reply</button> <!-- Submit button -->
+            </form>
             <!-- Display replies if any -->
             {% if comment.children.count > 0 %}
             <ul>
