@@ -26,12 +26,12 @@ class PostDetailView(DetailView):
     model = Post
     template_name = "posts/post_detail.html"
 
-    def get_object(self):
-        return get_object_or_404(Post, pk=self.kwargs["pk"])
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = CommentForm
+        post = self.get_object()
+        context["comment_create_form"] = CommentForm()
+        context["comments"] = post.comments.all()
+
         return context
 
 

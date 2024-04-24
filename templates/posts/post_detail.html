@@ -26,7 +26,7 @@
     {% if request.user == post.author %}
     <div class="post-actions">
         <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a> <!-- Link to update post -->
-        <form method="post" action="{% url 'post-delete' pk=post.pk %}" style="display:inline;">
+        <form method="post" action="{% url 'post-delete' pk=post.pk %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Delete</button> <!-- Button to delete post -->
         </form>
@@ -35,9 +35,9 @@
 
     <!-- Comment Form with Crispy Forms -->
     <h3>Leave a Comment</h3>
-    <form method="post">
+    <form method="post" action="{% url 'comment-create' pk=post.pk %}">
         {% csrf_token %} <!-- CSRF protection -->
-        {{ form|crispy }} <!-- Crispy Forms rendering -->
+        {{ comment_create_form|crispy }} <!-- Crispy Forms rendering -->
         <button type="submit" class="btn btn-primary">Submit</button> <!-- Submit button -->
     </form>
 

@@ -1,21 +1,24 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, DeleteView
 from ..models.comment import Comment
+from ..models.post import Post
 from ..forms.comment import CommentForm
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
-    template_name = "comment/create_comment.html"
+    template_name = "posts/post_detail.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        form.instance.post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
         return super().form_valid(form)
 
     def get_success_url(self):
-        return self.object.content.get_absolute_url()
+        return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
 
 
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
