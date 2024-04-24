@@ -5,7 +5,6 @@ from django.urls import reverse
 import os
 
 
-
 class Post(models.Model):
     title = models.CharField(max_length=100)
     file = models.FileField(null=True, blank=True, upload_to="Files")

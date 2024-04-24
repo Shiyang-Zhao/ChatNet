@@ -15,7 +15,7 @@ from .forms import PostForm
 
 class PostListView(ListView):
     model = Post  # The model to fetch from the database
-    template_name = "post/post_list.html"  # Template to render the list
+    template_name = "posts/post_list.html"  # Template to render the list
     context_object_name = "posts"  # Context variable for the list of posts
     paginate_by = 10  # Number of items per page
     ordering = ["-date_posted"]
@@ -23,7 +23,7 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = "post/post_detail.html"
+    template_name = "posts/post_detail.html"
 
     def get_object(self):
         return get_object_or_404(Post, pk=self.kwargs["pk"])
@@ -32,8 +32,8 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostForm
-    template_name = "post/post_form.html"
-    success_url = reverse_lazy("post-list")
+    template_name = "posts/post_create_form.html"
+    success_url = reverse_lazy("home")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -43,9 +43,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
-    form_class = PostForm  # The form used to update a post
-    template_name = "post/post_form.html"  # Template for the form
-    success_url = reverse_lazy("post-list")  # Redirect after successful update
+    form_class = PostForm
+    template_name = "posts/post_update_form.html"
+    success_url = reverse_lazy("home")
 
     def get_object(self):
         return get_object_or_404(Post, pk=self.kwargs["pk"], author=self.request.user)
@@ -57,8 +57,8 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
-    template_name = "post/post_confirm_delete.html"
-    success_url = reverse_lazy("post-list")
+    template_name = "posts/post_confirm_delete.html"
+    success_url = reverse_lazy("home")
 
     def get_object(self):
         return get_object_or_404(Post, pk=self.kwargs["pk"], author=self.request.user)

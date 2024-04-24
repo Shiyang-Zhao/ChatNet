@@ -10,12 +10,33 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
+
+                <!-- Show links for logged-in users -->
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile-detail' username=user.username %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'post-create' %}">Create Post</a> 
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">Chat</a>
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="{% url 'user-logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link btn btn-link">Log Out</button>
+                    </form>
+                </li>
+                {% else %}
+                <!-- Show links for users who are not logged in -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user-register' %}">Sign Up</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user-login' %}">Log In</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </nav>

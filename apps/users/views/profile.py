@@ -9,7 +9,7 @@ from ..forms.profile import ProfileForm
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
-    template_name = "profile/profile_detail.html"  # Template to display profile details
+    template_name = "users/profile_detail.html"  # Template to display profile details
 
     def get_object(self):
         # Retrieve the current user's profile
@@ -19,7 +19,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
 class ProfileCreateView(LoginRequiredMixin, CreateView):
     model = Profile
     form_class = ProfileForm
-    template_name = "profile/profile_form.html"
+    template_name = "users/profile_create_form.html"
     success_url = reverse_lazy("profile_detail")
 
     def form_valid(self, form):
@@ -31,7 +31,7 @@ class ProfileCreateView(LoginRequiredMixin, CreateView):
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileForm
-    template_name = "profile/profile_form.html"
+    template_name = "users/profile_update_form.html"
     success_url = reverse_lazy("profile_detail")
 
     def get_object(self):

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ post.title }}</h2> <!-- Display the post title -->
+    <p>
+        By {{ post.author }} on {{ post.date_posted|date:"F j, Y, g:i a" }} <!-- Author and date -->
+    </p>
+
+    <p>{{ post.content }}</p> <!-- Full content -->
+
+    <!-- File attachment, if any -->
+    {% if post.file %}
+    <div>
+        <p>Download the attached file:</p>
+        <a href="{{ post.file.url }}">{{ post.file.name }}</a> <!-- File download link -->
+        <p>File type: {{ post.extension }}</p> <!-- File extension -->
+    </div>
+    {% endif %}
+
+    <p><strong>Likes:</strong> {{ post.likes }}</p>
+    <p><strong>Comments:</strong> {{ post.comments_count }}</p>
+    <p><strong>Views:</strong> {{ post.views }}</p>
+
+    <!-- Display update and delete options for the author -->
+    {% if request.user == post.author %}
+    <div class="post-actions">
+        <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
+        <!-- Link to update post -->
+        <form method="post" action="{% url 'post-delete' pk=post.pk %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button> <!-- Button to delete post -->
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

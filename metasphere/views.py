@@ -1,5 +1,11 @@
 from django.shortcuts import render
+from apps.posts.models import Post
+
 
 def home(request):
-    # Render the template for the start page
-    return render(request, 'layouts/home.html')  # Render 'home.html' as the start page
+    # Retrieve all posts from the database
+    posts = (
+        Post.objects.all()
+    )  # Or add filters like 'Post.objects.filter(published=True)'
+
+    return render(request, "layouts/home.html", {"posts": posts})

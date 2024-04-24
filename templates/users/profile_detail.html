@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile.user.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="profile-header">
+        <!-- Display the profile image -->
+        {% if profile.profile_image %}
+        <img src="{{ profile.profile_image.url }}" alt="Profile Image" class="profile-image">
+        {% else %}
+        <img src="/static/images/default_profile_image.png" alt="Default Profile Image" class="profile-image">
+        {% endif %}
+
+        <h2>{{ profile.user.username }}</h2> <!-- Display the username -->
+        <p>{{ profile.bio }}</p> <!-- Display the bio -->
+    </div>
+
+    <div class="profile-details">
+        <!-- Display additional profile information -->
+        <p><strong>Location:</strong> {{ profile.location }}</p>
+        <p><strong>Website:</strong>
+            {% if profile.website %}
+            <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a> <!-- Display website link -->
+            {% else %}
+            No website listed.
+            {% endif %}
+        </p>
+
+        <!-- Display basic user information -->
+        <p><strong>Email:</strong> {{ profile.user.email }}</p>
+        <p><strong>First Name:</strong> {{ profile.user.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ profile.user.last_name }}</p>
+    </div>
+</div>
+{% endblock %}
