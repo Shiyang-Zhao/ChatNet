@@ -1,0 +1,219 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    background-color: inherit;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Light Theme with Color Descriptions */
+.light {
+    --clr-bg: #f7fafc;
+    /* Primary background for the overall UI (e.g., body, containers) */
+    --clr-bg-alt: #ffffff;
+    /* Secondary background for panels, cards, and alternate areas */
+    --clr-fg: #2b2b2b;
+    /* Main text color for headings and body text */
+    --clr-fg-alt: #404040;
+    /* Secondary text color for less prominent text and subheadings */
+    --clr-primary: #5c7aff;
+    /* Primary color for interactive elements (e.g., buttons, links) */
+    --clr-primary-light: #8da2ff;
+    /* Lighter shade for hover effects on buttons and links */
+    --clr-secondary: #ffb24c;
+    /* Secondary color for emphasis or warning (e.g., alerts, highlights) */
+    --clr-shadow: rgba(60, 60, 60, 0.15) 0px 7px 29px 0px;
+    /* Soft shadow for cards and other elements requiring depth */
+    --clr-link: #5c7aff;
+    /* Default link color */
+    --clr-link-hover: #3c5acc;
+    /* Hover color for links to indicate interaction */
+    --clr-success: #42ba96;
+    /* Color for success messages and indicators (e.g., notifications) */
+    --clr-error: #e53935;
+    /* Color for error messages and alerts */
+    --clr-gradient: linear-gradient(to right, #f7fafc, #ffffff);
+    /* Gradient for decorative purposes (e.g., headers, footers) */
+}
+
+/* Dark Theme with Color Descriptions */
+.dark {
+    --clr-bg: #121212;
+    /* Primary background for dark mode */
+    --clr-bg-alt: #1a1a1a;
+    /* Secondary background for alternate areas in dark mode */
+    --clr-fg: #e6e6e6;
+    /* Main text color for readability in dark mode */
+    --clr-fg-alt: #c5c5c5;
+    /* Secondary text color for lower emphasis text */
+    --clr-primary: #478ae8;
+    /* Primary color for interactive elements in dark mode (e.g., buttons, links) */
+    --clr-primary-light: #7baaff;
+    /* Lighter shade for hover effects on buttons and links in dark mode */
+    --clr-secondary: #ffcc80;
+    /* Secondary color for emphasis in dark mode */
+    --clr-shadow: rgba(100, 100, 100, 0.4) 0px 15px 30px 0px, rgba(100, 100, 100, 0.25) 0px 5px 10px 0px;
+    /* Shadows for elements requiring depth in dark mode */
+    --clr-link: #478ae8;
+    /* Default link color for dark mode */
+    --clr-link-hover: #7baaff;
+    /* Hover color for links in dark mode */
+    --clr-success: #66bb6a;
+    /* Color for success messages and indicators in dark mode */
+    --clr-error: #ef5350;
+    /* Color for error messages and alerts in dark mode */
+    --clr-gradient: linear-gradient(to right, #121212, #1a1a1a);
+    /* Gradient for decorative purposes in dark mode */
+}
+
+/* Link Styles */
+a {
+    text-decoration: none;
+    /* Remove underlines by default */
+    color: var(--clr-link);
+    /* Use theme-based link color */
+    transition: color 0.2s ease;
+    /* Smooth transition for hover effects */
+}
+
+a:hover {
+    color: var(--clr-link-hover);
+    /* Use hover color on mouse over */
+}
+
+/* Button Styles */
+button {
+    padding: 10px 20px;
+    /* Provide adequate padding */
+    background-color: var(--clr-primary);
+    /* Use primary color for background */
+    color: white;
+    /* Contrast with background color */
+    border-radius: 5px;
+    /* Slight rounding of corners */
+    border: 1px solid var(--clr-primary);
+    /* Border to define button edges */
+    cursor: pointer;
+    /* Change cursor to pointer on hover */
+    transition: background-color 0.2s ease;
+    /* Smooth transition for hover effects */
+}
+
+button:hover {
+    background-color: var(--clr-primary-light);
+    /* Change background on hover */
+}
+
+/* Heading Styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--clr-fg);
+    /* Use primary text color for headings */
+    font-weight: bold;
+    /* Stronger emphasis on headings */
+    line-height: 1.2;
+    /* Consistent line height */
+}
+
+h1 {
+    font-size: 2em;
+    /* Size for largest heading */
+}
+
+h2 {
+    font-size: 1.75em;
+    /* Adjust heading sizes proportionally */
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+h4 {
+    font-size: 1.25em;
+}
+
+h5 {
+    font-size: 1em;
+}
+
+h6 {
+    font-size: 0.875em;
+}
+
+/* List Styles */
+ul,
+ol {
+    padding-left: 20px;
+    /* Ensure proper indent for list items */
+}
+
+li {
+    color: var(--clr-fg-alt);
+    /* Secondary text color for list items */
+    line-height: 1.5;
+    /* Consistent spacing */
+}
+
+/* Mobile-first approach, applying styles for larger screens */
+@media (min-width: 600px) {
+
+    /* Styles for tablets or larger phones in landscape mode */
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        /* Center content */
+    }
+
+    .header {
+        font-size: 1.5em;
+        /* Increase font size for headings */
+    }
+}
+
+@media (min-width: 768px) {
+
+    /* Styles for small laptops and larger tablets */
+    .container {
+        max-width: 768px;
+    }
+
+    .nav {
+        display: flex;
+        /* Display navigation as a row */
+        justify-content: space-between;
+        /* Space between nav items */
+    }
+}
+
+@media (min-width: 1024px) {
+
+    /* Styles for larger laptops and desktops */
+    .container {
+        max-width: 1024px;
+        /* Expand container for larger screens */
+    }
+
+    .sidebar {
+        display: block;
+        /* Display sidebar on larger screens */
+    }
+
+    .content {
+        margin-left: 200px;
+        /* Adjust content margin to account for sidebar */
+    }
+}

@@ -21,6 +21,10 @@ from .views import home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", home, name="home"),
-    # path("users/", include("apps.users.urls")),
+    path("", home, name="metasphere"),
+    path("home/", home, name="home"),
+    path("users/", include("apps.users.urls")),
+    path("posts/", include("apps.posts.urls")),
+    path("chats/", include("apps.chats.urls")),
+
 ]
