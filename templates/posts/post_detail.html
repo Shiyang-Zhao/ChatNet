@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <h2>{{ post.title }}</h2> <!-- Display the post title -->
     <p>
-        By {{ post.author }} on {{ post.date_posted|date:"F j, Y, g:i a" }} <!-- Author and date -->
+        By {{ post.author }} on {{ post.date_posted|date:"F j, Y, g:i a" }} <!-- Display the author and date -->
     </p>
 
-    <p>{{ post.content }}</p> <!-- Full content -->
+    <p>{{ post.content }}</p> <!-- Display the full content -->
 
-    <!-- File attachment, if any -->
     {% if post.file %}
     <div>
         <p>Download the attached file:</p>
         <a href="{{ post.file.url }}">{{ post.file.name }}</a> <!-- File download link -->
-        <p>File type: {{ post.extension }}</p> <!-- File extension -->
+        <p>File type: {{ post.extension }}</p> <!-- Display the file extension -->
     </div>
     {% endif %}
 
@@ -23,16 +23,50 @@
     <p><strong>Comments:</strong> {{ post.comments_count }}</p>
     <p><strong>Views:</strong> {{ post.views }}</p>
 
-    <!-- Display update and delete options for the author -->
     {% if request.user == post.author %}
     <div class="post-actions">
-        <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
-        <!-- Link to update post -->
+        <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a> <!-- Link to update post -->
         <form method="post" action="{% url 'post-delete' pk=post.pk %}" style="display:inline;">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Delete</button> <!-- Button to delete post -->
         </form>
     </div>
     {% endif %}
+
+    <!-- Comment Form with Crispy Forms -->
+    <h3>Leave a Comment</h3>
+    <form method="post">
+        {% csrf_token %} <!-- CSRF protection -->
+        {{ form|crispy }} <!-- Crispy Forms rendering -->
+        <button type="submit" class="btn btn-primary">Submit</button> <!-- Submit button -->
+    </form>
+
+    <!-- Display existing comments -->
+    <h3>Comments</h3>
+    {% if comments.count > 0 %}
+    <ul class="list-group">
+        {% for comment in comments %}
+        <li class="list-group-item">
+            <p><strong>{{ comment.author.username }}</strong> on {{ comment.date_posted|date:"F j, Y, g:i a" }}</p>
+            <p>{{ comment.content }}</p> <!-- Display the comment content -->
+
+            <!-- Display replies if any -->
+            {% if comment.children.count > 0 %}
+            <ul>
+                {% for reply in comment.children %}
+                <li>
+                    <p><strong>{{ reply.author.username }}</strong> on {{ reply.date_posted|date:"F j, Y, g:i a" }}</p>
+                    <p>{{ reply.content }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No comments yet.</p>
+    {% endif %}
+
 </div>
 {% endblock %}

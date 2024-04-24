@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, DeleteView
-from .models import Comment
-from .forms import CommentForm
+from ..models.comment import Comment
+from ..forms.comment import CommentForm
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):

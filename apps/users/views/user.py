@@ -7,8 +7,6 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from ..forms.user import UserRegisterForm
 from ..forms.user import UserUpdateForm
-from django.contrib.auth import logout
-from django.shortcuts import redirect
 
 User = get_user_model()
 

@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "apps.users.apps.UsersConfig",
     "apps.posts.apps.PostsConfig",
-    "apps.comments.apps.CommentsConfig",
     "apps.chats.apps.ChatsConfig",
     "django.contrib.admin",
     "django.contrib.auth",

@@ -9,8 +9,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-from .models import Post
-from .forms import PostForm
+from ..models.post import Post
+from ..forms.post import PostForm
+from ..forms.comment import CommentForm
 
 
 class PostListView(ListView):
@@ -27,6 +28,11 @@ class PostDetailView(DetailView):
 
     def get_object(self):
         return get_object_or_404(Post, pk=self.kwargs["pk"])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = CommentForm
+        return context
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
