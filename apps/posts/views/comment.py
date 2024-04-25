@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, DeleteView
 from ..models.comment import Comment
 from ..models.post import Post
-from ..forms.comment import CommentForm
+from ..forms.comment import CommentForm, ReplyForm
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
@@ -23,15 +23,14 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 class ReplyCreateView(LoginRequiredMixin, CreateView):
     model = Comment
-    form_class = CommentForm
+    form_class = ReplyForm
     template_name = "posts/post_detail.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        form.instance.parent_comment = get_object_or_404(
-            Comment, pk=self.kwargs.get("comment_pk")
-        )
-        form.instance.post = form.instance.parent_comment.post
+        parent_comment = get_object_or_404(Comment, pk=self.kwargs.get("parent_comment_pk"))
+        form.instance.parent_comment = parent_comment
+        form.instance.post = parent_comment.post
         return super().form_valid(form)
 
     def get_success_url(self):

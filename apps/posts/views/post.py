@@ -31,8 +31,7 @@ class PostDetailView(DetailView):
         post = self.get_object()
         context["comment_create_form"] = CommentForm()
         context["reply_create_form"] = ReplyForm()
-        context["comments"] = post.comments.all()
-
+        context["parent_comments"] = post.comments.filter(parent_comment__isnull=True)
         return context
 
 

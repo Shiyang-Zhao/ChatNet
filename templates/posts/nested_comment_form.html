@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+<!-- Display replies if any -->
+{% if replies %}
+<ul>
+    {% for reply in replies %}
+    <li>
+        <p><strong>{{ reply.author.username }}</strong> on {{ reply.date_posted|date:"F j, Y, g:i a" }}</p>
+        <p>{{ reply.content }}</p>
+
+        <h4>Reply</h4>
+        <form method="post" action="{% url 'reply-create' post_pk=post.pk parent_comment_pk=reply.pk %}">
+            {% csrf_token %}
+            {{ reply_create_form|crispy }}
+            <button type="submit" class="btn btn-primary">Submit Reply</button>
+        </form>
+
+        {% include 'posts/nested_comment_form.html' with replies=reply.children %}
+
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
+
     <h2>{{ post.title }}</h2> <!-- Display the post title -->
     <p>
         By {{ post.author }} on {{ post.date_posted|date:"F j, Y, g:i a" }} <!-- Display the author and date -->
@@ -43,37 +45,28 @@
 
     <!-- Display existing comments -->
     <h3>Comments</h3>
-    {% if comments.count > 0 %}
+    {% if parent_comments %}
     <ul class="list-group">
-        {% for comment in comments %}
+        {% for parent_comment in parent_comments %}
         <li class="list-group-item">
-            <p><strong>{{ comment.author.username }}</strong> on {{ comment.date_posted|date:"F j, Y, g:i a" }}</p>
-            <p>{{ comment.content }}</p> <!-- Display the comment content -->
+            <p><strong>{{ parent_comment.author.username }}</strong> on {{ parent_comment.date_posted|date:"F j, Y, g:i
+                a" }}</p>
+            <p>{{ parent_comment.content }}</p>
 
             <!-- Display a form to reply to this comment -->
             <h4>Reply</h4>
-            <form method="post" action="{% url 'reply-create' post_pk=post.pk comment_pk=comment.pk %}">
-                {% csrf_token %} <!-- CSRF protection -->
+            <form method="post" action="{% url 'reply-create' post_pk=post.pk parent_comment_pk=parent_comment.pk %}">
+                {% csrf_token %}
                 {{ reply_create_form|crispy }}
-                <button type="submit" class="btn btn-primary">Submit Reply</button> <!-- Submit button -->
+                <button type="submit" class="btn btn-primary">Submit Reply</button>
             </form>
-            <!-- Display replies if any -->
-            {% if comment.children.count > 0 %}
-            <ul>
-                {% for reply in comment.children %}
-                <li>
-                    <p><strong>{{ reply.author.username }}</strong> on {{ reply.date_posted|date:"F j, Y, g:i a" }}</p>
-                    <p>{{ reply.content }}</p>
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
+
+            {% include 'posts/nested_comment_form.html' with replies=parent_comment.children %}
         </li>
         {% endfor %}
     </ul>
     {% else %}
     <p>No comments yet.</p>
     {% endif %}
-
 </div>
 {% endblock %}

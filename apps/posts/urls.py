@@ -26,7 +26,7 @@ urlpatterns = [
         name="comment-create",
     ),
     path(
-        "post/<int:post_pk>/comment/<int:comment_pk>/reply/",
+        "post/<int:post_pk>/comment/<int:parent_comment_pk>/reply/",
         ReplyCreateView.as_view(),
         name="reply-create",
     ),
