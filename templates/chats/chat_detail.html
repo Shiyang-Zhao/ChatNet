@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}My Chats{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2>My Chats</h2>
+
+    {% if chats %}
+    <ul class="list-group">
+        {% for chat in chats %}
+        <li class="list-group-item">
+            <!-- Link to the chat detail page -->
+            <a href="{% url 'chat-detail' pk=chat.pk %}">
+                {{ chat.title }} ({{ chat.chat_type }})
+            </a>
+            <p>Created at: {{ chat.created_at|date:"F j, Y, g:i a" }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No chats found.</p>
+    {% endif %}
+</div>
+{% endblock %}

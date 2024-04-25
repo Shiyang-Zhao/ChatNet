@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}{{ viewed_user.username }}'s Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="profile-header d-flex align-items-center">
+        <!-- Profile Image (optional) -->
+        {% if viewed_user.profile.profile_image %}
+        <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
+            class="profile-image rounded-circle" width="150">
+        {% else %}
+        <img src="/static/images/default_profile_image.png" alt="Default Profile Image"
+            class="profile-image rounded-circle" width="150">
+        {% endif %}
+
+        <div class="ml-4">
+            <h2>{{ viewed_user.username }}</h2>
+            <p>{{ viewed_user.profile.bio }}</p>
+        </div>
+    </div>
+
+    <div class="profile-details mt-4">
+        <!-- Location (optional) -->
+        <p><strong>Location:</strong> {{ viewed_user.profile.location }}</p>
+
+        <!-- Website (optional) -->
+        <p><strong>Website:</strong>
+            {% if viewed_user.profile.website %}
+            <a href="{{ viewed_user.profile.website }}" target="_blank" rel="noopener noreferrer">
+                {{ viewed_user.profile.website }}
+            </a>
+            {% else %}
+            No website listed.
+            {% endif %}
+        </p>
+
+        <!-- Core User Information -->
+        <p><strong>Email:</strong> {{ viewed_user.email }}</p>
+        <p><strong>First Name:</strong> {{ viewed_user.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ viewed_user.last_name }}</p>
+
+        <!-- Birthday (optional) -->
+        {% if viewed_user.profile.birthday %}
+        <p><strong>Birthday:</strong> {{ viewed_user.profile.birthday | date:"F j, Y" }}</p>
+        {% endif %}
+
+        <div>
+            <a href="{% url 'user-profile-update' username=viewed_user.username %}" class="btn btn-primary">Update Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

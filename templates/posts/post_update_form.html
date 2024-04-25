@@ -7,13 +7,9 @@
     <h2>Update Post</h2> <!-- Title for the form -->
 
     <!-- Form for updating a post -->
-    <form method="post" enctype="multipart/form-data"> <!-- For file uploads -->
-        {% csrf_token %} <!-- CSRF protection -->
-
-        <!-- Render the form -->
-        {{ form|crispy }} <!-- If using Crispy Forms, or use {{ form.as_p }} otherwise -->
-
-        <!-- Submit button to update the post -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>

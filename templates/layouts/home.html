@@ -8,7 +8,12 @@
     {% for post in posts %}
     <div class="post">
         <h3>{{ post.title }}</h3> <!-- Display the post title -->
-        <p>By {{ post.author }}</p> <!-- Display the author of the post -->
+        <p>By
+            <a href="{% url 'user-profile-detail' username=post.author.username %}">
+                {{ post.author }}
+            </a>
+            <!-- Link to the author's profile -->
+        </p>
         <p>{{ post.content|truncatewords:50 }}</p> <!-- Display the content (truncated) -->
         <a href="{% url 'post-detail' post.pk %}">Read More</a> <!-- Link to detailed view of the post -->
     </div>

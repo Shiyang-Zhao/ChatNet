@@ -1,7 +1,17 @@
 from django.shortcuts import render, redirect
-from django.views.generic import CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView
 from ..models.chat import Chat
 from ..forms.chat import ChatCreationForm
+
+
+class ChatListView(ListView):
+    model = Chat
+    template_name = "chats/chat_detail.html"
+    context_object_name = "chats"
+    ordering = ["-created_at"]
+
+    def get_queryset(self):
+        return Chat.objects.filter(participants=self.request.user)
 
 
 class ChatDetailView(DetailView):

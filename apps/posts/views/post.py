@@ -15,11 +15,11 @@ from ..forms.comment import CommentForm, ReplyForm
 
 
 class PostListView(ListView):
-    model = Post  # The model to fetch from the database
-    template_name = "posts/post_list.html"  # Template to render the list
-    context_object_name = "posts"  # Context variable for the list of posts
-    paginate_by = 10  # Number of items per page
+    model = Post
+    template_name = "posts/post_list.html"
+    context_object_name = "posts"
     ordering = ["-date_posted"]
+    paginate_by = 10
 
 
 class PostDetailView(DetailView):

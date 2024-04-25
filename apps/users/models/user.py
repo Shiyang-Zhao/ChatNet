@@ -42,9 +42,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)  # Unique username
     first_name = models.CharField(max_length=30, blank=True)  # Optional first name
     last_name = models.CharField(max_length=30, blank=True)  # Optional last name
-    date_joined = models.DateTimeField(default=timezone.now)  # When the user joined
     is_active = models.BooleanField(default=True)  # Is the user active?
     is_staff = models.BooleanField(default=False)  # Is the user staff?
+    is_superuser = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)  # When the user joined
+    last_login = models.DateTimeField(null=True, blank=True)
 
     objects = UserManager()  # Set the custom user manager
 

@@ -1,2 +1,2 @@
-from .user import UserRegisterView, UserUpdateView
-from .profile import ProfileCreateView, ProfileUpdateView, ProfileDetailView
+from .user import UserRegisterView
+from .profile import ProfileCreateView
