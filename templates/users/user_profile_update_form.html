@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-5">
     <h2>Update {{ user.username }}'s Profile</h2>
-    <form method="post" enctype="multipart/form-data" action="{% url 'user-profile-update' username=user.username %}">
+    <form method="post" enctype="multipart/form-data" action="{% url 'user-profile-update' %}">
         {% csrf_token %}
         <div>
             {{ user_update_form|crispy }}

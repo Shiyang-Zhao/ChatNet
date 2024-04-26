@@ -19,5 +19,10 @@
     {% else %}
     <p>No chats found.</p>
     {% endif %}
+
+    {% for following in user.profile.following.all %}
+    {{ following.user.username }}
+    {% endfor %}
+
 </div>
 {% endblock %}

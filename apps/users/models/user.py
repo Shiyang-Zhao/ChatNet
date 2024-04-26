@@ -48,10 +48,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)  # When the user joined
     last_login = models.DateTimeField(null=True, blank=True)
 
-    objects = UserManager()  # Set the custom user manager
+    objects = UserManager()
 
     USERNAME_FIELD = "email"  # Use email for authentication
     REQUIRED_FIELDS = ["username"]  # Additional required fields for superusers
 
     def __str__(self):
-        return self.username  # String representation of the user
+        return self.username

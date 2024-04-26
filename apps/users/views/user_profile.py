@@ -11,9 +11,8 @@ User = get_user_model()
 @login_required
 def user_and_profile_detail(request, username):
     user = get_object_or_404(User, username=username)
-    context = {
-        "viewed_user": user,
-    }
+    is_following = request.user.profile.is_following(user.profile)
+    context = {"viewed_user": user, "is_following": is_following}
     return render(request, "users/user_profile_detail.html", context)
 
 

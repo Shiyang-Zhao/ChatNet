@@ -44,9 +44,27 @@
         <p><strong>Birthday:</strong> {{ viewed_user.profile.birthday | date:"F j, Y" }}</p>
         {% endif %}
 
+        {% if viewed_user is user %}
         <div>
-            <a href="{% url 'user-profile-update' username=viewed_user.username %}" class="btn btn-primary">Update Profile</a>
+            <a href="{% url 'user-profile-update' %}" class="btn btn-primary">Update Profile</a>
         </div>
+        {% endif %}
+
+        {% if viewed_user != user %}
+        <div>
+            {% if is_following %}
+            <form id="unfollowForm" method="post" action="{% url 'unfollow-profile' username=viewed_user.username %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary following">Following</button>
+            </form>
+            {% else %}
+            <form id="followForm" method="post" action="{% url 'follow-profile' username=viewed_user.username %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary following">Follow</button>
+            </form>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
