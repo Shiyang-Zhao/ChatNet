@@ -10,7 +10,9 @@ class Post(models.Model):
     file = models.FileField(null=True, blank=True, upload_to="Files")
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts"
+    )
 
     likes = models.IntegerField(default=0)
     comments_count = models.IntegerField(default=0)

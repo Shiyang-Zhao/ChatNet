@@ -11,7 +11,9 @@ User = get_user_model()
 class UserRegisterView(FormView):
     template_name = "users/signup.html"
     form_class = UserRegisterForm
-    success_url = reverse_lazy("user-login")
+
+    def get_success_url(self):
+        return reverse_lazy("user-login")
 
     def form_valid(self, form):
         form.save()
@@ -22,11 +24,10 @@ class UserRegisterView(FormView):
 
 class UserLoginView(LoginView):
     template_name = "users/login.html"
-    success_url = reverse_lazy("home")
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return self.success_url
+        return reverse_lazy("home")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

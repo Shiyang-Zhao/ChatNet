@@ -37,32 +37,30 @@ class ReplyCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
 
 
-class CommentUpdateView(LoginRequiredMixin, UpdateView):
-    model = Comment
-    form_class = CommentForm
-    template_name = "comment/edit_comment.html"
+# class CommentUpdateView(LoginRequiredMixin, UpdateView):
+#     model = Comment
+#     form_class = CommentForm
+#     template_name = "comment/edit_comment_form.html"
 
-    def get_object(self, queryset=None):
-        comment = super().get_object(queryset)
-        if comment.author != self.request.user:
-            # Handle unauthorized access here
-            pass
-        return comment
+#     def get_object(self, queryset=None):
+#         comment = super().get_object(queryset)
+#         if comment.author != self.request.user:
+#             pass
+#         return comment
 
-    def get_success_url(self):
-        return self.object.content.get_absolute_url()
+#     def get_success_url(self):
+#         return self.object.content.get_absolute_url()
 
 
-class CommentDeleteView(LoginRequiredMixin, DeleteView):
-    model = Comment
-    template_name = "comment/delete_comment.html"
+# class CommentDeleteView(LoginRequiredMixin, DeleteView):
+#     model = Comment
+#     template_name = "comment/delete_comment.html"
 
-    def get_object(self, queryset=None):
-        comment = super().get_object(queryset)
-        if comment.author != self.request.user:
-            # Handle unauthorized access here
-            pass
-        return comment
+#     def get_object(self, queryset=None):
+#         comment = super().get_object(queryset)
+#         if comment.author != self.request.user:
+#             pass
+#         return comment
 
-    def get_success_url(self):
-        return self.object.content.get_absolute_url()
+#     def get_success_url(self):
+#         return self.object.content.get_absolute_url()

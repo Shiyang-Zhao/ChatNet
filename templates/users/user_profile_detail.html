@@ -4,7 +4,6 @@
 {% block content %}
 <div class="container mt-5">
     <div class="profile-header d-flex align-items-center">
-        <!-- Profile Image (optional) -->
         {% if viewed_user.profile.profile_image %}
         <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
             class="profile-image rounded-circle" width="150">
@@ -20,10 +19,8 @@
     </div>
 
     <div class="profile-details mt-4">
-        <!-- Location (optional) -->
         <p><strong>Location:</strong> {{ viewed_user.profile.location }}</p>
 
-        <!-- Website (optional) -->
         <p><strong>Website:</strong>
             {% if viewed_user.profile.website %}
             <a href="{{ viewed_user.profile.website }}" target="_blank" rel="noopener noreferrer">
@@ -34,17 +31,15 @@
             {% endif %}
         </p>
 
-        <!-- Core User Information -->
         <p><strong>Email:</strong> {{ viewed_user.email }}</p>
         <p><strong>First Name:</strong> {{ viewed_user.first_name }}</p>
         <p><strong>Last Name:</strong> {{ viewed_user.last_name }}</p>
 
-        <!-- Birthday (optional) -->
         {% if viewed_user.profile.birthday %}
         <p><strong>Birthday:</strong> {{ viewed_user.profile.birthday | date:"F j, Y" }}</p>
         {% endif %}
 
-        {% if viewed_user is user %}
+        {% if viewed_user == user %}
         <div>
             <a href="{% url 'user-profile-update' %}" class="btn btn-primary">Update Profile</a>
         </div>
@@ -60,11 +55,24 @@
             {% else %}
             <form id="followForm" method="post" action="{% url 'follow-profile' username=viewed_user.username %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-secondary following">Follow</button>
+                <button type="submit" class="btn btn-primary following">Follow</button>
             </form>
             {% endif %}
+            <button type="submit" class="btn btn-primary">Message</button>
         </div>
         {% endif %}
+
+        <div>
+            <h3>Posts by {{ viewed_user.username }}</h3>
+            <ul>
+                {% for post in viewed_user.posts.all %}
+                <li>
+                    <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
     </div>
 </div>
 {% endblock %}

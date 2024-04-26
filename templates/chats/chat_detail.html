@@ -21,7 +21,9 @@
     {% endif %}
 
     {% for following in user.profile.following.all %}
-    {{ following.user.username }}
+    <a href="{% url 'user-profile-detail' username=following.user.username %}">
+        {{ following.user.username }}
+    </a>
     {% endfor %}
 
 </div>

@@ -10,8 +10,8 @@ from .views.post import (
 from .views.comment import (
     CommentCreateView,
     ReplyCreateView,
-    CommentUpdateView,
-    CommentDeleteView,
+    # CommentUpdateView,
+    # CommentDeleteView,
 )
 
 urlpatterns = [
