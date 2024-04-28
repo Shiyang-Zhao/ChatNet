@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.urls import reverse
 
 
 class Chat(models.Model):
@@ -12,7 +13,7 @@ class Chat(models.Model):
     ]
 
     participants = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="chats"
+        settings.AUTH_USER_MODEL, related_name="joined_chats"
     )
     chat_type = models.CharField(max_length=10, choices=CHAT_TYPES, default=PRIVATE)
     created_at = models.DateTimeField(default=timezone.now)
@@ -30,3 +31,6 @@ class Chat(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.chat_type})"
+
+    def get_absolute_url(self):
+        return reverse("chat-list")

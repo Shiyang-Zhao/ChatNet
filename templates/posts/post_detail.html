@@ -8,7 +8,7 @@
 
     <h2>{{ post.title }}</h2> <!-- Display the post title -->
     <p>
-        By {{ post.author }} on {{ post.date_posted|date:"F j, Y, g:i a" }} <!-- Display the author and date -->
+        By {{ post.author }} on {{ post.date_posted|date:"F j, Y, g:i a" }}
     </p>
 
     <p>{{ post.content }}</p> <!-- Display the full content -->
@@ -52,8 +52,12 @@
     <ul class="list-group">
         {% for parent_comment in parent_comments %}
         <li class="list-group-item">
-            <p><strong>{{ parent_comment.author.username }}</strong> on {{ parent_comment.date_posted|date:"F j, Y, g:i
-                a" }}</p>
+            <p>
+                <strong>
+                    {{ parent_comment.author.username }}
+                </strong>
+                on {{ parent_comment.date_posted|date:"F j, Y, g:i a" }}
+            </p>
             <p>{{ parent_comment.content }}</p>
 
             <!-- Display a form to reply to this comment -->

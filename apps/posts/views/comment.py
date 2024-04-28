@@ -4,12 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView, DeleteView
 from ..models.comment import Comment
 from ..models.post import Post
-from ..forms.comment import CommentForm, ReplyForm
+from ..forms.comment import CommentCreateForm, ReplyCreateForm
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
-    form_class = CommentForm
+    form_class = CommentCreateForm
     template_name = "posts/post_detail.html"
 
     def form_valid(self, form):
@@ -23,7 +23,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 class ReplyCreateView(LoginRequiredMixin, CreateView):
     model = Comment
-    form_class = ReplyForm
+    form_class = ReplyCreateForm
     template_name = "posts/post_detail.html"
 
     def form_valid(self, form):

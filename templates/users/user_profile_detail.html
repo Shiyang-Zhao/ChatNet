@@ -58,7 +58,11 @@
                 <button type="submit" class="btn btn-primary following">Follow</button>
             </form>
             {% endif %}
-            <button type="submit" class="btn btn-primary">Message</button>
+            <form id="messageForm" method="post"
+                action="{% url 'private-chat-create' receiver_username=viewed_user.username %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary following">Message</button>
+            </form>
         </div>
         {% endif %}
 

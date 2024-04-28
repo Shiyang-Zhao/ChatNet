@@ -1,4 +1,4 @@
-from django.views.generic import FormView, UpdateView
+from django.views.generic import FormView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.contrib import messages

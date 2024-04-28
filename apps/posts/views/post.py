@@ -10,8 +10,8 @@ from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from ..models.post import Post
-from ..forms.post import PostForm
-from ..forms.comment import CommentForm, ReplyForm
+from ..forms.post import PostCreateForm, PostUpdateForm
+from ..forms.comment import CommentCreateForm, ReplyCreateForm
 
 
 class PostListView(ListView):
@@ -29,19 +29,16 @@ class PostDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = self.get_object()
-        context["comment_create_form"] = CommentForm()
-        context["reply_create_form"] = ReplyForm()
+        context["comment_create_form"] = CommentCreateForm()
+        context["reply_create_form"] = ReplyCreateForm()
         context["parent_comments"] = post.comments.filter(parent_comment__isnull=True)
         return context
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    form_class = PostForm
+    form_class = PostCreateForm
     template_name = "posts/post_create_form.html"
-
-    def get_success_url(self):
-        return reverse("post_detail", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -51,14 +48,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
-    form_class = PostForm
+    form_class = PostUpdateForm
     template_name = "posts/post_update_form.html"
 
     def get_object(self):
         return get_object_or_404(Post, pk=self.kwargs["pk"], author=self.request.user)
-
-    def get_success_url(self):
-        return reverse("post-detail", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
         messages.success(self.request, "Post updated successfully.")
