@@ -5,19 +5,29 @@ from ..models.chat import Chat
 from ..forms.chat import GroupChatCreateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
+from django.contrib import messages
 
 User = get_user_model()
 
 
 class ChatListView(LoginRequiredMixin, ListView):
     model = Chat
-    template_name = "chats/chat_list.html"
-    ordering = ["-created_at"]
+    template_name = "chats/chat_detail.html"
+    # context_object_name = "chats"
+    # ordering = ["-last_activity"]
+
+    # def get_queryset(self):
+    #     return Chat.objects.filter(participants=self.request.user)
 
 
 class ChatDetailView(LoginRequiredMixin, DetailView):
     model = Chat
-    template_name = "chats/chat_list.html"
+    template_name = "chats/chat_detail.html"
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["chats"] = Chat.objects.filter(participants=self.request.user)
+    #     return context
 
 
 class PrivateChatCreateView(LoginRequiredMixin, CreateView):
@@ -27,8 +37,14 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         receiver_username = self.kwargs.get("receiver_username")
         receiver = get_object_or_404(User, username=receiver_username)
+        # Check for an existing private chat between the request user and the receiver
+        existing_chat = Chat.get_existing_chat(self.request.user, receiver)
+
+        if existing_chat:
+            messages.info(self.request, "Private chat already exists.")
+            return redirect(existing_chat.get_absolute_url())
+
         self.object = form.save(commit=False)
-        self.object.chat_type = Chat.PRIVATE
         self.object.creator = self.request.user
         self.object.title = receiver.username
         self.object.save()

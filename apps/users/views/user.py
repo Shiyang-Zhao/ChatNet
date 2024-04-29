@@ -27,7 +27,7 @@ class UserLoginView(LoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return reverse_lazy("home")
+        return reverse_lazy("metasphere")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,7 +35,7 @@ class UserLoginView(LoginView):
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy("home")
+    next_page = reverse_lazy("metasphere")
 
 
 # class PasswordResetView(PasswordResetView):

@@ -1,0 +1,21 @@
+{% load static %}
+<div class="chat-detail">
+    <h1>{{ chat.title }}</h1>
+    <div class="chat-messages">
+        {% if chat.messages.all %}
+        {% for message in chat.messages.all %}
+        <div class="message">
+            <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+            <span class="timestamp">{{ message.created_at|date:"F j, Y, g:i a" }}</span>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No messages yet. Start the conversation!</p>
+        {% endif %}
+    </div>
+    <div class="message-form">
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button class="btn btn-primary" type="submit">Send</button>
+    </div>
+</div>
+<span id="chat-pk" style="display:none;">{{ chat.pk }}</span>
