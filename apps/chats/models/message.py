@@ -12,7 +12,7 @@ class Message(models.Model):
         related_name="sent_messages",
     )
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name="messages")
-    content = models.TextField(blank=False, null=False)
+    content = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)
     is_read = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)

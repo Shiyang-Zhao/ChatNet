@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
+from django.views import View
 from django.views.generic import ListView, CreateView, DetailView
 from ..models.chat import Chat
 from ..forms.chat import GroupChatCreateForm, PrivateChatCreateForm
+from ..forms.message import MessageCreateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.contrib import messages
@@ -10,24 +12,37 @@ from django.contrib import messages
 User = get_user_model()
 
 
-class ChatListView(LoginRequiredMixin, ListView):
-    model = Chat
+# class ChatListView(LoginRequiredMixin, ListView):
+#     model = Chat
+#     template_name = "chats/chat_detail.html"
+#     # context_object_name = "chats"
+#     # ordering = ["-last_activity"]
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["message_form"] = MessageCreateForm()
+#         return context
+
+
+# class ChatDetailView(LoginRequiredMixin, DetailView):
+#     model = Chat
+#     template_name = "chats/chat_detail.html"
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["message_form"] = MessageCreateForm()
+#         return context
+
+
+class ChatListAndDetailView(View):
     template_name = "chats/chat_detail.html"
-    # context_object_name = "chats"
-    # ordering = ["-last_activity"]
 
-    # def get_queryset(self):
-    #     return Chat.objects.filter(participants=self.request.user)
-
-
-class ChatDetailView(LoginRequiredMixin, DetailView):
-    model = Chat
-    template_name = "chats/chat_detail.html"
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["chats"] = Chat.objects.filter(participants=self.request.user)
-    #     return context
+    def get(self, request, pk=None):
+        context = {
+            "chats": Chat.objects.filter(participants=request.user),
+            "message_form": MessageCreateForm(),
+        }
+        return render(request, self.template_name, context)
 
 
 class PrivateChatCreateView(LoginRequiredMixin, CreateView):

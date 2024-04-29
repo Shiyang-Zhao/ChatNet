@@ -14,12 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        const newMessage = document.createElement('div');
-        newMessage.className = 'message';
-        newMessage.innerHTML = `<p><strong>${data.sender}:</strong> ${data.message}</p>
-                                <span class="timestamp">${data.timestamp}</span>`;
-        messagesContainer.appendChild(newMessage);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        appendMessage(data.sender, data.message, data.timestamp);
     };
 
     chatSocket.onclose = function (e) {
@@ -32,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         chatSocket.send(JSON.stringify({
             'message': message
         }));
+        appendMessage('You', message, new Date().toLocaleTimeString());  // Adjust the timestamp format as needed
         messageInput.value = '';
     };
 
@@ -41,4 +37,14 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.btn').click(); // Simulate button click
         }
     };
+
+    // Helper function to append messages to the DOM
+    function appendMessage(sender, message, timestamp) {
+        const newMessage = document.createElement('div');
+        newMessage.className = 'message';
+        newMessage.innerHTML = `<p><strong>${sender}:</strong> ${message}</p>
+                                <span class="timestamp">${timestamp}</span>`;
+        messagesContainer.appendChild(newMessage);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;  // Scroll to the latest message
+    }
 });

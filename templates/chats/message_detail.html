@@ -14,10 +14,12 @@
         <p>No messages yet. Start the conversation!</p>
         {% endif %}
     </div>
-    <form id="messageForm" method="post" action="{% url 'message-create' pk=chat.pk %}">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-primary">Send</button>
-    </form>
+    <div>
+        <form id="messageForm" method="post" action="{% url 'message-create' pk=chat.pk %}">
+            {% csrf_token %}
+            {{ message_form|crispy }}
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
 </div>
 <span id="chat-pk" style="display:none;">{{ chat.pk }}</span>
