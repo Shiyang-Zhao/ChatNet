@@ -29,3 +29,6 @@ urlpatterns = [
     path("posts/", include("apps.posts.urls")),
     path("chats/", include("apps.chats.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

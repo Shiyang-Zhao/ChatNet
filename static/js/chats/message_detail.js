@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Chat socket closed unexpectedly');
     };
 
-    document.querySelector('.message-form').onsubmit = function (e) {
+    document.querySelector('#messageForm').onsubmit = function (e) {
         e.preventDefault();
         const message = messageInput.value;
         chatSocket.send(JSON.stringify({

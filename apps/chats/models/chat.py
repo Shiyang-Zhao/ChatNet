@@ -23,11 +23,10 @@ class Chat(models.Model):
         blank=True,
         related_name="created_chats",
     )
-
     chat_type = models.CharField(max_length=10, choices=CHAT_TYPES, default=PRIVATE)
     created_at = models.DateTimeField(default=timezone.now)
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=255, default="default title")
+    description = models.TextField(blank=True, default="description")
     image = models.ImageField(upload_to="chat_images/", null=True, blank=True)
     last_activity = models.DateTimeField(null=True, blank=True)
 
@@ -37,15 +36,8 @@ class Chat(models.Model):
     def get_absolute_url(self):
         return reverse("chat-detail", kwargs={"pk": self.pk})
 
-    # def clean(self):
-    #     super().clean()
-    #     if self.chat_type == self.PRIVATE and self.participants.count() != 2:
-    #         raise ValidationError("A private chat must have exactly two participants.")
-    #     elif self.chat_type == self.GROUP and self.participants.count() < 3:
-    #         raise ValidationError("A group chat must have at least three participants.")
-
     @classmethod
-    def get_existing_chat(cls, user1, user2):
+    def get_existing_private_chat(cls, user1, user2):
         return (
             cls.objects.filter(
                 chat_type=cls.PRIVATE,

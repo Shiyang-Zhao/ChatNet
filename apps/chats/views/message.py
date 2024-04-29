@@ -8,7 +8,7 @@ from ..forms.message import MessageCreateForm
 class MessageCreateView(CreateView):
     model = Message
     form_class = MessageCreateForm
-    template_name = "chat/create_message.html"
+    template_name = "chats/message_detail.html"
 
     def form_valid(self, form):
         form.instance.sender = self.request.user

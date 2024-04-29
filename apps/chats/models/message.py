@@ -12,7 +12,7 @@ class Message(models.Model):
         related_name="sent_messages",
     )
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name="messages")
-    content = models.TextField()
+    content = models.TextField(blank=False, null=False)
     timestamp = models.DateTimeField(default=timezone.now)
     is_read = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
@@ -21,7 +21,7 @@ class Message(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse("message-detail", kwargs={"pk": self.pk})
+        return reverse("chat-detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return (

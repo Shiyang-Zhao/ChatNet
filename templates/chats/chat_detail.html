@@ -8,7 +8,7 @@
     <ul class="list-group">
         {% for chat in user.joined_chats.all %}
         <li class="list-group-item" data-chat-pk="{{ chat.pk }}" href="{% url 'chat-detail' pk=chat.pk %}">
-            {{ chat.title }} ({{ chat.chat_type }})
+            {{ chat.participants.first.username }} {{ chat.participants.last.username }} ({{ chat.chat_type }})
             <p>Created at: {{ chat.created_at|date:"F j, Y, g:i a" }}</p>
         </li>
 
