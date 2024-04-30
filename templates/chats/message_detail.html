@@ -1,13 +1,12 @@
 {% load static %}
-{% load crispy_forms_tags %}
 
 <div class="chat-detail">
-    <div class="chat-messages">
+    <div class="chat-messages" id="message-container">
         {% if chat.messages.all %}
         {% for message in chat.messages.all %}
         <div class="message">
             <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
-            <span class="timestamp">{{ message.created_at|date:"F j, Y, g:i a" }}</span>
+            <span class="timestamp">{{ message.timestamp|date:"F j, Y, g:i a" }}</span>
         </div>
         {% endfor %}
         {% else %}
@@ -15,10 +14,14 @@
         {% endif %}
     </div>
     <div>
-        <form id="messageForm" method="post" action="{% url 'message-create' pk=chat.pk %}">
+        <form id="message-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ message_form|crispy }}
-            <button type="submit" class="btn btn-primary">Send</button>
+            <label for="message">Message:</label><br>
+            <textarea id="message" name="message" rows="4" cols="50"></textarea>
+            <br>
+            <label for="attachment">Attachment:</label><br>
+            <input type="file" id="attachment" name="attachment"><br><br>
+            <button id="sendButton" type="button" class="btn btn-primary">Send</button>
         </form>
     </div>
 </div>

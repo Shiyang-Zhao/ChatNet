@@ -1,20 +1,18 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 from .models.chat import Chat
 from .models.message import Message
-from channels.db import database_sync_to_async
-from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.chat_pk = self.scope["url_route"]["kwargs"]["pk"]
+        self.chat = await self.get_chat(self.chat_pk)
         self.chat_channel_name = f"chat_{self.chat_pk}"
-        self.chat = await sync_to_async(Chat.objects.get)(pk=self.chat_pk)
 
         await self.channel_layer.group_add(self.chat_channel_name, self.channel_name)
-
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -22,23 +20,53 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.chat_channel_name, self.channel_name
         )
 
+    # Consumer receives message
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        message_content = text_data_json.get("content", "")
+        sender = self.scope["user"]
+        timestamp = timezone.now()
+
+        # Save the message to the database
+        await self.save_message(sender, message_content, timestamp)
 
         # Send the message to the room group
         await self.channel_layer.group_send(
-            self.chat_channel_name, {"type": "chat_message", "message": message}
+            self.chat_channel_name,
+            {
+                "type": "chat_message",
+                "sender_username": sender.username,
+                "content": message_content,
+                "timestamp": timestamp.isoformat(),
+            },
         )
 
+    # Consumer sends message
     async def chat_message(self, event):
-        message = event["message"]
+        sender_username = event["sender_username"]
+        content = event["content"]
+        timestamp = event["timestamp"]
 
-        await self.send(text_data=json.dumps({"message": message}))
+        # Send the message to the client
+        await self.send(
+            text_data=json.dumps(
+                {
+                    "sender_username": sender_username,
+                    "content": content,
+                    "timestamp": timestamp,
+                }
+            )
+        )
 
     @database_sync_to_async
-    def save_message(self, sender_pk, message):
-        User = get_user_model()
-        sender = User.objects.get(pk=sender_pk)
-        chat = Chat.objects.get(pk=self.chat_pk)
-        Message.objects.create(sender=sender, chat=chat, content=message)
+    def save_message(self, sender, content, timestamp):
+        return Message.objects.create(
+            chat=self.chat,
+            sender=sender,
+            content=content,
+            timestamp=timestamp,
+        )
+
+    @database_sync_to_async
+    def get_chat(self, pk):
+        return Chat.objects.get(pk=pk)

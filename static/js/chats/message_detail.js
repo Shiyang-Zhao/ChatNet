@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'ws://' + window.location.host + '/ws/chats/chat/' + chatPk + '/'
     );
 
-    const messageInput = document.querySelector('#messageInput');
     const messagesContainer = document.querySelector('.chat-messages');
 
     // Connection established
@@ -12,39 +11,57 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('WebSocket connection to chat successfully established!');
     };
 
-    chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        appendMessage(data.sender, data.message, data.timestamp);
+
+    chatSocket.onmessage = function (event) {
+        var message = JSON.parse(event.data);
+        console.log("Sender: " + message.sender_username);
+        console.log("Received message: " + message.content);
+        console.log("timestamp: " + message.timestamp);
+        displayMessage(message);
     };
 
     chatSocket.onclose = function (e) {
         console.error('Chat socket closed unexpectedly');
     };
 
-    document.querySelector('#messageForm').onsubmit = function (e) {
-        e.preventDefault();
-        const message = messageInput.value;
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-        appendMessage('You', message, new Date().toLocaleTimeString());  // Adjust the timestamp format as needed
-        messageInput.value = '';
-    };
+    function sendMessage() {
+        var messageInput = document.getElementById("message");
+        var message = messageInput.value;
 
-    messageInput.onkeyup = function (e) {
-        if (e.keyCode === 13) {  // enter, return
-            e.preventDefault(); // Avoid form submit on enter key
-            document.querySelector('.btn').click(); // Simulate button click
-        }
-    };
+        var messageData = {
+            'content': message
+        };
 
-    // Helper function to append messages to the DOM
-    function appendMessage(sender, message, timestamp) {
-        const newMessage = document.createElement('div');
-        newMessage.className = 'message';
-        newMessage.innerHTML = `<p><strong>${sender}:</strong> ${message}</p>
-                                <span class="timestamp">${timestamp}</span>`;
-        messagesContainer.appendChild(newMessage);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;  // Scroll to the latest message
+        chatSocket.send(JSON.stringify(messageData)); // Send the message data as a JSON string
+        messageInput.value = ''; // Clear the message input field after sending
     }
+
+    function displayMessage(message) {
+        var messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        var usernameElement = document.createElement("strong");
+        usernameElement.textContent = message.sender_username + ": ";
+        messageElement.appendChild(usernameElement);
+        var contentElement = document.createElement("span");
+        contentElement.textContent = message.content;
+        messageElement.appendChild(contentElement);
+        var timestampElement = document.createElement("span");
+        timestampElement.classList.add("timestamp");
+        timestampElement.textContent = message.timestamp;
+        messageElement.appendChild(timestampElement);
+        messagesContainer.appendChild(messageElement);
+    }
+
+    document.getElementById("sendButton").addEventListener("click", function (event) {
+        event.preventDefault();
+        sendMessage();
+    });
+
+    document.getElementById("message").addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
 });

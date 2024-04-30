@@ -20,8 +20,8 @@ class Message(models.Model):
         upload_to="message_attachments/", null=True, blank=True
     )
 
-    def get_absolute_url(self):
-        return reverse("chat-detail", kwargs={"pk": self.pk})
+    # def get_absolute_url(self):
+    #     return reverse("chat-detail", kwargs={"pk": self.chat.pk})
 
     def __str__(self):
         return (

@@ -4,7 +4,8 @@ from django.views import View
 from django.views.generic import ListView, CreateView, DetailView
 from ..models.chat import Chat
 from ..forms.chat import GroupChatCreateForm, PrivateChatCreateForm
-from ..forms.message import MessageCreateForm
+
+# from ..forms.message import MessageCreateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.contrib import messages
@@ -40,7 +41,6 @@ class ChatListAndDetailView(View):
     def get(self, request, pk=None):
         context = {
             "chats": Chat.objects.filter(participants=request.user),
-            "message_form": MessageCreateForm(),
         }
         return render(request, self.template_name, context)
 
