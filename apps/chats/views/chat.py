@@ -4,8 +4,6 @@ from django.views import View
 from django.views.generic import ListView, CreateView, DetailView
 from ..models.chat import Chat
 from ..forms.chat import GroupChatCreateForm, PrivateChatCreateForm
-
-# from ..forms.message import MessageCreateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.contrib import messages
@@ -41,6 +39,7 @@ class ChatListAndDetailView(View):
     def get(self, request, pk=None):
         context = {
             "chats": Chat.objects.filter(participants=request.user),
+            "group_chat_create_form": GroupChatCreateForm(),
         }
         return render(request, self.template_name, context)
 
@@ -52,7 +51,6 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         receiver_username = self.kwargs.get("receiver_username")
         receiver = get_object_or_404(User, username=receiver_username)
-        # Check for an existing private chat between the request user and the receiver
         existing_chat = Chat.get_existing_private_chat(self.request.user, receiver)
 
         if existing_chat:
@@ -69,8 +67,8 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
 class GroupChatCreateView(LoginRequiredMixin, CreateView):
     model = Chat
     form_class = GroupChatCreateForm
-    template_name = "chats/create_chat.html"
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
+        form.instance.chat_type = Chat.GROUP
         return super().form_valid(form)

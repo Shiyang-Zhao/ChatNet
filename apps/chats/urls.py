@@ -4,7 +4,6 @@ from .views.chat import (
     PrivateChatCreateView,
     GroupChatCreateView,
 )
-# from .views.message import MessageCreateView
 
 urlpatterns = [
     path("", ChatListAndDetailView.as_view(), name="chat-list"),
@@ -14,9 +13,4 @@ urlpatterns = [
         PrivateChatCreateView.as_view(),
         name="private-chat-create",
     ),
-    # path(
-    #     "chat/<int:pk>/message/create",
-    #     MessageCreateView.as_view(),
-    #     name="message-create",
-    # ),
 ]

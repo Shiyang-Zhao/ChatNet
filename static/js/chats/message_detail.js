@@ -24,6 +24,18 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Chat socket closed unexpectedly');
     };
 
+    document.getElementById("sendButton").addEventListener("click", function (event) {
+        event.preventDefault();
+        sendMessage();
+    });
+
+    document.getElementById("message").addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    });
+
     function sendMessage() {
         var messageInput = document.getElementById("message");
         var message = messageInput.value;
@@ -51,17 +63,5 @@ document.addEventListener('DOMContentLoaded', function () {
         messageElement.appendChild(timestampElement);
         messagesContainer.appendChild(messageElement);
     }
-
-    document.getElementById("sendButton").addEventListener("click", function (event) {
-        event.preventDefault();
-        sendMessage();
-    });
-
-    document.getElementById("message").addEventListener("keydown", function (event) {
-        if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
-            sendMessage();
-        }
-    });
 
 });

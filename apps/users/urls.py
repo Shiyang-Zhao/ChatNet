@@ -1,7 +1,7 @@
 from django.urls import path
 from .views.user import UserRegisterView, UserLoginView, UserLogoutView
 from .views.profile import FollowProfileView, UnfollowProfileView
-from .views.user_profile import user_and_profile_detail, user_and_profile_update
+from .views.user_profile import UserAndProfileDetailView, user_and_profile_update
 
 urlpatterns = [
     path("signup/", UserRegisterView.as_view(), name="user-register"),
@@ -9,7 +9,7 @@ urlpatterns = [
     path("logout/", UserLogoutView.as_view(), name="user-logout"),
     path(
         "user/<str:username>/profile/detail/",
-        user_and_profile_detail,
+        UserAndProfileDetailView.as_view(),
         name="user-profile-detail",
     ),
     path(

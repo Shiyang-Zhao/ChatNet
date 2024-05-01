@@ -8,8 +8,8 @@
     <p>Welcome back! Please log in to continue.</p>
 
     <form method="post">
-        {% csrf_token %} <!-- CSRF protection -->
-        {{ form|crispy }} <!-- Render the form using Crispy Forms -->
+        {% csrf_token %}
+        {{ form|crispy }}
         <button type="submit" class="btn btn-primary">Log In</button> <!-- Submit button -->
     </form>
 

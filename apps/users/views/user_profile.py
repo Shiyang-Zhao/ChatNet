@@ -4,16 +4,26 @@ from django.contrib import messages
 from ..forms.user import UserUpdateForm
 from ..forms.profile import ProfileUpdateForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView
 
 User = get_user_model()
 
 
-@login_required
-def user_and_profile_detail(request, username):
-    user = get_object_or_404(User, username=username)
-    is_following = request.user.profile.is_following(user.profile)
-    context = {"viewed_user": user, "is_following": is_following}
-    return render(request, "users/user_profile_detail.html", context)
+class UserAndProfileDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = "users/user_profile_detail.html"
+    context_object_name = "viewed_user"
+
+    def get_object(self):
+        return get_object_or_404(User, username=self.kwargs["username"])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_following"] = self.request.user.profile.is_following(
+            self.object.profile
+        )
+        return context
 
 
 @login_required
