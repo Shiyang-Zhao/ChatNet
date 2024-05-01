@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 {% load static %}
 
 {% block title %}My Chats{% endblock %}
@@ -12,13 +11,39 @@
     {% if chats %}
     <ul class="list-group">
         {% for chat in chats %}
-        <li class="list-group-item" data-chat-pk="{{ chat.pk }}" href="{% url 'chat-detail' pk=chat.pk %}">
-            {{ chat.participants.first.username }} {{ chat.participants.last.username }} ({{ chat.chat_type }})
-            <p>Created at: {{ chat.created_at|date:"F j, Y, g:i a" }}</p>
-        </li>
+        <div>
+            <li class="list-group-item" data-chat-pk="{{ chat.pk }}" data-href="{% url 'chat-detail' pk=chat.pk %}">
+                {{ chat.participants.first.username }} {{ chat.participants.last.username }} ({{ chat.chat_type }})
+                <p>Created at: {{ chat.created_at|date:"F j, Y, g:i a" }}</p>
+            </li>
 
-        <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
-            {% include 'chats/message_detail.html' with chat=chat %}
+            <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
+                <div class="chat-detail">
+                    <div class="chat-messages" id="message-container">
+                        {% if chat.messages.all %}
+                        {% for message in chat.messages.all %}
+                        <div class="message">
+                            <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+                            <span class="timestamp">{{ message.timestamp|date:"F j, Y, g:i a" }}</span>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p>No messages yet. Start the conversation!</p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <form id="message-form" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <label for="message">Message:</label><br>
+                            <textarea id="message" name="message" rows="4" cols="50"></textarea>
+                            <br>
+                            <!-- <label for="attachment">Attachment:</label><br>
+                            <input type="file" id="attachment" name="attachment"><br><br> -->
+                            <button id="sendButton" type="button" class="btn btn-primary">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </ul>
@@ -33,8 +58,6 @@
     {% endfor %}
 </div>
 
-
-<script src="{% static 'js/chats/chat_detail.js' %}"></script>
-<script src="{% static 'js/chats/message_detail.js' %}"></script>
+<script type="module" src="{% static 'js/chats/chat_detail.js' %}"></script>
 
 {% endblock %}

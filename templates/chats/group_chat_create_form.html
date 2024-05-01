@@ -12,7 +12,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'group-chat-create' creator_username=user.username %}"
+                        enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ group_chat_create_form|crispy }}
                         <button type="submit" class="btn btn-primary">Create Chat</button>

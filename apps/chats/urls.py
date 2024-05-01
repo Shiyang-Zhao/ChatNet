@@ -13,4 +13,9 @@ urlpatterns = [
         PrivateChatCreateView.as_view(),
         name="private-chat-create",
     ),
+    path(
+        "chat/group/<str:creator_username>/create/",
+        GroupChatCreateView.as_view(),
+        name="group-chat-create",
+    ),
 ]
