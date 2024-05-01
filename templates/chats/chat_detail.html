@@ -19,29 +19,7 @@
 
             <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
                 <div class="chat-detail">
-                    <div class="chat-messages" id="message-container">
-                        {% if chat.messages.all %}
-                        {% for message in chat.messages.all %}
-                        <div class="message">
-                            <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
-                            <span class="timestamp">{{ message.timestamp|date:"F j, Y, g:i a" }}</span>
-                        </div>
-                        {% endfor %}
-                        {% else %}
-                        <p>No messages yet. Start the conversation!</p>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <form id="message-form" method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <label for="message">Message:</label><br>
-                            <textarea id="message" name="message" rows="4" cols="50"></textarea>
-                            <br>
-                            <!-- <label for="attachment">Attachment:</label><br>
-                            <input type="file" id="attachment" name="attachment"><br><br> -->
-                            <button id="sendButton" type="button" class="btn btn-primary">Send</button>
-                        </form>
-                    </div>
+                    {% include 'chats/message_detail.html' with chat=chat %}
                 </div>
             </div>
         </div>
@@ -57,7 +35,8 @@
     </a>
     {% endfor %}
 </div>
-
 <script type="module" src="{% static 'js/chats/chat_detail.js' %}"></script>
+<script type="module" src="{% static 'js/chats/websocket.js' %}"></script>
+
 
 {% endblock %}
