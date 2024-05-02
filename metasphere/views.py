@@ -1,11 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from apps.posts.models.post import Post
+from django.db.models import Q
+import re
 
 
 def home(request):
-    # Retrieve all posts from the database
-    posts = (
-        Post.objects.all()
-    ) 
+    context = {"posts": Post.objects.all()}
+    return render(request, "layouts/home.html", context)
 
-    return render(request, "layouts/home.html", {"posts": posts})
+
+def search(request):
+    query = request.GET.get("q", "")
+    if query.isspace():
+        query = " "
+    else:
+        query = re.sub(r"\s+", " ", query).strip()
+
+    if not query:
+        return redirect("home")
+
+    results = Post.objects.filter(
+        Q(title__icontains=query)
+        | Q(content__icontains=query)
+        | Q(author__username__icontains=query),
+        is_published=True,
+    ).distinct()
+
+    return render(
+        request, "posts/search_results.html", {"results": results, "query": query}
+    )

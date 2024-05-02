@@ -5,6 +5,8 @@ from .views.post import (
     PostCreateView,
     PostUpdateView,
     PostDeleteView,
+    LikePostView,
+    DislikePostView,
 )
 
 from .views.comment import (
@@ -12,6 +14,8 @@ from .views.comment import (
     ReplyCreateView,
     # CommentUpdateView,
     # CommentDeleteView,
+    LikeCommentView,
+    DislikeCommentView,
 )
 
 urlpatterns = [
@@ -26,8 +30,16 @@ urlpatterns = [
         name="comment-create",
     ),
     path(
-        "post/<int:post_pk>/comment/<int:parent_comment_pk>/reply/",
+        "comment/<int:pk>/reply/",
         ReplyCreateView.as_view(),
         name="reply-create",
+    ),
+    path("post/<int:pk>/like/", LikePostView.as_view(), name="like-post"),
+    path("post/<int:pk>/dislike/", DislikePostView.as_view(), name="dislike-post"),
+    path("comment/<int:pk>/like/", LikeCommentView.as_view(), name="like-comment"),
+    path(
+        "comment/<int:pk>/dislike/",
+        DislikeCommentView.as_view(),
+        name="dislike-comment",
     ),
 ]

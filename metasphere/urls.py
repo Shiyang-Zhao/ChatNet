@@ -19,12 +19,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import home
+from .views import home, search
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home, name="metasphere"),
     path("home/", home, name="home"),
+    path("search/", search, name="search-posts"),
     path("users/", include("apps.users.urls")),
     path("posts/", include("apps.posts.urls")),
     path("chats/", include("apps.chats.urls")),

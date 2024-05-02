@@ -10,8 +10,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
-
-                <!-- Show links for logged-in users -->
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link"
@@ -21,7 +19,7 @@
                     <a class="nav-link" href="{% url 'post-create' %}">Create Post</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'chat-list' %}" chat-list>Chat</a>
+                    <a class="nav-link" href="{% url 'chat-list' %}">Chat</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user-profile-detail' username=user.username %}">
@@ -35,7 +33,6 @@
                     </form>
                 </li>
                 {% else %}
-                <!-- Show links for users who are not logged in -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user-register' %}">Sign Up</a>
                 </li>
@@ -44,6 +41,12 @@
                 </li>
                 {% endif %}
             </ul>
+
+            <!-- Search form -->
+            <form class="d-flex ms-auto" method="get" action="{% url 'search-posts' %}">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
         </div>
     </nav>
 </div>

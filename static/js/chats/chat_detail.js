@@ -1,9 +1,5 @@
 import { establishWebSocket, sendMessage } from "./websocket.js";
 
-const chatPattern = /^\/chats\/chat\/\d+\/$/;
-let messageInput;
-let sendButton;
-
 const showDetailPlaceholder = (chatPk) => {
     document.querySelectorAll('.chat-detail-placeholder').forEach(placeholder => {
         placeholder.style.display = 'none';
@@ -14,8 +10,8 @@ const showDetailPlaceholder = (chatPk) => {
         detailPlaceholder.style.display = 'block';
         establishWebSocket(chatPk);
 
-        messageInput = detailPlaceholder.querySelector("#messageInput");
-        sendButton = detailPlaceholder.querySelector("#sendButton");
+        const messageInput = detailPlaceholder.querySelector("#messageInput");
+        const sendButton = detailPlaceholder.querySelector("#sendButton");
 
 
         sendButton.addEventListener('click', () => {
@@ -34,24 +30,28 @@ const showDetailPlaceholder = (chatPk) => {
                     sendMessage({ content: messageInput.value.trim() });
                     messageInput.value = '';
                 } else {
-                    alert("fuck you")
+                    alert("You can't send an empty message");
                 }
             }
         });
     }
 };
 
-const currentPath = window.location.pathname;
-if (chatPattern.test(currentPath)) {
-    const chatPk = currentPath.match(/\d+/)[0];
-    showDetailPlaceholder(chatPk);
-}
-
-document.querySelectorAll('.list-group-item').forEach(item => {
-    item.addEventListener('click', () => {
-        const chatPk = item.getAttribute('data-chat-pk');
+document.addEventListener('DOMContentLoaded', function () {
+    const chatPattern = /^\/chats\/chat\/\d+\/$/;
+    const currentPath = window.location.pathname;
+    if (chatPattern.test(currentPath)) {
+        const chatPk = currentPath.match(/\d+/)[0];
         showDetailPlaceholder(chatPk);
-        const url = item.getAttribute("data-href");
-        window.history.pushState(null, "", url);
+    }
+
+    document.querySelectorAll('.list-group-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const chatPk = item.getAttribute('data-chat-pk');
+            showDetailPlaceholder(chatPk);
+            const url = item.getAttribute("data-href");
+            window.history.pushState(null, "", url);
+        });
     });
 });
+

@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, UpdateView, DeleteView, View
 from ..models.comment import Comment
 from ..models.post import Post
 from ..forms.comment import CommentCreateForm, ReplyCreateForm
+from django.http import JsonResponse
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
@@ -28,7 +29,7 @@ class ReplyCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
-        parent_comment = get_object_or_404(Comment, pk=self.kwargs.get("parent_comment_pk"))
+        parent_comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
         form.instance.parent_comment = parent_comment
         form.instance.post = parent_comment.post
         return super().form_valid(form)
@@ -64,3 +65,27 @@ class ReplyCreateView(LoginRequiredMixin, CreateView):
 
 #     def get_success_url(self):
 #         return self.object.content.get_absolute_url()
+
+
+class LikeCommentView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
+        if user in comment.liked_by.all():
+            comment.liked_by.remove(user)
+        else:
+            comment.like(user.pk)
+        return JsonResponse({"success": True, "likes_count": comment.liked_by.count()})
+
+
+class DislikeCommentView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
+        if user in comment.disliked_by.all():
+            comment.disliked_by.remove(user)
+        else:
+            comment.dislike(user.pk)
+        return JsonResponse(
+            {"success": True, "dislikes_count": comment.disliked_by.count()}
+        )

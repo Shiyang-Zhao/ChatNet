@@ -8,7 +8,7 @@
         <p>{{ reply.content }}</p>
 
         <h4>Reply</h4>
-        <form method="post" action="{% url 'reply-create' post_pk=post.pk parent_comment_pk=reply.pk %}">
+        <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
             {% csrf_token %}
             {{ reply_create_form|crispy }}
             <button type="submit" class="btn btn-primary">Submit Reply</button>

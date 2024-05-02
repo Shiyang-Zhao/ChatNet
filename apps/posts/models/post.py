@@ -14,7 +14,12 @@ class Post(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts"
     )
 
-    likes = models.IntegerField(default=0)
+    liked_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="liked_posts", blank=True
+    )
+    disliked_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="disliked_posts", blank=True
+    )
     comments_count = models.IntegerField(default=0)
     is_published = models.BooleanField(default=True)
     views = models.IntegerField(default=0)
@@ -28,3 +33,13 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse("post-detail", kwargs={"pk": self.pk})
+
+    def like(self, user_pk):
+        if not self.liked_by.filter(pk=user_pk).exists():
+            self.liked_by.add(user_pk)
+            self.disliked_by.remove(user_pk)
+
+    def dislike(self, user_pk):
+        if not self.disliked_by.filter(pk=user_pk).exists():
+            self.disliked_by.add(user_pk)
+            self.liked_by.remove(user_pk)

@@ -21,7 +21,18 @@
     </div>
     {% endif %}
 
+
     <p><strong>Likes:</strong> {{ post.likes }}</p>
+    <form method="POST" action="{% url 'like-post' post.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-success">Like</button>
+    </form>
+    <span>{{ post.liked_by.count }} Likes</span>
+    <span>{{ post.disliked_by.count }} Dislikes</span>
+    <form method="POST" action="{% url 'dislike-post' post.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">Dislike</button>
+    </form>
     <p><strong>Comments:</strong> {{ post.comments_count }}</p>
     <p><strong>Views:</strong> {{ post.views }}</p>
 
@@ -62,7 +73,7 @@
 
             <!-- Display a form to reply to this comment -->
             <h4>Reply</h4>
-            <form method="post" action="{% url 'reply-create' post_pk=post.pk parent_comment_pk=parent_comment.pk %}">
+            <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
                 {% csrf_token %}
                 {{ reply_create_form|crispy }}
                 <button type="submit" class="btn btn-primary">Submit Reply</button>

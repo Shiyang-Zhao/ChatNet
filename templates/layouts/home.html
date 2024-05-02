@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Metasphere{% endblock %}
 
 {% block content %}
@@ -6,19 +7,28 @@
     <h2>Welcome to the Home Page</h2>
     <!-- Loop through the list of posts -->
     {% for post in posts %}
-    <div class="post">
-        <h3>{{ post.title }}</h3> <!-- Display the post title -->
+    <div class="post" id="post-{{ post.pk }}">
+        <h3>{{ post.title }}</h3>
         <p>By
             <a href="{% url 'user-profile-detail' username=post.author.username %}">
                 {{ post.author }}
             </a>
-            <!-- Link to the author's profile -->
         </p>
-        <p>{{ post.content|truncatewords:50 }}</p> <!-- Display the content (truncated) -->
-        <a href="{% url 'post-detail' post.pk %}">Read More</a> <!-- Link to detailed view of the post -->
+        <p>{{ post.content|truncatewords:50 }}</p>
+        <button type="button" class="btn btn-outline-success like-btn" data-post-id="{{ post.pk }}"
+            data-url="{% url 'like-post' post.pk %}">Like</button>
+        <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }} Likes</span>
+
+        <button type="button" class="btn btn-outline-danger dislike-btn" data-post-id="{{ post.pk }}"
+            data-url="{% url 'dislike-post' post.pk %}">Dislike</button>
+        <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }} Dislikes</span>
+
+        <a href="{% url 'post-detail' post.pk %}">{{ post.comments.count }} Comments</a>
     </div>
     {% empty %}
-    <p>No posts available.</p> <!-- Message if there are no posts -->
+    <p>No posts available.</p>
     {% endfor %}
 </div>
+<script type="module" src="{% static 'js/layouts/home.js' %}"></script>
+
 {% endblock %}

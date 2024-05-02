@@ -39,7 +39,7 @@ class ChatListAndDetailView(View):
     def get(self, request, pk=None):
         context = {
             "chats": Chat.objects.filter(participants=request.user),
-            "group_chat_create_form": GroupChatCreateForm(),
+            "group_chat_create_form": GroupChatCreateForm(creator=request.user),
         }
         return render(request, self.template_name, context)
 
