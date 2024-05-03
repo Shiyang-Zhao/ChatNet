@@ -13,7 +13,10 @@
         {% for chat in chats %}
         <div>
             <li class="list-group-item" data-chat-pk="{{ chat.pk }}" data-href="{% url 'chat-detail' pk=chat.pk %}">
-                {{ chat.participants.first.username }} {{ chat.participants.last.username }} ({{ chat.chat_type }})
+                {% for participant in chat.participants.all %}
+                {{ participant.username }}
+                {% endfor %}
+                ({{ chat.chat_type }})
                 <p>Created at: {{ chat.created_at|date:"F j, Y, G:i" }}</p>
             </li>
 

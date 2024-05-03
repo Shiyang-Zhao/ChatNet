@@ -39,7 +39,7 @@ class ChatListAndDetailView(View):
     def get(self, request, pk=None):
         context = {
             "chats": Chat.objects.filter(participants=request.user),
-            "group_chat_create_form": GroupChatCreateForm(creator=request.user),
+            "group_chat_create_form": GroupChatCreateForm(),
         }
         return render(request, self.template_name, context)
 
@@ -59,6 +59,10 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
 
         self.object = form.save(commit=False)
         self.object.creator = self.request.user
+        self.object.title = (
+            f"Chat between {self.request.user.username} and {receiver.username}"
+        )
+        self.object.description = f"Private conversation initiated between {self.request.user.username} and {receiver.username}"
         self.object.save()
         self.object.participants.add(self.request.user, receiver)
         return super().form_valid(form)
@@ -69,6 +73,14 @@ class GroupChatCreateView(LoginRequiredMixin, CreateView):
     form_class = GroupChatCreateForm
 
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
-        form.instance.chat_type = Chat.GROUP
+        self.object = form.save(commit=False)
+        self.object.creator = self.request.user
+        self.object.chat_type = Chat.GROUP
+        self.object.title = "Group Chat"
+        self.object.description = "Group Chat"
+        self.object.save()
+        self.object.participants.add(self.request.user)
+        participants = form.cleaned_data.get("participants")
+        if participants:
+            self.object.participants.add(*participants)
         return super().form_valid(form)

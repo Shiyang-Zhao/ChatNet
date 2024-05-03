@@ -19,8 +19,8 @@ class GroupChatCreateForm(forms.ModelForm):
         model = Chat
         fields = ["participants", "title", "description"]
 
-    def __init__(self, *args, **kwargs):
-        creator = kwargs.pop("creator", None)
-        super(GroupChatCreateForm, self).__init__(*args, **kwargs)
-        if creator is not None:
-            self.fields["participants"].queryset = creator.profile.following.all()
+    # def __init__(self, *args, **kwargs):
+    #     creator = kwargs.pop("creator", None)
+    #     super(GroupChatCreateForm, self).__init__(*args, **kwargs)
+    #     if creator is not None:
+    #         self.fields["participants"].queryset = creator.profile.following.all()

@@ -18,8 +18,7 @@
                             <button type="submit" class="btn btn-info mt-2">Search</button>
                         </div>
                     </form>
-                    <form method="post" action="{% url 'group-chat-create' creator_username=user.username %}"
-                        enctype="multipart/form-data">
+                    <form method="post" action="{% url 'group-chat-create' %}">
                         {% csrf_token %}
                         {{ group_chat_create_form|crispy }}
                         <button type="submit" class="btn btn-primary">Create Chat</button>
