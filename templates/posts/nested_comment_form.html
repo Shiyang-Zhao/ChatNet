@@ -4,7 +4,7 @@
 <ul>
     {% for reply in replies %}
     <li>
-        <p><strong>{{ reply.author.username }}</strong> on {{ reply.date_posted|date:"F j, Y, g:i a" }}</p>
+        <p><strong>{{ reply.author.username }}</strong> on {{ reply.date_posted|date:"F j, Y, G:i" }}</p>
         <p>{{ reply.content }}</p>
 
         <h4>Reply</h4>

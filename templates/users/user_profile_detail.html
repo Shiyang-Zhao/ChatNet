@@ -36,16 +36,14 @@
         <p><strong>Last Name:</strong> {{ viewed_user.last_name }}</p>
 
         {% if viewed_user.profile.birthday %}
-        <p><strong>Birthday:</strong> {{ viewed_user.profile.birthday | date:"F j, Y" }}</p>
+        <p><strong>Birthday:</strong> {{ viewed_user.profile.birthday|date:"F j, Y, G:i" }}</p>
         {% endif %}
 
         {% if viewed_user == user %}
         <div>
             <a href="{% url 'user-profile-update' %}" class="btn btn-primary">Update Profile</a>
         </div>
-        {% endif %}
-
-        {% if viewed_user != user %}
+        {% else %}
         <div>
             {% if is_following %}
             <form id="unfollowForm" method="post" action="{% url 'unfollow-profile' username=viewed_user.username %}">
@@ -75,6 +73,45 @@
                 </li>
                 {% endfor %}
             </ul>
+        </div>
+
+        <div>
+            <h3>Liked Posts</h3>
+            <ul>
+                {% for post in user.liked_posts.all %}
+                <li><a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a></li>
+                {% empty %}
+                <li>No liked posts.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div>
+            <h3>Disliked Posts</h3>
+            <ul>
+                {% for post in user.disliked_posts.all %}
+                <li><a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a></li>
+                {% empty %}
+                <li>No disliked posts.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div>
+            <h3>Commented Posts</h3>
+            {% for comment in user.posted_comments.all %}
+            <li>
+                <strong>Comment on
+                    <a href="{% url 'post-detail' pk=comment.post.pk %}">
+                        {{ comment.post.title}}
+                    </a>
+                </strong>
+                "{{ comment.content|truncatewords:20 }}"
+                <small>— posted on {{ comment.date_posted|date:"F j, Y, G:i" }}</small>
+            </li>
+            {% empty %}
+            <li>No posts commented on.</li>
+            {% endfor %}
         </div>
 
     </div>

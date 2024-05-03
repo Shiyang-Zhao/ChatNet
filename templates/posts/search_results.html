@@ -10,7 +10,7 @@
         {% for post in results %}
         <a href="{% url 'post-detail' pk=post.pk %}" class="list-group-item list-group-item-action">
             <h5 class="mb-1">{{ post.title }}</h5>
-            <small>By {{ post.author.username }} on {{ post.date_posted|date:"F j, Y, g:i a" }}</small>
+            <small>By {{ post.author.username }} on {{ post.date_posted|date:"F j, Y, G:i" }}</small>
             <p class="mb-1">{{ post.content|truncatewords:50 }}</p>
         </a>
         {% endfor %}

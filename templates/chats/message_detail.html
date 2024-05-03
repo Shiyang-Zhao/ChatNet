@@ -4,7 +4,7 @@
         {% for message in chat.messages.all %}
         <div class="message">
             <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
-            <span class="timestamp">{{ message.timestamp|date:"F j, Y, g:i a" }}</span>
+            <span class="date-sent">{{ message.date_sent|date:"F j, Y, G:i" }}</span>
         </div>
         {% endfor %}
         {% else %}

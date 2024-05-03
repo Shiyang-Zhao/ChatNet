@@ -6,55 +6,47 @@
 {% block content %}
 <div class="container mt-5">
 
-    <h2>{{ post.title }}</h2> <!-- Display the post title -->
+    <h2>{{ post.title }}</h2>
     <p>
-        By {{ post.author }} on {{ post.date_posted|date:"F j, Y, g:i a" }}
+        By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}
     </p>
 
-    <p>{{ post.content }}</p> <!-- Display the full content -->
+    <p>{{ post.content }}</p>
 
     {% if post.file %}
     <div>
         <p>Download the attached file:</p>
-        <a href="{{ post.file.url }}">{{ post.file.name }}</a> <!-- File download link -->
-        <p>File type: {{ post.extension }}</p> <!-- Display the file extension -->
+        <a href="{{ post.file.url }}">{{ post.file.name }}</a>
+        <p>File type: {{ post.extension }}</p>
     </div>
     {% endif %}
 
+    <button type="button" class="btn btn-outline-success like-btn" data-post-pk="{{ post.pk }}"
+        data-url="{% url 'like-post' pk=post.pk %}">Like</button>
+    <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }} Likes</span>
+    <button type="button" class="btn btn-outline-danger dislike-btn" data-post-pk="{{ post.pk }}"
+        data-url="{% url 'dislike-post' pk=post.pk %}">Dislike</button>
+    <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }} Dislikes</span>
 
-    <p><strong>Likes:</strong> {{ post.likes }}</p>
-    <form method="POST" action="{% url 'like-post' post.pk %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-success">Like</button>
-    </form>
-    <span>{{ post.liked_by.count }} Likes</span>
-    <span>{{ post.disliked_by.count }} Dislikes</span>
-    <form method="POST" action="{% url 'dislike-post' post.pk %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-danger">Dislike</button>
-    </form>
-    <p><strong>Comments:</strong> {{ post.comments_count }}</p>
+    <p><strong>Comments:</strong> {{ post.comments.count }}</p>
     <p><strong>Views:</strong> {{ post.views }}</p>
 
     {% if request.user == post.author %}
     <div class="post-actions">
-        <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a> <!-- Link to update post -->
+        <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
         <form method="post" action="{% url 'post-delete' pk=post.pk %}">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Delete</button> <!-- Button to delete post -->
+            <button type="submit" class="btn btn-danger">Delete</button>
         </form>
     </div>
     {% endif %}
 
-    <div>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
     <!-- Comment Form with Crispy Forms -->
     <h3>Leave a Comment</h3>
     <form method="post" action="{% url 'comment-create' pk=post.pk %}">
-        {% csrf_token %} <!-- CSRF protection -->
-        {{ comment_create_form|crispy }} <!-- Crispy Forms rendering -->
-        <button type="submit" class="btn btn-primary">Submit</button> <!-- Submit button -->
+        {% csrf_token %}
+        {{ comment_create_form|crispy }}
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
     <!-- Display existing comments -->
@@ -67,11 +59,10 @@
                 <strong>
                     {{ parent_comment.author.username }}
                 </strong>
-                on {{ parent_comment.date_posted|date:"F j, Y, g:i a" }}
+                on {{ parent_comment.date_posted|date:"F j, Y, G:i" }}
             </p>
             <p>{{ parent_comment.content }}</p>
 
-            <!-- Display a form to reply to this comment -->
             <h4>Reply</h4>
             <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
                 {% csrf_token %}
@@ -87,4 +78,5 @@
     <p>No comments yet.</p>
     {% endif %}
 </div>
+<script type="module" src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"></script>
 {% endblock %}

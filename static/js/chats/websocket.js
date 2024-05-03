@@ -18,7 +18,7 @@ export const establishWebSocket = (chatPk) => {
         console.log("socket: " + chatPk);
         console.log("Sender: " + message.sender_username);
         console.log("Received message: " + message.content);
-        console.log("timestamp: " + message.timestamp);
+        console.log("Date sent: " + message.date_sent);
         displayMessage(chatPk, message);
     };
 
@@ -46,10 +46,14 @@ const displayMessage = (chatPk, message) => {
     var contentElement = document.createElement("span");
     contentElement.textContent = message.content;
     messageElement.appendChild(contentElement);
-    var timestampElement = document.createElement("span");
-    timestampElement.classList.add("timestamp");
-    timestampElement.textContent = message.timestamp;
-    messageElement.appendChild(timestampElement);
+    var dateSentElement = document.createElement("span");
+    dateSentElement.classList.add("date-sent");
+
+    var dateSent = new Date(message.date_sent);
+    var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false };
+    dateSentElement.textContent = dateSent.toLocaleString('en-US', options);
+
+    messageElement.appendChild(dateSentElement);
     messagesContainer.appendChild(messageElement);
 };
 

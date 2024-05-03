@@ -6,7 +6,11 @@ from django.urls import reverse
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="posted_comments",
+    )
     content = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)
     parent_comment = models.ForeignKey(
