@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, DetailView
 from ..models.chat import Chat
@@ -50,7 +50,6 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
 class GroupChatCreateView(LoginRequiredMixin, CreateView):
     model = Chat
     form_class = GroupChatCreateForm
-    template_name = "chats/group_chat_create_form.html"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -58,23 +57,15 @@ class GroupChatCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
+        creator = self.request.user
+        participants = form.cleaned_data.get("participants")
+        existing_chat = Chat.get_existing_group_chat(participants, creator)
+        if existing_chat:
+            return redirect(existing_chat.get_absolute_url())
+        
         form.instance.creator = self.request.user
         form.instance.chat_type = Chat.GROUP
-        form.instance.title = "Group Chat"
-        form.instance.description = "Group Chat"
+        form.instance.title = "Group Title"
+        form.instance.description = "Group Description"
         form.save()
         return super().form_valid(form)
-    
-    
-        # self.object = form.save(commit=False)
-        # self.object.creator = self.request.user
-        # self.object.chat_type = Chat.GROUP
-        # self.object.title = "Group Chat"
-        # self.object.description = "Group Chat"
-        # self.object.save()
-        # form.save_m2m()
-        # participants = form.cleaned_data.get("participants")
-        # if participants:
-        #     self.object.participants.add(*participants)
-        # self.object.save()
-        # return super().form_valid(form)
