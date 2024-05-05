@@ -8,7 +8,6 @@ User = get_user_model()
 
 
 class PrivateChatCreateForm(forms.ModelForm):
-
     class Meta:
         model = Chat
         fields = []
@@ -17,10 +16,21 @@ class PrivateChatCreateForm(forms.ModelForm):
 class GroupChatCreateForm(forms.ModelForm):
     class Meta:
         model = Chat
-        fields = ["participants", "title", "description"]
+        fields = ["participants"]
+        widgets = {"participants": forms.CheckboxSelectMultiple()}
 
-    # def __init__(self, *args, **kwargs):
-    #     creator = kwargs.pop("creator", None)
-    #     super(GroupChatCreateForm, self).__init__(*args, **kwargs)
-    #     if creator is not None:
-    #         self.fields["participants"].queryset = creator.profile.following.all()
+    def __init__(self, *args, **kwargs):
+        self.creator = kwargs.pop(
+            "creator", None
+        )  # Creator is passed seperately when Get and Post request but they have the same name
+        super().__init__(*args, **kwargs)
+        if self.creator:
+            self.fields["participants"].queryset = User.objects.exclude(
+                pk=self.creator.pk
+            )
+
+    def clean_participants(self):
+        participants = self.cleaned_data.get("participants")
+        if self.creator and self.creator not in participants:
+            participants |= User.objects.filter(pk=self.creator.pk)
+        return participants

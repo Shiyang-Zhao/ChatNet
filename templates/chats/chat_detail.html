@@ -17,7 +17,7 @@
                 {{ participant.username }}
                 {% endfor %}
                 ({{ chat.chat_type }})
-                <p>Created at: {{ chat.created_at|date:"F j, Y, G:i" }}</p>
+                <p>Created by: {{ chat.creator }} at {{ chat.created_at|date:"F j, Y, G:i" }}</p>
             </li>
 
             <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">

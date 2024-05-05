@@ -7,30 +7,9 @@ from ..forms.chat import GroupChatCreateForm, PrivateChatCreateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.db.models import Q
 
 User = get_user_model()
-
-
-# class ChatListView(LoginRequiredMixin, ListView):
-#     model = Chat
-#     template_name = "chats/chat_detail.html"
-#     # context_object_name = "chats"
-#     # ordering = ["-last_activity"]
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["message_form"] = MessageCreateForm()
-#         return context
-
-
-# class ChatDetailView(LoginRequiredMixin, DetailView):
-#     model = Chat
-#     template_name = "chats/chat_detail.html"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["message_form"] = MessageCreateForm()
-#         return context
 
 
 class ChatListAndDetailView(View):
@@ -38,8 +17,8 @@ class ChatListAndDetailView(View):
 
     def get(self, request, pk=None):
         context = {
-            "chats": Chat.objects.filter(participants=request.user),
-            "group_chat_create_form": GroupChatCreateForm(),
+            "chats": Chat.objects.filter(Q(participants=request.user)).distinct(),
+            "group_chat_create_form": GroupChatCreateForm(creator=request.user),
         }
         return render(request, self.template_name, context)
 
@@ -58,7 +37,7 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
             return redirect(existing_chat.get_absolute_url())
 
         self.object = form.save(commit=False)
-        self.object.creator = self.request.user
+        # self.object.creator = self.request.user
         self.object.title = (
             f"Chat between {self.request.user.username} and {receiver.username}"
         )
@@ -71,16 +50,31 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
 class GroupChatCreateView(LoginRequiredMixin, CreateView):
     model = Chat
     form_class = GroupChatCreateForm
+    template_name = "chats/group_chat_create_form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["creator"] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.creator = self.request.user
-        self.object.chat_type = Chat.GROUP
-        self.object.title = "Group Chat"
-        self.object.description = "Group Chat"
-        self.object.save()
-        self.object.participants.add(self.request.user)
-        participants = form.cleaned_data.get("participants")
-        if participants:
-            self.object.participants.add(*participants)
+        form.instance.creator = self.request.user
+        form.instance.chat_type = Chat.GROUP
+        form.instance.title = "Group Chat"
+        form.instance.description = "Group Chat"
+        form.save()
         return super().form_valid(form)
+    
+    
+        # self.object = form.save(commit=False)
+        # self.object.creator = self.request.user
+        # self.object.chat_type = Chat.GROUP
+        # self.object.title = "Group Chat"
+        # self.object.description = "Group Chat"
+        # self.object.save()
+        # form.save_m2m()
+        # participants = form.cleaned_data.get("participants")
+        # if participants:
+        #     self.object.participants.add(*participants)
+        # self.object.save()
+        # return super().form_valid(form)

@@ -2,9 +2,11 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
+from django.db.models import Count, Q
 
 
 class Chat(models.Model):
+
     PRIVATE = "private"
     GROUP = "group"
     CHAT_TYPES = [
@@ -18,11 +20,12 @@ class Chat(models.Model):
     )
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name="created_chats",
     )
+
     chat_type = models.CharField(max_length=10, choices=CHAT_TYPES, default=PRIVATE)
     created_at = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=255, default="default title")
@@ -46,3 +49,18 @@ class Chat(models.Model):
             .filter(participants=user2)
             .first()
         )
+
+    @classmethod
+    def get_existing_group_chat(cls, participants, creator):
+        participant_pks = {participant.pk for participant in participants}
+        chats_with_correct_count = (
+            cls.objects.filter(chat_type=cls.GROUP, creator=creator)
+            .annotate(participant_count=Count("participants"))
+            .filter(participant_count=len(participant_pks))
+        )
+        for chat in chats_with_correct_count:
+            chat_participant_pks = set(chat.participants.values_list("pk", flat=True))
+            if chat_participant_pks == participant_pks:
+                return chat
+
+        return None

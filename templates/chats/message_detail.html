@@ -14,7 +14,7 @@
     <div>
         <form id="message-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <label for="message">Message:</label><br>
+            <label for="messageInput">Message:</label><br>
             <textarea id="messageInput" name="message" rows="4" cols="50" required></textarea>
             <br>
             <!-- <label for="attachment">Attachment:</label><br>

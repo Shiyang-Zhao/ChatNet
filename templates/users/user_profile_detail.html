@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ viewed_user.username }}'s Profile{% endblock %}
 
 {% block content %}
@@ -46,20 +47,27 @@
         {% else %}
         <div>
             {% if is_following %}
-            <form id="unfollowForm" method="post" action="{% url 'unfollow-profile' username=viewed_user.username %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-secondary following">Following</button>
-            </form>
+            <button class="btn btn-secondary following"
+                data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
+                data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}"
+                data-action-url="{% url 'unfollow-profile' username=viewed_user.username %}">
+                Following
+            </button>
             {% else %}
-            <form id="followForm" method="post" action="{% url 'follow-profile' username=viewed_user.username %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary following">Follow</button>
-            </form>
+            <button class="btn btn-primary follow"
+                data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
+                data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}"
+                data-action-url="{% url 'follow-profile' username=viewed_user.username %}">
+                Follow
+            </button>
             {% endif %}
+
+
+
             <form id="messageForm" method="post"
                 action="{% url 'private-chat-create' receiver_username=viewed_user.username %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary following">Message</button>
+                <button type="submit" class="btn btn-primary">Message</button>
             </form>
         </div>
         {% endif %}
@@ -112,8 +120,14 @@
             {% empty %}
             <li>No posts commented on.</li>
             {% endfor %}
+
+            {% for chat in user.joined_chats.all %}
+            <p>{{ chat.pk }}</p>
+            {% endfor %}
         </div>
 
     </div>
 </div>
+<script type="module" src="{% static 'js/users/user_profile_detail.js' %}"></script>
+
 {% endblock %}
