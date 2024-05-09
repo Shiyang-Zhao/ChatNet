@@ -1,21 +1,14 @@
-{% extends 'base.html' %} {% load static %} {% block title %}{{
-viewed_user.username }}'s Profile{% endblock %} {% block content %}
+{% extends 'base.html' %} {% load static %}
+{% block title %}{{viewed_user.username }}'s Profile{% endblock %}
+{% block content %}
 <div class="container mt-5">
   <div class="profile-header d-flex align-items-center">
     {% if viewed_user.profile.profile_image %}
-    <img
-      src="{{ viewed_user.profile.profile_image.url }}"
-      alt="{{ viewed_user.username }}'s Profile Image"
-      class="profile-image rounded-circle"
-      width="150"
-    />
+    <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
+      class="profile-image rounded-circle" width="150" />
     {% else %}
-    <img
-      src="/static/images/default_profile_image.png"
-      alt="Default Profile Image"
-      class="profile-image rounded-circle"
-      width="150"
-    />
+    <img src="/static/images/default_profile_image.png" alt="Default Profile Image" class="profile-image rounded-circle"
+      width="150" />
     {% endif %}
 
     <div class="ml-4">
@@ -30,11 +23,7 @@ viewed_user.username }}'s Profile{% endblock %} {% block content %}
     <p>
       <strong>Website:</strong>
       {% if viewed_user.profile.website %}
-      <a
-        href="{{ viewed_user.profile.website }}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href="{{ viewed_user.profile.website }}" target="_blank" rel="noopener noreferrer">
         {{ viewed_user.profile.website }}
       </a>
       {% else %} No website listed. {% endif %}
@@ -51,37 +40,27 @@ viewed_user.username }}'s Profile{% endblock %} {% block content %}
     </p>
     {% endif %} {% if viewed_user == user %}
     <div>
-      <a href="{% url 'user-profile-update' %}" class="btn btn-primary"
-        >Update Profile</a
-      >
+      <a href="{% url 'user-profile-update' %}" class="btn btn-primary">Update Profile</a>
     </div>
     {% else %}
     <div>
       {% if is_following %}
-      <button
-        class="btn btn-secondary following"
+      <button class="btn btn-secondary following"
         data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
         data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}"
-        data-action-url="{% url 'unfollow-profile' username=viewed_user.username %}"
-      >
+        data-action-url="{% url 'unfollow-profile' username=viewed_user.username %}">
         Following
       </button>
       {% else %}
-      <button
-        class="btn btn-primary follow"
-        data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
+      <button class="btn btn-primary follow" data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
         data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}"
-        data-action-url="{% url 'follow-profile' username=viewed_user.username %}"
-      >
+        data-action-url="{% url 'follow-profile' username=viewed_user.username %}">
         Follow
       </button>
       {% endif %}
 
-      <form
-        id="messageForm"
-        method="post"
-        action="{% url 'private-chat-create' receiver_username=viewed_user.username %}"
-      >
+      <form id="messageForm" method="post"
+        action="{% url 'private-chat-create' receiver_username=viewed_user.username %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Message</button>
       </form>
@@ -129,8 +108,7 @@ viewed_user.username }}'s Profile{% endblock %} {% block content %}
       <h3>Commented Posts</h3>
       {% for comment in user.posted_comments.all %}
       <li>
-        <strong
-          >Comment on
+        <strong>Comment on
           <a href="{% url 'post-detail' pk=comment.post.pk %}">
             {{ comment.post.title}}
           </a>
@@ -144,9 +122,6 @@ viewed_user.username }}'s Profile{% endblock %} {% block content %}
     </div>
   </div>
 </div>
-<script
-  type="module"
-  src="{% static 'js/users/user_profile_detail.js' %}"
-></script>
+<script type="module" src="{% static 'js/users/user_profile_detail.js' %}"></script>
 
 {% endblock %}

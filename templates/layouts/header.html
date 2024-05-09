@@ -4,15 +4,8 @@
     <a class="navbar-brand" href="{% url 'metasphere' %}">
       <img src="{% static 'images/title.png' %}" width="200" />
     </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <i class="fa-brands fa-meta"></i>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -28,10 +21,7 @@
           <a class="nav-link" href="{% url 'chat-list' %}">Chat</a>
         </li>
         <li class="nav-item">
-          <a
-            class="nav-link"
-            href="{% url 'user-profile-detail' username=user.username %}"
-          >
+          <a class="nav-link" href="{% url 'user-profile-detail' username=user.username %}">
             {{ user.username }}
           </a>
         </li>
@@ -52,18 +42,8 @@
       </ul>
 
       <!-- Add search form -->
-      <form
-        class="d-flex ms-auto"
-        method="get"
-        action="{% url 'search-posts' %}"
-      >
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-          name="q"
-        />
+      <form class="d-flex ms-auto" method="get" action="{% url 'search-posts' %}">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q" />
         <button class="btn btn-primary" type="submit">Search</button>
       </form>
     </div>

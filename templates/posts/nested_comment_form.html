@@ -5,14 +5,14 @@
   {% for reply in replies %}
   <li>
     <p>
-      <strong>{{ reply.author.username }}</strong> on {{
-      reply.date_posted|date:"F j, Y, G:i" }}
+      <strong>{{ reply.author.username }}</strong> on {{ reply.date_posted|date:"F j, Y, G:i" }}
     </p>
     <p>{{ reply.content }}</p>
 
     <h4>Reply</h4>
     <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
-      {% csrf_token %} {{ reply_create_form|crispy }}
+      {% csrf_token %}
+      {{ reply_create_form|crispy }}
       <button type="submit" class="btn btn-primary">Submit Reply</button>
     </form>
 

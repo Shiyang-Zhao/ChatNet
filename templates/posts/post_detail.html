@@ -1,5 +1,6 @@
-{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
-block title %}{{ post.title }}{% endblock %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
 <div class="container mt-5">
   <h2>{{ post.title }}</h2>
   <p>By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}</p>
@@ -14,35 +15,23 @@ block title %}{{ post.title }}{% endblock %} {% block content %}
   </div>
   {% endif %}
 
-  <button
-    type="button"
-    class="btn btn-outline-success like-btn"
-    data-post-pk="{{ post.pk }}"
-    data-url="{% url 'like-post' pk=post.pk %}"
-  >
+  <button type="button" class="btn btn-outline-success like-btn" data-post-pk="{{ post.pk }}"
+    data-url="{% url 'like-post' pk=post.pk %}">
     Like
   </button>
   <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }} Likes</span>
-  <button
-    type="button"
-    class="btn btn-outline-danger dislike-btn"
-    data-post-pk="{{ post.pk }}"
-    data-url="{% url 'dislike-post' pk=post.pk %}"
-  >
+  <button type="button" class="btn btn-outline-danger dislike-btn" data-post-pk="{{ post.pk }}"
+    data-url="{% url 'dislike-post' pk=post.pk %}">
     Dislike
   </button>
-  <span id="dislikes-count-{{ post.pk }}"
-    >{{ post.disliked_by.count }} Dislikes</span
-  >
+  <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }} Dislikes</span>
 
   <p><strong>Comments:</strong> {{ post.comments.count }}</p>
   <p><strong>Views:</strong> {{ post.views }}</p>
 
   {% if request.user == post.author %}
   <div class="post-actions">
-    <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}"
-      >Edit</a
-    >
+    <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
     <form method="post" action="{% url 'post-delete' pk=post.pk %}">
       {% csrf_token %}
       <button type="submit" class="btn btn-danger">Delete</button>
@@ -70,10 +59,7 @@ block title %}{{ post.title }}{% endblock %} {% block content %}
       <p>{{ parent_comment.content }}</p>
 
       <h4>Reply</h4>
-      <form
-        method="post"
-        action="{% url 'reply-create' pk=parent_comment.pk %}"
-      >
+      <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
         {% csrf_token %} {{ reply_create_form|crispy }}
         <button type="submit" class="btn btn-primary">Submit Reply</button>
       </form>
@@ -87,8 +73,5 @@ block title %}{{ post.title }}{% endblock %} {% block content %}
   <p>No comments yet.</p>
   {% endif %}
 </div>
-<script
-  type="module"
-  src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"
-></script>
+<script type="module" src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"></script>
 {% endblock %}
