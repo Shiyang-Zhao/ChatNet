@@ -1,42 +1,44 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block title %}My Chats{% endblock %}
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block title %}My Chats{% endblock
+%} {% block content %}
 <div class="container mt-5">
-    <h2>My Chats</h2>
-    {% include 'chats/group_chat_create_form.html' %}
-    {% if chats %}
-    <ul class="list-group">
-        {% for chat in chats %}
-        <div>
-            <li class="list-group-item" data-chat-pk="{{ chat.pk }}" data-href="{% url 'chat-detail' pk=chat.pk %}">
-                {% for participant in chat.participants.all %}
-                {{ participant.username }}
-                {% endfor %}
-                ({{ chat.chat_type }})
-                <p>Created by: {{ chat.creator }} at {{ chat.created_at|date:"F j, Y, G:i" }}</p>
-            </li>
+  <h2>My Chats</h2>
+  {% include 'chats/group_chat_create_form.html' %} {% if chats %}
+  <ul class="list-group">
+    {% for chat in chats %}
+    <div>
+      <li
+        class="list-group-item"
+        data-chat-pk="{{ chat.pk }}"
+        data-href="{% url 'chat-detail' pk=chat.pk %}"
+      >
+        {% for participant in chat.participants.all %} {{ participant.username
+        }} {% endfor %} ({{ chat.chat_type }})
+        <p>
+          Created by: {{ chat.creator }} at {{ chat.created_at|date:"F j, Y,
+          G:i" }}
+        </p>
+      </li>
 
-            <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
-                <div class="chat-detail">
-                    {% include 'chats/message_detail.html' with chat=chat %}
-                </div>
-            </div>
+      <div
+        id="chat-detail-placeholder-{{ chat.pk }}"
+        class="chat-detail-placeholder"
+        style="display: none"
+      >
+        <div class="chat-detail">
+          {% include 'chats/message_detail.html' with chat=chat %}
         </div>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No chats found.</p>
-    {% endif %}
-
-    {% for following in user.profile.following.all %}
-    <a href="{% url 'user-profile-detail' username=following.user.username %}">
-        {{ following.user.username }}
-    </a>
+      </div>
+    </div>
     {% endfor %}
+  </ul>
+  {% else %}
+  <p>No chats found.</p>
+  {% endif %} {% for following in user.profile.following.all %}
+  <a href="{% url 'user-profile-detail' username=following.user.username %}">
+    {{ following.user.username }}
+  </a>
+  {% endfor %}
 </div>
 <script type="module" src="{% static 'js/chats/chat_detail.js' %}"></script>
 <script type="module" src="{% static 'js/chats/websocket.js' %}"></script>
-
 {% endblock %}

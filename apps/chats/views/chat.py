@@ -62,7 +62,7 @@ class GroupChatCreateView(LoginRequiredMixin, CreateView):
         existing_chat = Chat.get_existing_group_chat(participants, creator)
         if existing_chat:
             return redirect(existing_chat.get_absolute_url())
-        
+
         form.instance.creator = self.request.user
         form.instance.chat_type = Chat.GROUP
         form.instance.title = "Group Title"

@@ -1,33 +1,50 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block title %}Metasphere{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %}Metasphere{%
+endblock %} {% block content %}
 <div class="container mt-5">
-    <h2>Welcome to the Home Page</h2>
-    <!-- Loop through the list of posts -->
-    {% for post in posts %}
-    <div class="post" id="post-{{ post.pk }}">
-        <h3>{{ post.title }}</h3>
-        <p>By
-            <a href="{% url 'user-profile-detail' username=post.author.username %}">
-                {{ post.author }}
-            </a>
-        </p>
-        <p>{{ post.content|truncatewords:50 }}</p>
+  <h2>Welcome to the Home Page</h2>
+  <!-- Loop through the list of posts -->
+  {% for post in posts %}
+  <div class="post" id="post-{{ post.pk }}">
+    <h3>{{ post.title }}</h3>
+    <p>
+      By
+      <a href="{% url 'user-profile-detail' username=post.author.username %}">
+        {{ post.author }}
+      </a>
+    </p>
+    <p>{{ post.content|truncatewords:50 }}</p>
 
-        <button type="button" class="btn btn-outline-success like-btn" data-post-pk="{{ post.pk }}"
-            data-url="{% url 'like-post' pk=post.pk %}">Like</button>
-        <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }} Likes</span>
-        <button type="button" class="btn btn-outline-danger dislike-btn" data-post-pk="{{ post.pk }}"
-            data-url="{% url 'dislike-post' pk=post.pk %}">Dislike</button>
-        <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }} Dislikes</span>
+    <button
+      type="button"
+      class="btn btn-outline-success like-btn"
+      data-post-pk="{{ post.pk }}"
+      data-url="{% url 'like-post' pk=post.pk %}"
+    >
+      Like
+    </button>
+    <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }} Likes</span>
+    <button
+      type="button"
+      class="btn btn-outline-danger dislike-btn"
+      data-post-pk="{{ post.pk }}"
+      data-url="{% url 'dislike-post' pk=post.pk %}"
+    >
+      Dislike
+    </button>
+    <span id="dislikes-count-{{ post.pk }}"
+      >{{ post.disliked_by.count }} Dislikes</span
+    >
 
-        <a href="{% url 'post-detail' post.pk %}">{{ post.comments.count }} Comments</a>
-    </div>
-    {% empty %}
-    <p>No posts available.</p>
-    {% endfor %}
+    <a href="{% url 'post-detail' post.pk %}"
+      >{{ post.comments.count }} Comments</a
+    >
+  </div>
+  {% empty %}
+  <p>No posts available.</p>
+  {% endfor %}
 </div>
-<script type="module" src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"></script>
+<script
+  type="module"
+  src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"
+></script>
 {% endblock %}

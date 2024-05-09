@@ -1,82 +1,94 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
-{% block title %}{{ post.title }}{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
+block title %}{{ post.title }}{% endblock %} {% block content %}
 <div class="container mt-5">
+  <h2>{{ post.title }}</h2>
+  <p>By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}</p>
 
-    <h2>{{ post.title }}</h2>
-    <p>
-        By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}
-    </p>
+  <p>{{ post.content }}</p>
 
-    <p>{{ post.content }}</p>
+  {% if post.file %}
+  <div>
+    <p>Download the attached file:</p>
+    <a href="{{ post.file.url }}">{{ post.file.name }}</a>
+    <p>File type: {{ post.extension }}</p>
+  </div>
+  {% endif %}
 
-    {% if post.file %}
-    <div>
-        <p>Download the attached file:</p>
-        <a href="{{ post.file.url }}">{{ post.file.name }}</a>
-        <p>File type: {{ post.extension }}</p>
-    </div>
-    {% endif %}
+  <button
+    type="button"
+    class="btn btn-outline-success like-btn"
+    data-post-pk="{{ post.pk }}"
+    data-url="{% url 'like-post' pk=post.pk %}"
+  >
+    Like
+  </button>
+  <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }} Likes</span>
+  <button
+    type="button"
+    class="btn btn-outline-danger dislike-btn"
+    data-post-pk="{{ post.pk }}"
+    data-url="{% url 'dislike-post' pk=post.pk %}"
+  >
+    Dislike
+  </button>
+  <span id="dislikes-count-{{ post.pk }}"
+    >{{ post.disliked_by.count }} Dislikes</span
+  >
 
-    <button type="button" class="btn btn-outline-success like-btn" data-post-pk="{{ post.pk }}"
-        data-url="{% url 'like-post' pk=post.pk %}">Like</button>
-    <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }} Likes</span>
-    <button type="button" class="btn btn-outline-danger dislike-btn" data-post-pk="{{ post.pk }}"
-        data-url="{% url 'dislike-post' pk=post.pk %}">Dislike</button>
-    <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }} Dislikes</span>
+  <p><strong>Comments:</strong> {{ post.comments.count }}</p>
+  <p><strong>Views:</strong> {{ post.views }}</p>
 
-    <p><strong>Comments:</strong> {{ post.comments.count }}</p>
-    <p><strong>Views:</strong> {{ post.views }}</p>
-
-    {% if request.user == post.author %}
-    <div class="post-actions">
-        <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
-        <form method="post" action="{% url 'post-delete' pk=post.pk %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
-    </div>
-    {% endif %}
-
-    <!-- Comment Form with Crispy Forms -->
-    <h3>Leave a Comment</h3>
-    <form method="post" action="{% url 'comment-create' pk=post.pk %}">
-        {% csrf_token %}
-        {{ comment_create_form|crispy }}
-        <button type="submit" class="btn btn-primary">Submit</button>
+  {% if request.user == post.author %}
+  <div class="post-actions">
+    <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}"
+      >Edit</a
+    >
+    <form method="post" action="{% url 'post-delete' pk=post.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Delete</button>
     </form>
+  </div>
+  {% endif %}
 
-    <!-- Display existing comments -->
-    <h3>Comments</h3>
-    {% if parent_comments %}
-    <ul class="list-group">
-        {% for parent_comment in parent_comments %}
-        <li class="list-group-item">
-            <p>
-                <strong>
-                    {{ parent_comment.author.username }}
-                </strong>
-                on {{ parent_comment.date_posted|date:"F j, Y, G:i" }}
-            </p>
-            <p>{{ parent_comment.content }}</p>
+  <!-- Comment Form with Crispy Forms -->
+  <h3>Leave a Comment</h3>
+  <form method="post" action="{% url 'comment-create' pk=post.pk %}">
+    {% csrf_token %} {{ comment_create_form|crispy }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 
-            <h4>Reply</h4>
-            <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
-                {% csrf_token %}
-                {{ reply_create_form|crispy }}
-                <button type="submit" class="btn btn-primary">Submit Reply</button>
-            </form>
+  <!-- Display existing comments -->
+  <h3>Comments</h3>
+  {% if parent_comments %}
+  <ul class="list-group">
+    {% for parent_comment in parent_comments %}
+    <li class="list-group-item">
+      <p>
+        <strong> {{ parent_comment.author.username }} </strong>
+        on {{ parent_comment.date_posted|date:"F j, Y, G:i" }}
+      </p>
+      <p>{{ parent_comment.content }}</p>
 
-            {% include 'posts/nested_comment_form.html' with replies=parent_comment.children %}
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No comments yet.</p>
-    {% endif %}
+      <h4>Reply</h4>
+      <form
+        method="post"
+        action="{% url 'reply-create' pk=parent_comment.pk %}"
+      >
+        {% csrf_token %} {{ reply_create_form|crispy }}
+        <button type="submit" class="btn btn-primary">Submit Reply</button>
+      </form>
+
+      {% include 'posts/nested_comment_form.html' with
+      replies=parent_comment.children %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No comments yet.</p>
+  {% endif %}
 </div>
-<script type="module" src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"></script>
+<script
+  type="module"
+  src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"
+></script>
 {% endblock %}

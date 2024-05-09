@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "apps.users.apps.UsersConfig",
     "apps.posts.apps.PostsConfig",
     "apps.chats.apps.ChatsConfig",
+    "apps.notifications.apps.NotificationsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

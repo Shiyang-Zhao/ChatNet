@@ -16,10 +16,10 @@ class Notification(models.Model):
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+"
     )
-    type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
-    text = models.TextField()
-    read = models.BooleanField(default=False)
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    text = models.TextField(blank=True, null=True)
+    is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Notification({self.type}) for {self.recipient.username}"
+        return f"Notification({self.notification_type}) for {self.recipient.username}"

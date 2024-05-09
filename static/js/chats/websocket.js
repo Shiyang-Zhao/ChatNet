@@ -5,12 +5,14 @@ export const establishWebSocket = (chatPk) => {
         socket.close();
     }
 
-    const socketProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-    const socketURL = socketProtocol + window.location.host + `/ws/chats/chat/${chatPk}/`;
+    const socketProtocol =
+        window.location.protocol === "https:" ? "wss://" : "ws://";
+    const socketURL =
+        socketProtocol + window.location.host + `/ws/chats/chat/${chatPk}/`;
     socket = new WebSocket(socketURL);
 
     socket.onopen = function () {
-        console.log('WebSocket connection to chat successfully established!');
+        console.log("WebSocket connection to chat successfully established!");
     };
 
     socket.onmessage = function (event) {
@@ -23,13 +25,13 @@ export const establishWebSocket = (chatPk) => {
     };
 
     socket.onclose = function (e) {
-        console.error('Chat socket closed unexpectedly');
+        console.error("Chat socket closed unexpectedly");
     };
 };
 
 export const sendMessage = (messageData) => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
-        console.error('WebSocket is not open or not connected');
+        console.error("WebSocket is not open or not connected");
         return;
     }
 
@@ -37,7 +39,9 @@ export const sendMessage = (messageData) => {
 };
 
 const displayMessage = (chatPk, message) => {
-    var messagesContainer = document.querySelector(`#chat-detail-placeholder-${chatPk} .chat-messages`);
+    var messagesContainer = document.querySelector(
+        `#chat-detail-placeholder-${chatPk} .chat-messages`
+    );
     var messageElement = document.createElement("div");
     messageElement.classList.add("message");
     var usernameElement = document.createElement("strong");
@@ -50,8 +54,15 @@ const displayMessage = (chatPk, message) => {
     dateSentElement.classList.add("date-sent");
 
     var dateSent = new Date(message.date_sent);
-    var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false };
-    dateSentElement.textContent = dateSent.toLocaleString('en-US', options);
+    var options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: false,
+    };
+    dateSentElement.textContent = dateSent.toLocaleString("en-US", options);
 
     messageElement.appendChild(dateSentElement);
     messagesContainer.appendChild(messageElement);

@@ -1,25 +1,33 @@
 <div class="chat-detail">
-    <div class="chat-messages" id="message-container">
-        {% if chat.messages.all %}
-        {% for message in chat.messages.all %}
-        <div class="message">
-            <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
-            <span class="date-sent">{{ message.date_sent|date:"F j, Y, G:i" }}</span>
-        </div>
-        {% endfor %}
-        {% else %}
-        <p>No messages yet. Start the conversation!</p>
-        {% endif %}
+  <div class="chat-messages" id="message-container">
+    {% if chat.messages.all %} {% for message in chat.messages.all %}
+    <div class="message">
+      <p>
+        <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+      </p>
+      <span class="date-sent">{{ message.date_sent|date:"F j, Y, G:i" }}</span>
     </div>
-    <div>
-        <form id="message-form" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <label for="messageInput">Message:</label><br>
-            <textarea id="messageInput" name="message" rows="4" cols="50" required></textarea>
-            <br>
-            <!-- <label for="attachment">Attachment:</label><br>
+    {% endfor %} {% else %}
+    <p>No messages yet. Start the conversation!</p>
+    {% endif %}
+  </div>
+  <div>
+    <form id="message-form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <label for="messageInput">Message:</label><br />
+      <textarea
+        id="messageInput"
+        name="message"
+        rows="4"
+        cols="50"
+        required
+      ></textarea>
+      <br />
+      <!-- <label for="attachment">Attachment:</label><br>
             <input type="file" id="attachment" name="attachment"><br><br> -->
-            <button id="sendButton" type="button" class="btn btn-primary">Send</button>
-        </form>
-    </div>
+      <button id="sendButton" type="button" class="btn btn-primary">
+        Send
+      </button>
+    </form>
+  </div>
 </div>

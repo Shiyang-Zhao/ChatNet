@@ -1,52 +1,71 @@
+{% load static %}
 <div class="header">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'metasphere' %}">Metasphere</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
-                </li>
-                {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link"
-                        href="{% url 'user-profile-detail' username=request.user.username %}">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'post-create' %}">Create Post</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'chat-list' %}">Chat</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user-profile-detail' username=user.username %}">
-                        {{ user.username }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <form method="post" action="{% url 'user-logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="nav-link btn btn-link">Log Out</button>
-                    </form>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user-register' %}">Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user-login' %}">Log In</a>
-                </li>
-                {% endif %}
-            </ul>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'metasphere' %}">
+      <img src="{% static 'images/title.png' %}" width="200" />
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fa-brands fa-meta"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'post-create' %}">Post</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'chat-list' %}">Chat</a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="{% url 'user-profile-detail' username=user.username %}"
+          >
+            {{ user.username }}
+          </a>
+        </li>
+        <li class="nav-item">
+          <form method="post" action="{% url 'user-logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="nav-link btn btn-link">Log Out</button>
+          </form>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'user-register' %}">Sign Up</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'user-login' %}">Log In</a>
+        </li>
+        {% endif %}
+      </ul>
 
-            <!-- Search form -->
-            <form class="d-flex ms-auto" method="get" action="{% url 'search-posts' %}">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+      <!-- Add search form -->
+      <form
+        class="d-flex ms-auto"
+        method="get"
+        action="{% url 'search-posts' %}"
+      >
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+          name="q"
+        />
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
 </div>
