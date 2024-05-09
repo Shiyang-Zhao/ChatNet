@@ -4,6 +4,11 @@ from django.core.exceptions import PermissionDenied
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.core.cache import cache
+from pathlib import Path
+
+
+def user_directory_path(instance, filename):
+    return str(Path("static/images/profile_images") / instance.user.username / filename)
 
 
 class Profile(models.Model):
@@ -13,7 +18,11 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
     birthday = models.DateField(null=True, blank=True)
-    profile_image = models.ImageField(upload_to="profile_images/", blank=True)
+    profile_image = models.ImageField(
+        upload_to=user_directory_path,
+        blank=True,
+        default="static/images/profile_images/default_profile_image.png",
+    )
     location = models.CharField(max_length=100, blank=True)
     website = models.URLField(blank=True)
     following = models.ManyToManyField(
