@@ -1,4 +1,6 @@
 from django.db.models.signals import post_save
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from .models import Notification
@@ -12,13 +14,22 @@ User = get_user_model()
 def new_message_notification(sender, instance, created, **kwargs):
     if created:
         chat = instance.chat
-        sender = instance.sender
+        receivers = chat.participants.exclude(pk=instance.sender.pk)
+        channel_layer = get_channel_layer()  # Initialize channel layer here
+        content = f"You have received a new message from {instance.sender.username} in chat '{chat.pk}'."
 
-        receivers = chat.participants.exclude(pk=sender.pk)
         for receiver in receivers:
-            Notification.objects.create(
-                user=receiver,
-                title="New Message",
-                content=f"You have received a new message from {sender.username} in chat '{chat.pk}'.",
-                message=instance,
+            notification = Notification.objects.create(
+                receiver=receiver,
+                sender=instance.sender,
+                content=content,
+            )
+
+            # Send the notification through WebSocket to the receiver's group
+            async_to_sync(channel_layer.group_send)(
+                f"notification_{receiver.pk}",
+                {
+                    "type": "notification_message",  # This will call `notification_message` in the consumer
+                    "content": content,
+                },
             )

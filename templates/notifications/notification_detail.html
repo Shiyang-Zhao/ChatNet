@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Notifications</h2>
+    <ul id="notification-list" class="list-group">
+        {% for notification in notifications %}
+        <div>
+            <li class="list-group-item" {% if not notification.is_read %}style="font-weight: bold;" {% endif %}>
+                <span>{{ notification.content }} - {{ notification.created_at|date:"F j, Y,G:i" }}</span>
+                <form method="post" action="{% url 'mark-as-read' notification.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Mark as Read</button>
+                </form>
+            </li>
+            {% empty %}
+            <li>No notifications available.</li>
+        </div>
+        {% endfor %}
+    </ul>
+</div>
+<script type="module" src="{% static 'js/notifications/notification_detail.js' %}"></script>
+{% endblock %}

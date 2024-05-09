@@ -23,25 +23,27 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Consumer receives message
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message_content = text_data_json.get("content", "")
+        message_type = text_data_json.get("type")
         sender = self.scope["user"]
-        date_sent = timezone.now()
 
-        # Save the message to the database
-        await self.save_message(sender, message_content, date_sent)
+        if message_type == "chat_message":
+            content = text_data_json.get("content", "")
+            date_sent = timezone.now()
 
-        # Send the message to the room group
-        await self.channel_layer.group_send(
-            self.chat_channel_name,
-            {
-                "type": "chat_message",
-                "sender_username": sender.username,
-                "content": message_content,
-                "date_sent": date_sent.isoformat(),
-            },
-        )
+            # Save message to the database
+            await self.save_message(sender, content, date_sent)
 
-    # Consumer sends message
+            # Send the chat message to the chat group
+            await self.channel_layer.group_send(
+                self.chat_channel_name,
+                {
+                    "type": "chat_message",
+                    "sender_username": sender.username,
+                    "content": content,
+                    "date_sent": date_sent.isoformat(),
+                },
+            )
+
     async def chat_message(self, event):
         sender_username = event["sender_username"]
         content = event["content"]
@@ -51,6 +53,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(
             text_data=json.dumps(
                 {
+                    "type": "chat_message",
                     "sender_username": sender_username,
                     "content": content,
                     "date_sent": date_sent,

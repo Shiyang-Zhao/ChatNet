@@ -1,4 +1,4 @@
-import { establishWebSocket, sendMessage } from "./websocket.js";
+import { establishChatWebSocket, sendChatMessage } from "../websockets/chat_websocket.js";
 
 const showDetailPlaceholder = (chatPk) => {
     document
@@ -12,14 +12,15 @@ const showDetailPlaceholder = (chatPk) => {
     );
     if (detailPlaceholder) {
         detailPlaceholder.style.display = "block";
-        establishWebSocket(chatPk);
+        establishChatWebSocket(chatPk);
 
         const messageInput = detailPlaceholder.querySelector("#messageInput");
         const sendButton = detailPlaceholder.querySelector("#sendButton");
 
         sendButton.addEventListener("click", () => {
-            if (messageInput.value.trim() !== "") {
-                sendMessage({ content: messageInput.value.trim() });
+            const messageContent = messageInput.value.trim();
+            if (messageContent !== "") {
+                sendChatMessage(messageContent);
                 messageInput.value = "";
             } else {
                 alert("You can't send an empty message");
@@ -29,9 +30,9 @@ const showDetailPlaceholder = (chatPk) => {
         messageInput.addEventListener("keydown", (event) => {
             if (event.key === "Enter" && !event.shiftKey) {
                 event.preventDefault();
-                if (messageInput.value.trim() !== "") {
-                    // Check if the form is valid
-                    sendMessage({ content: messageInput.value.trim() });
+                const messageContent = messageInput.value.trim();
+                if (messageContent !== "") {
+                    sendChatMessage(messageContent);
                     messageInput.value = "";
                 } else {
                     alert("You can't send an empty message");
@@ -57,17 +58,4 @@ document.addEventListener("DOMContentLoaded", function () {
             window.history.pushState(null, "", url);
         });
     });
-
-    // function toggleSelection(event) {
-    //     const option = event.target;
-    //     if (option.tagName === 'OPTION') {
-    //         option.selected = !option.selected;
-    //         if (option.selected) {
-    //             option.classList.add('bg-primary');
-    //         } else {
-    //             option.classList.remove('bg-primary');
-    //         }
-    //     }
-    // }
-    // document.getElementById('id_participants').addEventListener('click', toggleSelection);
 });

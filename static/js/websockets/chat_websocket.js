@@ -1,6 +1,6 @@
 let socket;
 
-export const establishWebSocket = (chatPk) => {
+const establishChatWebSocket = (chatPk) => {
     if (socket) {
         socket.close();
     }
@@ -21,24 +21,27 @@ export const establishWebSocket = (chatPk) => {
         console.log("Sender: " + message.sender_username);
         console.log("Received message: " + message.content);
         console.log("Date sent: " + message.date_sent);
-        displayMessage(chatPk, message);
+        displayChatMessage(chatPk, message);
     };
 
     socket.onclose = function (e) {
-        console.error("Chat socket closed unexpectedly");
+        console.error(`Chat socket closed unexpectedly: ${e.code} - ${e.reason}`);
     };
 };
 
-export const sendMessage = (messageData) => {
+const sendChatMessage = (content) => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
         console.error("WebSocket is not open or not connected");
         return;
     }
-
+    const messageData = {
+        type: "chat_message",
+        content: content.trim(),
+    };
     socket.send(JSON.stringify(messageData));
 };
 
-const displayMessage = (chatPk, message) => {
+const displayChatMessage = (chatPk, message) => {
     var messagesContainer = document.querySelector(
         `#chat-detail-placeholder-${chatPk} .chat-messages`
     );
@@ -68,4 +71,4 @@ const displayMessage = (chatPk, message) => {
     messagesContainer.appendChild(messageElement);
 };
 
-export default socket;
+export { establishChatWebSocket, sendChatMessage }
