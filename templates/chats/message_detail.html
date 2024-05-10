@@ -1,6 +1,7 @@
 <div class="chat-detail">
   <div class="chat-messages">
-    {% if chat.messages.all %} {% for message in chat.messages.all %}
+    {% if chat.messages.all %}
+    {% for message in chat.messages.all %}
     <div class="message">
       <p>
         <strong>{{ message.sender.username }}:</strong> {{ message.content }}

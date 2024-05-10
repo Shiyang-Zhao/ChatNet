@@ -1,4 +1,5 @@
 {% load static %}
+{% load notification_tags %}
 <div class="header">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{% url 'metasphere' %}">
@@ -30,12 +31,19 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'notification-list' %}">
+            {% unread_notification_count user as unread_count %}
+            {% if unread_count > 0 %}
+            <i class="fa-solid fa-bell fa-xl fa-shake">{{ unread_count }}</i>
+            {% else %}
             <i class="fa-regular fa-bell fa-xl"></i>
+            {% endif %}
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'user-profile-detail' username=user.username %}">
+            {% if user.profile.profile_image %}
             <img src="{{ user.profile.profile_image.url }}" class="profile-image rounded-circle" width="25">
+            {% endif %}
           </a>
         </li>
 

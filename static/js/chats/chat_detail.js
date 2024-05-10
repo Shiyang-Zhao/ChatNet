@@ -14,7 +14,9 @@ const showDetailPlaceholder = (chatPk) => {
         detailPlaceholder.style.display = "block";
         establishChatWebSocket(chatPk);
 
+        // Scroll to the input field
         const messageInput = detailPlaceholder.querySelector("#messageInput");
+        messageInput.scrollIntoView({ behavior: "smooth", block: "nearest" });
         const sendButton = detailPlaceholder.querySelector("#sendButton");
 
         sendButton.addEventListener("click", () => {

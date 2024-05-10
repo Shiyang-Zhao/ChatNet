@@ -31,11 +31,6 @@ const establishChatWebSocket = (chatPk) => {
         console.error(`Chat socket closed unexpectedly: ${e.code} - ${e.reason}`);
         reconnect(chatPk);
     };
-
-    socket.onerror = function (e) {
-        console.error(`WebSocket error: ${e.message}`);
-        reconnect(chatPk);
-    };
 };
 
 const reconnect = (chatPk) => {

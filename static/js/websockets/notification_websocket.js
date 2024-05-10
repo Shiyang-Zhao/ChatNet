@@ -28,11 +28,6 @@ const establishNotificationWebSocket = () => {
         console.error(`Chat socket closed unexpectedly: ${e.code} - ${e.reason}`);
         reconnect();
     };
-
-    socket.onerror = function (e) {
-        console.error(`WebSocket error: ${e.message}`);
-        reconnect();
-    };
 };
 
 const reconnect = () => {
