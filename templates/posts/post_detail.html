@@ -64,8 +64,7 @@
         <button type="submit" class="btn btn-primary">Submit Reply</button>
       </form>
 
-      {% include 'posts/nested_comment_form.html' with
-      replies=parent_comment.children %}
+      {% include 'posts/nested_comment_form.html' with replies=parent_comment.children %}
     </li>
     {% endfor %}
   </ul>

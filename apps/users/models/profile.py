@@ -21,7 +21,7 @@ class Profile(models.Model):
     profile_image = models.ImageField(
         upload_to=user_directory_path,
         blank=True,
-        default="static/images/profile_images/default_profile_image.png",
+        default="static/images/default_profile_image.jpg",
     )
     location = models.CharField(max_length=100, blank=True)
     website = models.URLField(blank=True)

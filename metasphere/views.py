@@ -5,7 +5,7 @@ import re
 
 
 def home(request):
-    context = {"posts": Post.objects.all()}
+    context = {"posts": Post.objects.filter(is_published=True)}
     return render(request, "layouts/home.html", context)
 
 

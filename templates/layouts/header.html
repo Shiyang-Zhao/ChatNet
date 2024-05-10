@@ -35,8 +35,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'user-profile-detail' username=user.username %}">
-            <img src="{{ user.profile.profile_image.url }}" class="profile-image rounded-circle" width="40">
-            {{ user.username }}
+            <img src="{{ user.profile.profile_image.url }}" class="profile-image rounded-circle" width="25">
           </a>
         </li>
 

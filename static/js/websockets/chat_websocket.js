@@ -1,4 +1,6 @@
 let socket;
+let retryInterval = 1000;
+let maxRetryInterval = 60000;
 
 const establishChatWebSocket = (chatPk) => {
     if (socket) {
@@ -13,6 +15,7 @@ const establishChatWebSocket = (chatPk) => {
 
     socket.onopen = function () {
         console.log("WebSocket connection to chat successfully established!");
+        retryInterval = 1000;
     };
 
     socket.onmessage = function (event) {
@@ -26,7 +29,19 @@ const establishChatWebSocket = (chatPk) => {
 
     socket.onclose = function (e) {
         console.error(`Chat socket closed unexpectedly: ${e.code} - ${e.reason}`);
+        reconnect(chatPk);
     };
+
+    socket.onerror = function (e) {
+        console.error(`WebSocket error: ${e.message}`);
+        reconnect(chatPk);
+    };
+};
+
+const reconnect = (chatPk) => {
+    console.log(`Attempting to reconnect in ${retryInterval / 1000} seconds...`);
+    setTimeout(() => establishChatWebSocket(chatPk), retryInterval);
+    retryInterval = Math.min(maxRetryInterval, retryInterval * 2);
 };
 
 const sendChatMessage = (content) => {
