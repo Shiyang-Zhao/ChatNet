@@ -13,6 +13,8 @@ const establishChatWebSocket = (chatPk) => {
         socketProtocol + window.location.host + `/ws/chats/chat/${chatPk}/`;
     socket = new WebSocket(socketURL);
 
+    socket.chatPk = chatPk;
+
     socket.onopen = function () {
         console.log("WebSocket connection to chat successfully established!");
         retryInterval = 1000;
@@ -28,12 +30,21 @@ const establishChatWebSocket = (chatPk) => {
     };
 
     socket.onclose = function (e) {
-        console.error(`Chat socket closed unexpectedly: ${e.code} - ${e.reason}`);
+        console.error(`Chat socket closed: ${e.code}  ${e.reason}`);
+        reconnect(chatPk);
+    };
+
+    socket.onerror = function (e) {
+        console.error(`WebSocket encountered an error: ${e.code}  ${e.reason}`);
         reconnect(chatPk);
     };
 };
 
 const reconnect = (chatPk) => {
+    if (socket && socket.chatPk !== chatPk) {
+        console.error("WebSocket won't try to reconnect because chat room changed.");
+        return;
+    }
     console.log(`Attempting to reconnect in ${retryInterval / 1000} seconds...`);
     setTimeout(() => establishChatWebSocket(chatPk), retryInterval);
     retryInterval = Math.min(maxRetryInterval, retryInterval * 2);
