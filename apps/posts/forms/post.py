@@ -18,11 +18,6 @@ class PostCreateForm(forms.ModelForm):
             raise forms.ValidationError("Title must be at least 5 characters long.")
         return title
 
-    def clean_content(self):
-        content = self.cleaned_data.get("content")
-        if not content or len(content.strip()) < 10:
-            raise forms.ValidationError("Content must be at least 10 characters long.")
-        return content
 
 class PostUpdateForm(forms.ModelForm):
     class Meta:
@@ -39,9 +34,3 @@ class PostUpdateForm(forms.ModelForm):
         if len(title) < 5:
             raise forms.ValidationError("Title must be at least 5 characters long.")
         return title
-
-    def clean_content(self):
-        content = self.cleaned_data.get("content")
-        if not content or len(content.strip()) < 10:
-            raise forms.ValidationError("Content must be at least 10 characters long.")
-        return content

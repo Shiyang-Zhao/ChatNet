@@ -2,13 +2,14 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.exceptions import ValidationError
-from django.db import transaction
 from django.core.cache import cache
 from pathlib import Path
+from PIL import Image
+import os
 
 
-def user_directory_path(instance, filename):
-    return str(Path("static/images/profile_images") / instance.user.username / filename)
+def profile_image_directory_path(instance, filename):
+    return str(Path("profile_images") / instance.user.username / filename)
 
 
 class Profile(models.Model):
@@ -19,9 +20,9 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=15, blank=True)
     birthday = models.DateField(null=True, blank=True)
     profile_image = models.ImageField(
-        upload_to=user_directory_path,
+        upload_to=profile_image_directory_path,
         blank=True,
-        default="static/images/default_profile_image.jpg",
+        default="profile_images/default_profile_image.jpg",
     )
     location = models.CharField(max_length=100, blank=True)
     website = models.URLField(blank=True)
@@ -32,14 +33,30 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.profile_image:
+            image_path = self.profile_image.path
+            image = Image.open(image_path)
+            if image.format != "JPEG":
+                image = image.convert("RGB")
+            max_size_kb = 50
+            max_size_bytes = max_size_kb * 1024
+            if os.path.getsize(image_path) > max_size_bytes:
+                image.save(
+                    image_path,
+                    quality=85,  # Adjust quality as needed
+                    optimize=True,
+                )
+
     def delete(self, *args, **kwargs):
-        raise PermissionDenied("Profiles cannot be deleted manually.")
+        raise PermissionDenied("Profiles cannot be deleted manually")
 
     def follow(self, profile):
         if self == profile:
-            raise ValidationError("You cannot follow yourself.")
+            raise ValidationError("You cannot follow yourself")
         if self.is_following(profile):
-            raise ValidationError("You are already following this profile.")
+            raise ValidationError("You are already following this profile")
 
         self.following.add(profile)
         cache_key = f"following:{self.pk}:{profile.pk}"
@@ -47,9 +64,9 @@ class Profile(models.Model):
 
     def unfollow(self, profile):
         if self == profile:
-            raise ValidationError("You cannot unfollow yourself.")
+            raise ValidationError("You cannot unfollow yourself")
         if not self.is_following(profile):
-            raise ValidationError("You are not following this profile.")
+            raise ValidationError("You are not following this profile")
 
         self.following.remove(profile)
         cache_key = f"following:{self.pk}:{profile.pk}"

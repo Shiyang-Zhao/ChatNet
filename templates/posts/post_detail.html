@@ -7,13 +7,7 @@
 
   <p>{{ post.content }}</p>
 
-  {% if post.file %}
-  <div>
-    <p>Download the attached file:</p>
-    <a href="{{ post.file.url }}">{{ post.file.name }}</a>
-    <p>File type: {{ post.extension }}</p>
-  </div>
-  {% endif %}
+  {% include 'posts/post_file_detail.html' with post=post %}
 
   <button type="button" class="btn btn-outline-success like-btn" data-post-pk="{{ post.pk }}"
     data-url="{% url 'like-post' pk=post.pk %}">
@@ -42,7 +36,8 @@
   <!-- Comment Form with Crispy Forms -->
   <h3>Leave a Comment</h3>
   <form method="post" action="{% url 'comment-create' pk=post.pk %}">
-    {% csrf_token %} {{ comment_create_form|crispy }}
+    {% csrf_token %}
+    {{ comment_create_form|crispy }}
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 
@@ -54,13 +49,15 @@
     <li class="list-group-item">
       <p>
         <strong> {{ parent_comment.author.username }} </strong>
-        on {{ parent_comment.date_posted|date:"F j, Y, G:i" }}
+        on
+        {{ parent_comment.date_posted|date:"F j, Y, G:i" }}
       </p>
       <p>{{ parent_comment.content }}</p>
 
       <h4>Reply</h4>
       <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
-        {% csrf_token %} {{ reply_create_form|crispy }}
+        {% csrf_token %}
+        {{ reply_create_form|crispy }}
         <button type="submit" class="btn btn-primary">Submit Reply</button>
       </form>
 

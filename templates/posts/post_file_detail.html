@@ -1,0 +1,47 @@
+{% if post.file %}
+<div>
+    <a href="{{ post.file.url }}">Download</a>
+    <p>File type: {{ post.file_extension }}</p>
+    {% if post.file_extension in '.jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp' %}
+    <p>This is an image file.</p>
+    <img src="{{ post.file.url }}" alt="Image">
+    {% elif post.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
+    <p>This is a video file.</p>
+    <video controls playsinline preload="auto">
+        <source src="{{ post.file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    {% elif post.file_extension == 'pdf' %}
+    <p>This is a PDF file.</p>
+    <a href="{{ post.file.url }}" target="_blank">Open PDF</a>
+    {% elif post.file_extension == 'doc' %}
+    <p>This is a DOC file.</p>
+    <a href="{{ post.file.url }}" target="_blank">Open DOC</a>
+    {% elif post.file_extension == 'docx' %}
+    <p>This is a DOCX file.</p>
+    <a href="{{ post.file.url }}" target="_blank">Open DOCX</a>
+    {% elif post.file_extension == 'ppt' %}
+    <p>This is a PPT file.</p>
+    <a href="{{ post.file.url }}" target="_blank">Open PPT</a>
+    {% elif post.file_extension == 'pptx' %}
+    <p>This is a PPTX file.</p>
+    <a href="{{ post.file.url }}" target="_blank">Open PPTX</a>
+    {% elif post.file_extension == 'xls' %}
+    <p>This is an XLS file.</p>
+    <a href="{{ post.file.url }}" target="_blank">Open XLS</a>
+    {% elif post.file_extension == 'xlsx' %}
+    <p>This is an XLSX file.</p>
+    <a href="{{ post.file.url }}" target="_blank">Open XLSX</a>
+    {% elif post.file_extension == 'txt' %}
+    <p>This is a text file.</p>
+    <a href="{{ post.file.url }}" target="_blank">View Text</a>
+    {% elif post.file_extension == 'rtf' %}
+    <p>This is an RTF file.</p>
+    <a href="{{ post.file.url }}" target="_blank">Open RTF</a>
+
+    {% else %}
+    <p>This is a file with extension {{ post.file_extension }}.</p>
+    <a href="{{ post.file.url }}">Download</a>
+    {% endif %}
+</div>
+{% endif %}
