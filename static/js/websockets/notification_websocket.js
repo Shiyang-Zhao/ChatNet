@@ -20,8 +20,13 @@ const establishNotificationWebSocket = () => {
 
     socket.onmessage = function (event) {
         var message = JSON.parse(event.data);
+        console.log("Message type: " + message.type);
         console.log("Received message: " + message.content);
-        displayNotificationMessage(message);
+        console.log("Unread count: " + message.unread_count);
+        displayUnreadNotificationCount(message.unread_count);
+        if (message.type === "notification_message") {
+            displayNotificationMessage(message);
+        }
     };
 
     socket.onclose = function (e) {
@@ -41,16 +46,33 @@ const reconnect = () => {
     retryInterval = Math.min(maxRetryInterval, retryInterval * 2);
 };
 
+const displayUnreadNotificationCount = (count) => {
+    const iconElement = document.querySelector("#notification-icon");
+    const countElement = document.querySelector("#notification-count");
+
+    if (count > 0) {
+        iconElement.className = "fa-solid fa-bell fa-shake fa-xl";
+        countElement.textContent = count;
+        countElement.style.display = 'inline-block';
+    } else {
+        iconElement.className = "fa-regular fa-bell fa-xl";
+        countElement.textContent = '';
+        countElement.style.display = 'none';
+    }
+};
+
 const displayNotificationMessage = (message) => {
     const notificationContainer = document.querySelector("#notification-list");
-    const wrapperDiv = document.createElement("div");
-    const notificationElement = document.createElement("li");
-    notificationElement.classList.add("list-group-item");
-    const messageContent = document.createElement("span");
-    messageContent.textContent = message.content;
-    notificationElement.appendChild(messageContent);
-    wrapperDiv.appendChild(notificationElement);
-    notificationContainer.prepend(wrapperDiv);
+    if (notificationContainer) {
+        const wrapperDiv = document.createElement("div");
+        const notificationElement = document.createElement("li");
+        notificationElement.classList.add("list-group-item");
+        const messageContent = document.createElement("span");
+        messageContent.textContent = message.content;
+        notificationElement.appendChild(messageContent);
+        wrapperDiv.appendChild(notificationElement);
+        notificationContainer.prepend(wrapperDiv);
+    }
 };
 
 export { establishNotificationWebSocket };

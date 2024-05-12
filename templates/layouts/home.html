@@ -5,26 +5,27 @@
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-3">Welcome to the Home Page</h2>
+  <h2 class="mb-3 text-center">Welcome to Metasphere</h2>
   {% for post in posts %}
-  <div class="card mb-4" id="post-{{ post.pk }}">
+  <div class="card mb-4 shadow-sm" id="post-{{ post.pk }}">
     <div class="card-body">
       <h3 class="card-title">{{ post.title }}</h3>
       <h6 class="card-subtitle mb-2 text-muted">
         By <a href="{% url 'user-profile-detail' username=post.author.username %}" class="text-decoration-none">
           {{ post.author }}
-        </a>
+        </a> - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
+
       </h6>
       <p class="card-text">{{ post.content|truncatewords:50 }}</p>
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <button type="button" class="btn btn-success like-btn" data-post-pk="{{ post.pk }}"
+          <button type="button" class="btn btn-outline-primary like-btn" data-post-pk="{{ post.pk }}"
             data-url="{% url 'like-post' pk=post.pk %}">
             <i class="fa-regular fa-thumbs-up"></i>
           </button>
           <span id="likes-count-{{ post.pk }}" class="ms-2">{{ post.liked_by.count }} Likes</span>
 
-          <button type="button" class="btn btn-danger dislike-btn" data-post-pk="{{ post.pk }}"
+          <button type="button" class="btn btn-outline-danger dislike-btn" data-post-pk="{{ post.pk }}"
             data-url="{% url 'dislike-post' pk=post.pk %}">
             <i class="fa-regular fa-thumbs-down"></i>
           </button>
@@ -36,7 +37,7 @@
     </div>
   </div>
   {% empty %}
-  <p class="text-muted">No posts available.</p>
+  <p class="text-center text-muted">No posts available.</p>
   {% endfor %}
 </div>
 <script type="module" src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"></script>
