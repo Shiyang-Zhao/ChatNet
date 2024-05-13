@@ -3,9 +3,6 @@ let retryInterval = 1000;
 let maxRetryInterval = 60000;
 
 const establishNotificationWebSocket = () => {
-    if (socket) {
-        socket.close();
-    }
 
     const socketProtocol =
         window.location.protocol === "https:" ? "wss://" : "ws://";

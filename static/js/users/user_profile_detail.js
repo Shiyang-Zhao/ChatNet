@@ -1,26 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".following, .follow").forEach((button) => {
-    button.addEventListener("click", function () {
-      const csrfToken = document.querySelector(
-        'input[name="csrfmiddlewaretoken"]'
-      ).value;
-      const actionUrl = this.dataset.actionUrl;
+  document.querySelectorAll(".follow-unfollow-form").forEach((form) => {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      const button = this.querySelector("button");
+      const actionUrl = form.action;
 
-      axios
-        .post(actionUrl, {}, { headers: { "X-CSRFToken": csrfToken } })
+      axios.post(actionUrl, {}, {
+        headers: { "X-CSRFToken": this.querySelector('input[name="csrfmiddlewaretoken"]').value }
+      })
         .then((response) => {
-          if (this.classList.contains("following")) {
-            this.classList.remove("btn-secondary", "following");
-            this.classList.add("btn-primary", "follow");
-            this.textContent = "Follow";
-            // Update the action URL to follow
-            this.dataset.actionUrl = this.dataset.followUrl;
+          if (button.classList.contains("following")) {
+            button.classList.remove("btn-secondary", "following");
+            button.classList.add("btn-primary", "follow");
+            button.textContent = "Follow";
+            // Update the form action to follow
+            form.action = form.dataset.followUrl;
           } else {
-            this.classList.remove("btn-primary", "follow");
-            this.classList.add("btn-secondary", "following");
-            this.textContent = "Following";
-            // Update the action URL to unfollow
-            this.dataset.actionUrl = this.dataset.unfollowUrl;
+            button.classList.remove("btn-primary", "follow");
+            button.classList.add("btn-secondary", "following");
+            button.textContent = "Following";
+            // Update the form action to unfollow
+            form.action = form.dataset.unfollowUrl;
           }
         })
         .catch((error) => {

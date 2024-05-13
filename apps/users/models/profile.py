@@ -4,8 +4,6 @@ from django.core.exceptions import PermissionDenied
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
 from pathlib import Path
-from PIL import Image
-import os
 
 
 def profile_image_directory_path(instance, filename):
@@ -32,22 +30,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.profile_image:
-            image_path = self.profile_image.path
-            image = Image.open(image_path)
-            if image.format != "JPEG":
-                image = image.convert("RGB")
-            max_size_kb = 50
-            max_size_bytes = max_size_kb * 1024
-            if os.path.getsize(image_path) > max_size_bytes:
-                image.save(
-                    image_path,
-                    quality=85,  # Adjust quality as needed
-                    optimize=True,
-                )
 
     def delete(self, *args, **kwargs):
         raise PermissionDenied("Profiles cannot be deleted manually")

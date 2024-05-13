@@ -2,6 +2,8 @@ from django.views.generic import ListView, View
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Notification
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 class NotificationListView(LoginRequiredMixin, ListView):
@@ -17,7 +19,19 @@ class NotificationListView(LoginRequiredMixin, ListView):
 
 class MarkAsReadView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        notification = get_object_or_404(Notification, pk=pk, receiver=request.user)
-        notification.is_read = True
-        notification.save()
+        Notification.objects.filter(pk=pk, receiver=request.user).update(is_read=True)
         return redirect("notification-list")
+
+
+class MarkAsUnreadView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        Notification.objects.filter(pk=pk, receiver=request.user).update(is_read=False)
+        return redirect("notification-list")
+
+
+class MarkAllAsReadView(LoginRequiredMixin, View):
+    def post(self, request):
+        Notification.objects.filter(receiver=request.user, is_read=False).update(
+            is_read=True
+        )
+        return HttpResponseRedirect(reverse("notification-list"))

@@ -4,7 +4,7 @@
     <p>File type: {{ post.file_extension }}</p>
     {% if post.file_extension in '.jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp' %}
     <p>This is an image file.</p>
-    <img src="{{ post.file.url }}" alt="Image">
+    <img src="{{ post.file.url }}" alt="Image" class="img-fluid">
     {% elif post.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
     <p>This is a video file.</p>
     <video controls playsinline preload="auto">

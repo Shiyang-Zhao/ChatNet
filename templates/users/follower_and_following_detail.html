@@ -1,0 +1,63 @@
+<div class="mt-2">
+    <!-- Badges that trigger modals -->
+    <div class="mt-2">
+        <a href="#" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#followingModal">
+            Following: {{ viewed_user.profile.following.count }}
+        </a>
+        <a href="#" class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#followersModal">
+            Followers: {{ viewed_user.profile.followers.count }}
+        </a>
+    </div>
+</div>
+
+<!-- Modal for Following -->
+<div class="modal fade" id="followingModal" tabindex="-1" aria-labelledby="followingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followingModalLabel">Following</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    {% for profile in viewed_user.profile.following.all %}
+                    <a href="{% url 'user-profile-detail' username=profile.user.username %}"
+                        class="list-group-item list-group-item-action">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Image"
+                                class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                            {{ profile.user.username }}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Followers -->
+<div class="modal fade" id="followersModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followersModalLabel">Followers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    {% for profile in viewed_user.profile.followers.all %}
+                    <a href="{% url 'user-profile-detail' username=profile.user.username %}"
+                        class="list-group-item list-group-item-action">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Image"
+                                class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                            {{ profile.user.username }}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

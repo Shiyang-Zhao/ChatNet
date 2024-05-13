@@ -5,6 +5,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from django.utils import timezone
+from datetime import timedelta
 
 
 # Custom User Manager for handling user creation
@@ -47,6 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(null=True, blank=True)
+    last_active = models.DateTimeField(null=True, blank=True)
 
     objects = UserManager()
 
@@ -55,3 +57,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+    def activity_status(self):
+        if not self.last_active:
+            return -1
+        delta = timezone.now() - self.last_active
+        return int(delta.total_seconds() / 60)

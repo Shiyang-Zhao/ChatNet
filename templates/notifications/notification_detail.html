@@ -2,21 +2,36 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Your Notifications</h2>
-    <ul id="notification-list" class="list-group">
+    <h2 class="mb-4">Your Notifications</h2>
+    <form method="post" action="{% url 'mark-all-as-read' %}" class="mb-3">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Mark All as Read</button>
+    </form>
+    <div class="list-group">
         {% for notification in notifications %}
-        <div>
-            <li class="list-group-item" {% if not notification.is_read %}style="font-weight: bold;" {% endif %}>
-                <span>{{ notification.content }} - {{ notification.created_at|date:"F j, Y,G:i" }}</span>
-                <form method="post" action="{% url 'mark-as-read' notification.pk %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Mark as Read</button>
-                </form>
-            </li>
-            {% empty %}
-            <li>No notifications available.</li>
+        <div class="card mb-2">
+            <div class="card-body" {% if not notification.is_read %}style="background-color: #c0c0c0;" {% endif %}>
+                <h5 class="card-title">{{ notification.content }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ notification.created_at|date:"F j, Y, G:i" }}</h6>
+                <div class="btn-group">
+                    <form method="post" action="{% url 'mark-as-read' notification.pk %}" class="mr-1">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-envelope-open-text"></i> Mark as
+                            Read</button>
+                    </form>
+                    <form method="post" action="{% url 'mark-as-unread' notification.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning"><i class="fas fa-envelope"></i> Mark as
+                            Unread</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info" role="alert">
+            No notifications available.
         </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}
