@@ -5,7 +5,6 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from django.utils import timezone
-from datetime import timedelta
 
 
 # Custom User Manager for handling user creation
