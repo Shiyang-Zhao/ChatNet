@@ -8,38 +8,49 @@
   <p>{{ post.content }}</p>
 
   {% include 'posts/post_file_detail.html' with post=post %}
+  <div class="d-flex justify-content-between align-items-center">
+    <form class="like-form" data-post-pk="{{ post.pk }}" data-url="{% url 'like-post' pk=post.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-success">
+        <i class="fa-regular fa-thumbs-up">
+          <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
+        </i>
+      </button>
+    </form>
 
-  <button type="button" class="btn btn-outline-success like-btn" data-post-pk="{{ post.pk }}"
-    data-url="{% url 'like-post' pk=post.pk %}">
-    Like
-  </button>
-  <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }} Likes</span>
-  <button type="button" class="btn btn-outline-danger dislike-btn" data-post-pk="{{ post.pk }}"
-    data-url="{% url 'dislike-post' pk=post.pk %}">
-    Dislike
-  </button>
-  <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }} Dislikes</span>
+    <form class="dislike-form" data-post-pk="{{ post.pk }}" data-url="{% url 'dislike-post' pk=post.pk %}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-outline-danger">
+        <i class="fa-regular fa-thumbs-down">
+          <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }}</span>
+        </i>
+      </button>
+    </form>
 
-  <p><strong>Comments:</strong> {{ post.comments.count }}</p>
-  <p><strong>Views:</strong> {{ post.views }}</p>
+    <p><strong>Comments:</strong> {{ post.comments.count }}</p>
+    <p><strong>Views:</strong> {{ post.views }}</p>
 
-  {% if request.user == post.author %}
-  <div class="post-actions">
+    {% if request.user == post.author %}
     <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
     <form method="post" action="{% url 'post-delete' pk=post.pk %}">
       {% csrf_token %}
       <button type="submit" class="btn btn-danger">Delete</button>
     </form>
+    {% endif %}
   </div>
-  {% endif %}
 
   <!-- Comment Form with Crispy Forms -->
-  <h3>Leave a Comment</h3>
-  <form method="post" action="{% url 'comment-create' pk=post.pk %}">
-    {% csrf_token %}
-    {{ comment_create_form|crispy }}
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+  <div style="position: relative;">
+    <form method="post" action="{% url 'comment-create' pk=post.pk %}">
+      {% csrf_token %}
+      <div style="position: relative; margin-bottom: 50px;">
+        {{ comment_create_form|crispy }}
+        <button type="submit" class="btn btn-primary" style="position: absolute; right: 10px; bottom: 10px;">
+          <i class="fa-regular fa-reply"></i>
+        </button>
+      </div>
+    </form>
+  </div>
 
   <!-- Display existing comments -->
   <h3>Comments</h3>
@@ -54,12 +65,17 @@
       </p>
       <p>{{ parent_comment.content }}</p>
 
-      <h4>Reply</h4>
-      <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
-        {% csrf_token %}
-        {{ reply_create_form|crispy }}
-        <button type="submit" class="btn btn-primary">Submit Reply</button>
-      </form>
+      <div style="position: relative;">
+        <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
+          {% csrf_token %}
+          <div style="position: relative; margin-bottom: 50px;">
+            {{ reply_create_form|crispy }}
+            <button type="submit" class="btn btn-primary" style="position: absolute; right: 10px; bottom: 10px;">
+              <i class="fa-regular fa-reply"></i>
+            </button>
+          </div>
+        </form>
+      </div>
 
       {% include 'posts/nested_comment_form.html' with replies=parent_comment.children %}
     </li>
@@ -69,5 +85,6 @@
   <p>No comments yet.</p>
   {% endif %}
 </div>
-<script type="module" src="{% static 'js/layouts/like_and_dislike_buttons.js' %}"></script>
+<script type="module" src="{% static 'js/posts/like_and_dislike_buttons.js' %}"></script>
+<script type="module" src="{% static 'js/posts/post_detail.js' %}"></script>
 {% endblock %}

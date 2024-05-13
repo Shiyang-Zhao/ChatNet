@@ -9,12 +9,17 @@
     </p>
     <p>{{ reply.content }}</p>
 
-    <h4>Reply</h4>
-    <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
-      {% csrf_token %}
-      {{ reply_create_form|crispy }}
-      <button type="submit" class="btn btn-primary">Submit Reply</button>
-    </form>
+    <div style="position: relative;">
+      <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
+        {% csrf_token %}
+        <div style="position: relative; margin-bottom: 50px;">
+          {{ reply_create_form|crispy }}
+          <button type="submit" class="btn btn-primary" style="position: absolute; right: 10px; bottom: 10px;">
+            <i class="fa-regular fa-reply"></i>
+          </button>
+        </div>
+      </form>
+    </div>
 
     {% include 'posts/nested_comment_form.html' with replies=reply.children %}
   </li>

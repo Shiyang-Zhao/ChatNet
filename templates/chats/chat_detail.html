@@ -26,11 +26,7 @@
   </ul>
   {% else %}
   <p>No chats found.</p>
-  {% endif %} {% for following in user.profile.following.all %}
-  <a href="{% url 'user-profile-detail' username=following.user.username %}">
-    {{ following.user.username }}
-  </a>
-  {% endfor %}
+  {% endif %}
 </div>
 <script type="module" src="{% static 'js/chats/chat_detail.js' %}"></script>
 {% endblock %}
