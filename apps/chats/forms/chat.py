@@ -17,15 +17,13 @@ class GroupChatCreateForm(forms.ModelForm):
     class Meta:
         model = Chat
         fields = ["participants"]
+        widgets = {
+            "participants": forms.SelectMultiple(attrs={"size": 10}),
+        }
 
     def __init__(self, *args, **kwargs):
         self.creator = kwargs.pop("creator", None)
         super().__init__(*args, **kwargs)
-        self.fields["participants"].widget.attrs.update(
-            {
-                "size": "10",
-            }
-        )
         if self.creator:
             self.fields["participants"].queryset = User.objects.exclude(
                 pk=self.creator.pk
@@ -35,4 +33,6 @@ class GroupChatCreateForm(forms.ModelForm):
         participants = self.cleaned_data.get("participants", User.objects.none())
         if self.creator and self.creator not in participants:
             participants |= User.objects.filter(pk=self.creator.pk)
+        if len(participants) < 2:
+            raise ValidationError("A group chat requires at least two participants")
         return participants

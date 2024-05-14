@@ -60,3 +60,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modalButton = document.getElementById('openModalButton');
+    const myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+        keyboard: false
+    });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('group_chat_create_form') === 'open') {
+        myModal.show();
+    }
+
+    modalButton.addEventListener('click', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('group_chat_create_form', 'open');
+        window.history.pushState({}, '', window.location.pathname + '?' + urlParams.toString());
+        myModal.show();
+    });
+});
+

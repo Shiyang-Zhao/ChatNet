@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.db.models import Q
+from django.http import HttpResponse
 
 User = get_user_model()
 
@@ -50,11 +51,19 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
 class GroupChatCreateView(LoginRequiredMixin, CreateView):
     model = Chat
     form_class = GroupChatCreateForm
+    template_name = "chats/chat_detail.html"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["creator"] = self.request.user
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_group_chat_create_form_open"] = (
+            self.request.GET.get("group_chat_create_form") == "open"
+        )
+        return context
 
     def form_valid(self, form):
         creator = self.request.user
@@ -69,3 +78,6 @@ class GroupChatCreateView(LoginRequiredMixin, CreateView):
         form.instance.description = "Group Description"
         form.save()
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return redirect(f"{reverse('chat-list')}?group_chat_create_form=open")

@@ -31,7 +31,7 @@ const establishChatWebSocket = (chatPk) => {
 
     socket.onclose = function (e) {
         console.error(`Chat socket closed: ${e.code}  ${e.reason}`);
-        reconnect(chatPk);
+        // reconnect(chatPk);
     };
 
     socket.onerror = function (e) {

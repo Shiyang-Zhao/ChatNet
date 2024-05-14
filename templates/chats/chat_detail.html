@@ -4,13 +4,18 @@
 {% block content %}
 <div class="container mt-5">
   <h2>My Chats</h2>
-  {% include 'chats/group_chat_create_form.html' %} {% if chats %}
+  
+  {% include 'chats/group_chat_create_form.html' %} 
+
+  {% if chats %}
   <ul class="list-group">
     {% for chat in chats %}
     <div>
       <li class="list-group-item" data-chat-pk="{{ chat.pk }}" data-href="{% url 'chat-detail' pk=chat.pk %}">
         {% for participant in chat.participants.all %}
-        {{ participant.username}} {% endfor %} ({{ chat.chat_type }})
+        {{ participant.username}}
+        {% endfor %}
+        ({{ chat.chat_type }})
         <p>
           Created by: {{ chat.creator }} at {{ chat.created_at|date:"F j, Y,G:i" }}
         </p>

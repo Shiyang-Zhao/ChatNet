@@ -34,4 +34,4 @@ class MarkAllAsReadView(LoginRequiredMixin, View):
         Notification.objects.filter(receiver=request.user, is_read=False).update(
             is_read=True
         )
-        return HttpResponseRedirect(reverse("notification-list"))
+        return redirect("notification-list")
