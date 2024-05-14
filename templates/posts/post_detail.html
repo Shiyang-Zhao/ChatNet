@@ -1,7 +1,12 @@
 {% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %}
+<!-- {% load post_tags %} -->
+
 {% block title %}{{ post.title }}{% endblock %}
 {% block content %}
+<!-- {% check_like_status post user as user_liked %} -->
+
 <div class="container mt-5">
+
   <h2>{{ post.title }}</h2>
   <p>By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}</p>
 
@@ -9,26 +14,14 @@
 
   {% include 'posts/post_file_detail.html' with post=post %}
   <div class="d-flex justify-content-between align-items-center">
-    <form class="like-form" data-post-pk="{{ post.pk }}" data-url="{% url 'like-post' pk=post.pk %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-outline-success">
-        <i class="fa-regular fa-thumbs-up">
-          <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
-        </i>
-      </button>
-    </form>
 
-    <form class="dislike-form" data-post-pk="{{ post.pk }}" data-url="{% url 'dislike-post' pk=post.pk %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-outline-danger">
-        <i class="fa-regular fa-thumbs-down">
-          <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }}</span>
-        </i>
-      </button>
-    </form>
+    {% include 'posts/like_and_dislike_button.html' with post=post user=user %}
 
-    <p><strong>Comments:</strong> {{ post.comments.count }}</p>
-    <p><strong>Views:</strong> {{ post.views }}</p>
+
+    <div class="d-flex justify-content-between align-items-center">
+      <p><strong>Comments:</strong> {{ post.comments.count }}</p>
+      <p><strong>Views:</strong> {{ post.views }}</p>
+    </div>
 
     {% if request.user == post.author %}
     <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
@@ -85,6 +78,5 @@
   <p>No comments yet.</p>
   {% endif %}
 </div>
-<script type="module" src="{% static 'js/posts/like_and_dislike_buttons.js' %}"></script>
 <script type="module" src="{% static 'js/posts/post_detail.js' %}"></script>
 {% endblock %}

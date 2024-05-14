@@ -84,15 +84,18 @@ class LikePostView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
         user = request.user
+        like_status = 0
         if user in post.liked_by.all():
             post.liked_by.remove(user)
         else:
             post.like(user.pk)
+            like_status = 1
         return JsonResponse(
             {
                 "success": True,
                 "likes_count": post.liked_by.count(),
                 "dislikes_count": post.disliked_by.count(),
+                "like_status": like_status,
             }
         )
 
@@ -101,14 +104,17 @@ class DislikePostView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
         user = request.user
+        like_status = 0
         if user in post.disliked_by.all():
             post.disliked_by.remove(user)
         else:
             post.dislike(user.pk)
+            like_status = -1
         return JsonResponse(
             {
                 "success": True,
                 "likes_count": post.liked_by.count(),
                 "dislikes_count": post.disliked_by.count(),
+                "like_status": like_status,
             }
         )
