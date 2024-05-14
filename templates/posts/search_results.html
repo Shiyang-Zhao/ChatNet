@@ -6,12 +6,28 @@
   {% if results.exists %}
   <div class="list-group">
     {% for post in results %}
-    <a href="{% url 'post-detail' pk=post.pk %}" class="list-group-item list-group-item-action">
-      <h5 class="mb-1">{{ post.title }}</h5>
-      <small>By {{ post.author.username }} on {{ post.date_posted|date:"F j, Y, G:i"
-        }}</small>
-      <p class="mb-1">{{ post.content|truncatewords:50 }}</p>
-    </a>
+    <div class="card mb-4 shadow-sm" id="post-{{ post.pk }}">
+      <div class="card-body">
+        <h3 class="card-title">{{ post.title }}</h3>
+        <h6 class="card-subtitle mb-2 text-muted">
+          By <a href="{% url 'user-profile-detail' username=post.author.username %}" class="text-decoration-none">
+            {{ post.author }}
+          </a> - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
+
+        </h6>
+        <p class="card-text">{{ post.content|truncatewords:50 }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center">
+
+            {% include 'posts/like_and_dislike_button.html' with post=post user=user %}
+
+          </div>
+          <a href="{% url 'post-detail' post.pk %}" class="btn btn-outline-secondary">
+            {{ post.comments.count }} Comments
+          </a>
+        </div>
+      </div>
+    </div>
     {% endfor %}
   </div>
   {% else %}

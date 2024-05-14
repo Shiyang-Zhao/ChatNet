@@ -2,39 +2,63 @@
 {% load static %}
 <div>
   <button type="button" id="openModalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-    Open Modal
+    <i class="fa-regular fa-plus"></i>Group Chat
   </button>
   <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+          <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
+            <h5 class="modal-title mb-0" id="exampleModalLabel">Modal Title</h5>
+            <div id="form-error"
+              style="display: none; opacity: 0; transform: translateY(-10px); color: red; font-size: 14px; margin-left: 10px;">
+              Please select at least one user
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
         </div>
         <div class="modal-body">
+
+          <form method="get" action="" style="position: relative; display: flex; align-items: center;">
+            <input type="text" class="form-control" name="query" placeholder="Search users..."
+              style="padding-left: 40px; padding-right: 5px;">
+            <button
+              style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; padding: 0; pointer-events: all;">
+              <i class="fa fa-search"></i>
+            </button>
+          </form>
+
 
           <form id="group-chat-create-form" method="post" action="{% url 'group-chat-create' %}">
             {% csrf_token %}
             <div class="form-group">
-              {% for participant in group_chat_create_form.fields.participants.queryset %}
-              <label>
-                <input type="checkbox" name="participants" value="{{ participant.pk }}" class="participant-checkbox">
-                <img src="{{ participant.profile.profile_image.url }}" alt="{{ participant.username }}"
-                  class="rounded-circle img-fluid" style="width: 35px; height: 35px;">
-                {{ participant.username }}
-              </label>
-              {% endfor %}
+              <div class="d-flex flex-column align-items-start">
+                {% for participant in group_chat_create_form.fields.participants.queryset %}
+                <label class="mb-2">
+                  <input type="checkbox" name="participants" value="{{ participant.pk }}"
+                    class="participant-checkbox mr-2">
+                  <img src="{{ participant.profile.profile_image.url }}" alt="{{ participant.username }}"
+                    class="rounded-circle img-fluid" style="width: 35px; height: 35px;">
+                  {{ participant.username }}
+                </label>
+                {% endfor %}
+              </div>
 
-              <!-- {% if group_chat_create_form.participants.errors %}
+
+
+              {% if group_chat_create_form.participants.errors %}
               <div class="alert alert-danger mt-2">
                 {% for error in group_chat_create_form.participants.errors %}
                 <p>{{ error }}</p>
                 {% endfor %}
               </div>
-              {% endif %} -->
+              {% endif %}
             </div>
             <button type="submit" class="btn btn-primary mt-3">Create Chat</button>
           </form>
+
         </div>
 
         <!-- <div class="modal-footer">

@@ -63,20 +63,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     const modalButton = document.getElementById('openModalButton');
-    const myModal = new bootstrap.Modal(document.getElementById('myModal'), {
+    const myModalElement = document.getElementById('myModal');
+    const myModal = new bootstrap.Modal(myModalElement, {
         keyboard: false
     });
 
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('group_chat_create_form') === 'open') {
-        myModal.show();
-    }
-
+    // Event listener for opening the modal
     modalButton.addEventListener('click', function () {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('group_chat_create_form', 'open');
         window.history.pushState({}, '', window.location.pathname + '?' + urlParams.toString());
         myModal.show();
     });
+
+    // Check if the modal should be opened based on URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('group_chat_create_form') === 'open') {
+        myModal.show();
+    }
+
+    // Listen for the hidden event on the modal
+    myModalElement.addEventListener('hidden.bs.modal', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.delete('group_chat_create_form'); // Remove the query parameter
+
+        // Prepare the new URL
+        let newUrl = window.location.pathname;
+        if (urlParams.toString()) {
+            newUrl += '?' + urlParams.toString();
+        }
+
+        // Update the URL without refreshing the page
+        window.history.pushState({}, '', newUrl);
+    });
+
 });
+
 
