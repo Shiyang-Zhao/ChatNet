@@ -12,6 +12,9 @@
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
   <!-- <link rel="stylesheet" href="{% static 'css/base.css' %}"> -->
   <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}" />
+  {% block styles %}
+  <!-- Child styles can insert their content here -->
+  {% endblock %}
 </head>
 
 <body>
@@ -22,6 +25,10 @@
     <!-- Child templates can insert their content here -->
     {% endblock %}
   </div>
+
+  {% block javascripts %}
+  <!-- Child javascripts can insert their content here -->
+  {% endblock %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"

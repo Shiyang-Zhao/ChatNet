@@ -7,13 +7,15 @@
         {% if user_liked == 1 %}
         <button type="submit" id="like-button-{{ post.pk }}" class="btn btn-outline-success like-btn"
             style="background-color: #198754; color: #ffffff;">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
+            <i class="fa-regular fa-thumbs-up">
+                <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
+            </i>
         </button>
         {% else %}
         <button type="submit" id="like-button-{{ post.pk }}" class="btn btn-outline-success like-btn">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
+            <i class="fa-regular fa-thumbs-up">
+                <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
+            </i>
         </button>
         {% endif %}
     </form>
@@ -36,4 +38,7 @@
         {% endif %}
     </form>
 </div>
+
+{% block javascripts %}
 <script src="{% static 'js/posts/like_and_dislike_buttons.js' %}"></script>
+{% endblock %}

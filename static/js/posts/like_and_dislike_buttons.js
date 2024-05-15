@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".like-btn, .dislike-btn").forEach((button) => {
+        button.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+    })
+
     document.querySelectorAll(".like-form, .dislike-form").forEach((form) => {
         form.addEventListener("submit", (event) => {
             event.preventDefault();
