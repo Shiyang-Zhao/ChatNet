@@ -29,7 +29,7 @@
   {% block javascripts %}
   <!-- Child javascripts can insert their content here -->
   {% endblock %}
-  
+
   <script src="https://unpkg.com/@popperjs/core@2"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -39,7 +39,9 @@
     </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
+  {% if user.is_authenticated %}
   <script type="module" src="{% static 'js/base/notification.js' %}"></script>
+  {% endif %}
 </body>
 
 </html>

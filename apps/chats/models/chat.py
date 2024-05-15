@@ -27,7 +27,7 @@ class Chat(models.Model):
     )
 
     chat_type = models.CharField(max_length=10, choices=CHAT_TYPES, default=PRIVATE)
-    created_at = models.DateTimeField(default=timezone.now)
+    date_created = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=255, default="default title")
     description = models.TextField(blank=True, default="default_description")
     image = models.ImageField(upload_to="chat_images/", null=True, blank=True)

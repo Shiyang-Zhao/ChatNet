@@ -18,7 +18,7 @@
         {% endfor %}
         ({{ chat.chat_type }})
         <p>
-          Created by: {{ chat.creator }} at {{ chat.created_at|date:"F j, Y,G:i" }}
+          Created by: {{ chat.creator }} at {{ chat.date_created|date:"F j, Y,G:i" }}
         </p>
       </li>
 

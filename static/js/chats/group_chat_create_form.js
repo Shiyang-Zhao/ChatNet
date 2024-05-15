@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const createChatButton = document.querySelector('#create-chat-button')
     const createChatButtonPopover = new bootstrap.Popover(createChatButton, {
         trigger: 'manual',
-        html: true
+        html: true,
+        content: 'You must select at least one participant',
+        placement: 'right',
     });
 
     // Event listener for opening the modal
@@ -42,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!isChecked) {
             event.preventDefault();
             createChatButtonPopover.show();
+            setTimeout(() => { createChatButtonPopover.hide(); }, 3000);
         }
     });
 
