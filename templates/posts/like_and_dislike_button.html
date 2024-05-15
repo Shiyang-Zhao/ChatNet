@@ -1,41 +1,28 @@
 {% load static %}
 {% load post_tags %}
-{% check_like_status post user as user_liked %}
+{% check_like_status post user as is_user_liked %}
+
 <div class="d-flex justify-content-between align-items-center">
-    <form class="like-form" data-post-pk="{{ post.pk }}" data-url="{% url 'like-post' pk=post.pk %}">
+    <form class="like-form" data-post-pk="{{ post.pk }}" data-url="{% url 'like-post' pk=post.pk %}"
+        data-listener-added="false">
         {% csrf_token %}
-        {% if user_liked == 1 %}
-        <button type="submit" id="like-button-{{ post.pk }}" class="btn btn-outline-success like-btn"
-            style="background-color: #198754; color: #ffffff;">
+        <button type="submit" id="like-button-{{ post.pk }}"
+            class="btn {% if is_user_liked == 1 %}btn-success{% else %}btn-outline-success{% endif %} like-btn">
             <i class="fa-regular fa-thumbs-up">
                 <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
             </i>
         </button>
-        {% else %}
-        <button type="submit" id="like-button-{{ post.pk }}" class="btn btn-outline-success like-btn">
-            <i class="fa-regular fa-thumbs-up">
-                <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
-            </i>
-        </button>
-        {% endif %}
     </form>
 
-    <form class="dislike-form" data-post-pk="{{ post.pk }}" data-url="{% url 'dislike-post' pk=post.pk %}">
+    <form class="dislike-form" data-post-pk="{{ post.pk }}" data-url="{% url 'dislike-post' pk=post.pk %}"
+        data-listener-added="false">
         {% csrf_token %}
-        {% if user_liked == -1 %}
-        <button type="submit" id="dislike-button-{{ post.pk }}" class="btn btn-outline-danger dislike-btn"
-            style="background-color: #dc3545; color: #ffffff;">
+        <button type="submit" id="dislike-button-{{ post.pk }}"
+            class="btn {% if is_user_liked == -1 %}btn-danger{% else %}btn-outline-danger{% endif %} dislike-btn">
             <i class="fa-regular fa-thumbs-down">
                 <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }}</span>
             </i>
         </button>
-        {% else %}
-        <button type="submit" id="dislike-button-{{ post.pk }}" class="btn btn-outline-danger dislike-btn">
-            <i class="fa-regular fa-thumbs-down">
-                <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }}</span>
-            </i>
-        </button>
-        {% endif %}
     </form>
 </div>
 

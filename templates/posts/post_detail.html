@@ -1,22 +1,16 @@
 {% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %}
-<!-- {% load post_tags %} -->
-
 {% block title %}{{ post.title }}{% endblock %}
 {% block content %}
-<!-- {% check_like_status post user as user_liked %} -->
 
 <div class="container mt-5">
-
   <h2>{{ post.title }}</h2>
   <p>By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}</p>
-
   <p>{{ post.content }}</p>
 
   {% include 'posts/post_file_detail.html' with post=post %}
   <div class="d-flex justify-content-between align-items-center">
 
     {% include 'posts/like_and_dislike_button.html' with post=post user=user %}
-
 
     <div class="d-flex justify-content-between align-items-center">
       <p><strong>Comments:</strong> {{ post.comments.count }}</p>
