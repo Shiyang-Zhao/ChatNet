@@ -1,37 +1,57 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const errorDiv = document.getElementById('form-error');
+    const modalButton = document.querySelector('#openModalButton');
+    const myModalElement = document.querySelector('#myModal');
+    const myModal = new bootstrap.Modal(myModalElement, {
+        keyboard: false
+    });
+    const createChatButton = document.querySelector('#create-chat-button')
+    const createChatButtonPopover = new bootstrap.Popover(createChatButton, {
+        trigger: 'manual',
+        html: true
+    });
 
-    document.getElementById('group-chat-create-form').addEventListener('submit', function (event) {
+    // Event listener for opening the modal
+    modalButton.addEventListener('click', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('group_chat_create_form', 'open');
+        window.history.pushState({}, '', window.location.pathname + '?' + urlParams.toString());
+        myModal.show();
+    });
+
+    // Check if the modal should be opened based on URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('group_chat_create_form') === 'open') {
+        myModal.show();
+    }
+
+    // Listen for the hidden event on the modal
+    myModalElement.addEventListener('hidden.bs.modal', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.delete('group_chat_create_form'); // Remove the query parameter
+        let newUrl = window.location.pathname;
+        if (urlParams.toString()) {
+            newUrl += '?' + urlParams.toString();
+        }
+        window.history.pushState({}, '', newUrl);
+    });
+
+    document.querySelector('#group-chat-create-form').addEventListener('submit', function (event) {
         const checkboxes = document.querySelectorAll('.participant-checkbox');
         const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
 
         if (!isChecked) {
             event.preventDefault();
-            // Kill any existing animations on errorDiv before starting new ones
-            gsap.killTweensOf(errorDiv);
-            errorDiv.style.display = 'block';
-            gsap.fromTo(errorDiv, { opacity: 0, y: -10 }, {
-                duration: 0.5, opacity: 1, y: 0, ease: "power2.out"
-            });
-
-            setTimeout(() => {
-                // Start fading out after a delay
-                gsap.to(errorDiv, {
-                    duration: 0.5, opacity: 0, y: -10, ease: "power2.in", onComplete: function () {
-                        errorDiv.style.display = 'none';
-                    }
-                });
-            }, 3000);
+            createChatButtonPopover.show();
         }
     });
 
     document.querySelectorAll('.participant-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', () => {
             if (document.querySelector('.participant-checkbox:checked')) {
-                errorDiv.style.display = 'none';
-                errorDiv.style.opacity = 0;
-                gsap.killTweensOf(errorDiv);
+                createChatButtonPopover.hide();
             }
         });
     });
 });
+
+

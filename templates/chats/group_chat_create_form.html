@@ -8,19 +8,11 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-
-          <div class="d-flex align-items-center justify-content-between" style="width: 100%;">
-            <h5 class="modal-title mb-0" id="exampleModalLabel">Modal Title</h5>
-            <div id="form-error"
-              style="display: none; opacity: 0; transform: translateY(-10px); color: red; font-size: 14px; margin-left: 10px;">
-              Please select at least one user
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-
+          <h5 class="modal-title mb-0" id="exampleModalLabel">Modal Title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-
+          <!-- Search Users -->
           <form method="get" action="" style="position: relative; display: flex; align-items: center;">
             <input type="text" class="form-control" name="query" placeholder="Search users..."
               style="padding-left: 40px; padding-right: 5px;">
@@ -29,8 +21,7 @@
               <i class="fa fa-search"></i>
             </button>
           </form>
-
-
+          <!-- Create Group Chat -->
           <form id="group-chat-create-form" method="post" action="{% url 'group-chat-create' %}">
             {% csrf_token %}
             <div class="form-group">
@@ -45,21 +36,12 @@
                 </label>
                 {% endfor %}
               </div>
-
-
-
-              {% if group_chat_create_form.participants.errors %}
-              <div class="alert alert-danger mt-2">
-                {% for error in group_chat_create_form.participants.errors %}
-                <p>{{ error }}</p>
-                {% endfor %}
-              </div>
-              {% endif %}
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Create Chat</button>
+            <button type="submit" id="create-chat-button" class="btn btn-primary mt-3" data-bs-toggle="popover"
+              data-bs-placement="right" data-bs-content="fuck you">Create Chat</button>
           </form>
-
         </div>
+
 
         <!-- <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

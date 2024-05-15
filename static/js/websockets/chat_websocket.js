@@ -22,10 +22,10 @@ const establishChatWebSocket = (chatPk) => {
 
     socket.onmessage = function (event) {
         var message = JSON.parse(event.data);
-        console.log("socket: " + chatPk);
-        console.log("Sender: " + message.sender_username);
-        console.log("Received message: " + message.content);
-        console.log("Date sent: " + message.date_sent);
+        // console.log("socket: " + chatPk);
+        // console.log("Sender: " + message.sender_username);
+        // console.log("Received message: " + message.content);
+        // console.log("Date sent: " + message.date_sent);
         displayChatMessage(chatPk, message);
     };
 

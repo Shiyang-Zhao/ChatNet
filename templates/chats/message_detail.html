@@ -1,3 +1,4 @@
+{% load static %}
 <div class="chat-detail">
   <div class="chat-messages">
     {% if chat.messages.all %}
@@ -15,14 +16,21 @@
   <div>
     <form id="message-form" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <label for="messageInput">Message:</label><br />
-      <textarea id="messageInput" name="message" rows="4" cols="50" required></textarea>
-      <br />
-      <!-- <label for="attachment">Attachment:</label><br>
+      <div class="form-group" style="position: relative;">
+        <label for="message-input">Message:</label><br />
+        <textarea id="message-input" class="form-control" name="message" rows="4" cols="50" required></textarea>
+        <!-- <label for="attachment">Attachment:</label><br>
             <input type="file" id="attachment" name="attachment"><br><br> -->
-      <button id="sendButton" type="button" class="btn btn-primary">
-        Send
-      </button>
+        <button id="send-button" type="submit" class="btn btn-primary" data-bs-toggle="popover"
+          data-bs-placement="right" data-bs-content="You can't send an empty message"
+          style="position: absolute; right: 5px; bottom: 5px;">
+          Send
+        </button>
+      </div>
     </form>
   </div>
 </div>
+
+{% block javascripts %}
+<script type="module" src="{% static 'js/chats/message_detail.js' %}"></script>
+{% endblock %}
