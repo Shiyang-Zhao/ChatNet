@@ -8,7 +8,9 @@ from django.utils.timezone import localtime
 
 def post_file_directory_path(instance, filename):
     date_posted_str = localtime(instance.date_posted).strftime("%Y/%m/%d")
-    return str(Path("files") / instance.author.username / date_posted_str / filename)
+    return str(
+        Path("files/posts") / instance.author.username / date_posted_str / filename
+    )
 
 
 class Post(models.Model):

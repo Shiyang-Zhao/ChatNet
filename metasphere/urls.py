@@ -30,6 +30,7 @@ urlpatterns = [
     path("posts/", include("apps.posts.urls")),
     path("chats/", include("apps.chats.urls")),
     path("notifications/", include("apps.notifications.urls")),
+    path("stories/", include("apps.stories.urls")),
 ]
 
 if settings.DEBUG:

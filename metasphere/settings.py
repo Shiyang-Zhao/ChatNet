@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "apps.posts.apps.PostsConfig",
     "apps.chats.apps.ChatsConfig",
     "apps.notifications.apps.NotificationsConfig",
-    # "apps.stories.apps.StoriesConfig",
+    "apps.stories.apps.StoriesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -89,20 +89,30 @@ TEMPLATES = [
 WSGI_APPLICATION = "metasphere.wsgi.application"
 ASGI_APPLICATION = "metasphere.asgi.application"
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("127.0.0.1", 6379)],
-#         },
-#     },
-# }
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
+
+# Redis Setting
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         },
+#     }
+# }
+
+# Celery Setting
+CELERY_BROKER_URL = "redis://localhost:6379/0"  # Redis as the broker
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"  # Redis as the result backend
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "UTC"
 
 
 # Database
