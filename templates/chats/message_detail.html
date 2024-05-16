@@ -18,12 +18,13 @@
       {% csrf_token %}
       <div class="form-group" style="position: relative;">
         <label for="message-input">Message:</label><br />
-        <textarea id="message-input" class="form-control" name="message" rows="4" cols="50" required></textarea>
+        <textarea id="message-input" class="form-control" name="message" rows="4" cols="50" style="min-height: 50px;"
+          required></textarea>
         <!-- <label for="attachment">Attachment:</label><br>
             <input type="file" id="attachment" name="attachment"><br><br> -->
         <button id="send-button" type="submit" class="btn btn-primary" data-bs-toggle="popover"
-          style="position: absolute; right: 5px; bottom: 5px;">
-          Send
+          style="position: absolute; right: 7px; bottom: 5px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden; ">
+          <i class="fa-regular fa-paper-plane"></i>
         </button>
       </div>
     </form>

@@ -12,7 +12,7 @@
         <div class="card mb-2">
             <div class="card-body" {% if not notification.is_read %}style="background-color: #c0c0c0;" {% endif %}>
                 <h5 class="card-title">{{ notification.content }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ notification.date_created|date:"F j, Y, G:i" }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ notification.date_sent|date:"F j, Y, G:i" }}</h6>
                 <div class="btn-group">
                     <form method="post" action="{% url 'mark-as-read' notification.pk %}" class="mr-1">
                         {% csrf_token %}

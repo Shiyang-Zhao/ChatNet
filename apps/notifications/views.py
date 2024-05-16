@@ -13,7 +13,7 @@ class NotificationListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Notification.objects.filter(receiver=self.request.user).order_by(
-            "-date_created"
+            "-date_sent"
         )
 
 

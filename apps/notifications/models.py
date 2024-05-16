@@ -26,7 +26,7 @@ class Notification(models.Model):
     )
     notification_type = models.CharField(max_length=15, choices=NOTIFICATION_TYPES)
     content = models.TextField(default="You have a new notification.")
-    date_created = models.DateTimeField(default=timezone.now)
+    date_sent = models.DateTimeField(default=timezone.now)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):

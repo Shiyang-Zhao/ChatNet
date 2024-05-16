@@ -12,6 +12,13 @@ const showMessageDetail = (detailPlaceholder) => {
         content: "You can't send an empty message",
         placement: 'right',
     });
+    messageInput.addEventListener('input', () => {
+        if (messageInput.value.trim() === '') {
+            gsap.to(sendButton, { x: 5, width: 0, autoAlpha: 0, duration: 0.2 });
+        } else {
+            gsap.to(sendButton, { x: 0, width: 'auto', autoAlpha: 1, duration: 0.2 });
+        }
+    });
 
     messageForm.addEventListener('submit', (event) => {
         event.preventDefault();
