@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Create Story{% endblock %}
 
 {% block content %}
@@ -9,65 +10,39 @@
                 <div class="card-header">
                     <h2 class="card-title text-center">Create a New Story</h2>
                 </div>
-                <div class="card-body bg-light">
+                <div class="card-body">
                     <form method="post" action="{% url 'story-create' %}" enctype="multipart/form-data" class="mt-4">
                         {% csrf_token %}
 
                         <div class="form-group mb-3">
-                            <label for="id_file">File</label>
-                            <input type="file" id="id_file" name="{{ form.file.name }}" class="form-control"
-                                accept="image/*,video/*" onchange="previewMedia();">
-                            <div id="mediaPreview" class="mt-3" style="display: none;">
-                                <img id="imagePreview" src="#" alt="Image Preview" class="img-fluid"
-                                    style="display: none;">
-                                <video id="videoPreview" controls style="width: 100%; display: none;">
-                                    <source src="#" type="video/mp4">Your browser does not support the video tag.
-                                </video>
+                            <div id="preview-container" class="mt-3" style="position: relative;">
+                                <img id="image-preview" style="display:none; max-width:100%;" class="img-fluid" />
+                                <video id="video-preview" style="display:none; max-width:100%;" class="img-fluid"
+                                    controls></video>
                             </div>
-                            {% if form.file.errors %}
-                            <div class="alert alert-danger">{{ form.file.errors }}</div>
-                            {% endif %}
+                            <label for="file-input" class="mb-2">File</label>
+                            <input type="file" id="file-input" name="{{ form.file.name }}" class="form-control"
+                                accept="image/*,video/*">
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="id_content">Content</label>
-                            <textarea id="id_content" name="{{ form.content.name }}" class="form-control"
-                                rows="3">{{ form.content.value }}</textarea>
-                            {% if form.content.errors %}
-                            <div class="alert alert-danger">{{ form.content.errors }}</div>
-                            {% endif %}
+                            <label for="content-input" class="mb-2">Content</label>
+                            <textarea id="content-input" name="{{ form.content.name }}" class="form-control"
+                                rows="3"></textarea>
                         </div>
 
-                        <div class="form-group mt-3">
-                            <button type="submit" class="btn btn-primary d-block w-100">Create Story</button>
-                        </div>
+                        <button type="submit" class="btn btn-primary d-block w-100 mt-3" data-bs-toggle="popover">Create
+                            Story</button>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    function previewMedia() {
-        var file = document.getElementById("id_file").files[0];
-        var previewContainer = document.getElementById('mediaPreview');
-        if (file) {
-            var fileReader = new FileReader();
-            fileReader.onload = function (event) {
-                var mediaContent = document.createElement(file.type.startsWith('image/') ? 'img' : 'video');
-                mediaContent.src = event.target.result;
-                if (file.type.startsWith('video/')) {
-                    mediaContent.controls = true;
-                }
-                previewContainer.innerHTML = '';  // Clear previous previews
-                previewContainer.appendChild(mediaContent);
-                previewContainer.style.display = 'block';  // Make preview visible
-            };
-            fileReader.readAsDataURL(file);
-        } else {
-            previewContainer.style.display = 'none';
-        }
-    }
-</script>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{% static 'js/stories/story_create_form.js' %}"></script>
 {% endblock %}

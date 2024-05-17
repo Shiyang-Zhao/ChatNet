@@ -18,12 +18,12 @@ urlpatterns = [
         name="user-profile-update",
     ),
     path(
-        "user/<str:username>/profile/follow",
+        "user/<str:username>/profile/follow/",
         FollowProfileView.as_view(),
         name="follow-profile",
     ),
     path(
-        "user/<str:username>/profile/unfollow",
+        "user/<str:username>/profile/unfollow/",
         UnfollowProfileView.as_view(),
         name="unfollow-profile",
     ),

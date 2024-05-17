@@ -14,5 +14,5 @@ urlpatterns = [
         MarkAsUnreadView.as_view(),
         name="mark-as-unread",
     ),
-    path("notification/read/all", MarkAllAsReadView.as_view(), name="mark-all-as-read"),
+    path("notification/read/all/", MarkAllAsReadView.as_view(), name="mark-all-as-read"),
 ]

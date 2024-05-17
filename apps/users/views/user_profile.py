@@ -7,7 +7,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from django.urls import reverse_lazy
-from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.views.generic.base import View
+from apps.stories.models import Story
 
 User = get_user_model()
 
@@ -25,6 +26,7 @@ class UserAndProfileDetailView(LoginRequiredMixin, DetailView):
         context["is_following"] = self.request.user.profile.is_following(
             self.object.profile
         )
+        context["active_stories"] = Story.active_stories(self.object)
         return context
 
 

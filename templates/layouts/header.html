@@ -41,30 +41,22 @@
             {% endif %}
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="{% url 'user-profile-detail' username=user.username %}">Profile</a>
+            <li>
+              <a class="dropdown-item" href="{% url 'user-profile-detail' username=user.username %}">Profile</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'story-create' %}">Create Stroy</a>
             </li>
             <li>
               <form method="post" action="{% url 'user-logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="dropdown-item">
-                  Logout
-                </button>
+                <button type="submit" class="dropdown-item">Logout</button>
               </form>
             </li>
           </ul>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'story-list' %}">
-            <i class="fa-regular fa-book fa-xl"></i>
-          </a>
-        </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'story-create' %}">
-            <i class="fa-regular fa-pen fa-xl"></i>
-          </a>
-        </li>
 
         {% else %}
         <li class="nav-item">

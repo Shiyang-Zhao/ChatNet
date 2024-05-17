@@ -32,11 +32,12 @@ class Post(models.Model):
     is_published = models.BooleanField(default=True)
     views = models.IntegerField(default=0)
 
-    def __str__(self):
-        return self.title
-
+    @property
     def file_extension(self):
         return Path(self.file.name).suffix
+
+    def __str__(self):
+        return self.title
 
     def get_absolute_url(self):
         return reverse("post-detail", kwargs={"pk": self.pk})

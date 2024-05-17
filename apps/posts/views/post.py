@@ -6,8 +6,8 @@ from django.views.generic import (
     DeleteView,
     View,
 )
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from ..models.post import Post
@@ -48,36 +48,63 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+# class PostUpdateView(LoginRequiredMixin, UpdateView):
+#     model = Post
+#     form_class = PostUpdateForm
+#     template_name = "posts/post_update_form.html"
+
+#     def get_object(self):
+#         return get_object_or_404(
+#             Post, pk=self.kwargs.get("pk"), author=self.request.user
+#         )
+
+#     def form_valid(self, form):
+#         messages.success(self.request, "Post updated successfully.")
+#         return super().form_valid(form)
+
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostUpdateForm
     template_name = "posts/post_update_form.html"
-
-    def get_object(self):
-        return get_object_or_404(
-            Post, pk=self.kwargs.get("pk"), author=self.request.user
-        )
 
     def form_valid(self, form):
         messages.success(self.request, "Post updated successfully.")
         return super().form_valid(form)
 
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
 
-class PostDeleteView(LoginRequiredMixin, DeleteView):
+
+# class PostDeleteView(LoginRequiredMixin, DeleteView):
+#     model = Post
+#     template_name = "posts/post_confirm_delete.html"
+
+#     def get_object(self):
+#         return get_object_or_404(
+#             Post, pk=self.kwargs.get("pk"), author=self.request.user
+#         )
+
+#     def get_success_url(self):
+#         return reverse("home")
+
+#     def delete(self, request, *args, **kwargs):
+#         messages.success(request, "Post deleted successfully.")
+#         return super().delete(request, *args, **kwargs)
+
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
-    template_name = "posts/post_confirm_delete.html"
-
-    def get_object(self):
-        return get_object_or_404(
-            Post, pk=self.kwargs.get("pk"), author=self.request.user
-        )
-
-    def get_success_url(self):
-        return reverse("home")
+    success_url = reverse_lazy("home")
 
     def delete(self, request, *args, **kwargs):
         messages.success(request, "Post deleted successfully.")
         return super().delete(request, *args, **kwargs)
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
 
 
 class LikePostView(LoginRequiredMixin, View):

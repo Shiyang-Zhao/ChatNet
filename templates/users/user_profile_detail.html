@@ -1,14 +1,16 @@
-{% extends 'base.html' %} {% load static %}
+{% extends 'base.html' %}
+{% load static %}
 {% block title %}{{viewed_user.username }}'s Profile{% endblock %}
+
 {% block content %}
 <div class="container mt-5">
   <div class="profile-header d-flex align-items-center">
+
     {% if viewed_user.profile.profile_image %}
     <div class="d-inline-block position-relative" style="width: 150px; height: 150px;">
-      <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
-        class="rounded-circle img-fluid position-absolute top-0 start-0"
-        style="object-fit: cover; width: 100%; height: 100%;">
+      {% include 'stories/story_detail.html' with active_stories=active_stories %}
     </div>
+
     {% endif %}
 
     <div class="ml-4">
@@ -57,21 +59,20 @@
     {% else %}
     <div>
       {% if is_following %}
-      <form method="POST" action="{% url 'unfollow-profile' username=viewed_user.username %}"
+      <form method="post" action="{% url 'unfollow-profile' username=viewed_user.username %}"
         class="follow-unfollow-form" data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
         data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-secondary following">Following</button>
       </form>
       {% else %}
-      <form method="POST" action="{% url 'follow-profile' username=viewed_user.username %}" class="follow-unfollow-form"
+      <form method="post" action="{% url 'follow-profile' username=viewed_user.username %}" class="follow-unfollow-form"
         data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
         data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary follow">Follow</button>
       </form>
       {% endif %}
-
 
       <form id="messageForm" method="post"
         action="{% url 'private-chat-create' receiver_username=viewed_user.username %}">
@@ -81,8 +82,8 @@
     </div>
     {% endif %}
 
-    <!-- Posts, Liked Posts, and Commented Sections -->
-    <div class="card">
+    <!-- Posts, Stories, Liked Posts, and Commented Sections -->
+    <div class="card mt-4">
       <div class="card-header">Posts by {{ viewed_user.username }}</div>
       <ul class="list-group list-group-flush">
         {% for post in viewed_user.posts.all %}

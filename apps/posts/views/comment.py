@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView, UpdateView, DeleteView, View
 from ..models.comment import Comment
 from ..models.post import Post
@@ -37,6 +37,8 @@ class ReplyCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
 
+
+##################### UserPassesTestMixin ######################
 
 # class CommentUpdateView(LoginRequiredMixin, UpdateView):
 #     model = Comment
