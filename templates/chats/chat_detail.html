@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load static %}
 {% block title %}My Chats{%endblock%}
 
@@ -9,7 +9,7 @@
   {% include 'chats/group_chat_create_form.html' %}
 
   {% if chats %}
-  <ul class="list-group">
+  <ul class="list-group mt-3">
     {% for chat in chats %}
     <div>
       <li class="list-group-item" data-chat-pk="{{ chat.pk }}" data-href="{% url 'chat-detail' pk=chat.pk %}">

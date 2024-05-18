@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStoryIndex = 0;
     let storyTimer;
 
-    // Initialize progress bar styles
     progressBarSegments.forEach(segment => {
         Object.assign(segment.style, {
             width: '100%',
@@ -22,13 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
     leftArea.addEventListener('click', () => navigateStory(-1));
     rightArea.addEventListener('click', () => navigateStory(1));
 
-    modal.addEventListener('shown.bs.modal', () => startStory(currentStoryIndex));
+    modal.addEventListener('shown.bs.modal', () => {
+        startStory(currentStoryIndex);
+    });
     modal.addEventListener('hidden.bs.modal', () => {
-        if (currentStoryIndex >= stories.length - 1) {
-            currentStoryIndex = 0;
-        }
         clearTimeout(storyTimer);
         resetProgressBars();
+        stories.forEach(story => story.style.display = 'none');
+        if (currentStoryIndex >= stories.length - 1) {
+            currentStoryIndex = 0;
+            stories[0].style.display = 'block';
+        }
     });
 
     function navigateStory(direction) {
@@ -47,9 +50,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function animateProgressBar(index, duration) {
+        setTimeout(() => {
+            progressBarSegments[index].style.transition = `background-position ${duration}ms linear`;
+            progressBarSegments[index].style.backgroundPosition = 'left center';
+        }, 10);
+    }
+
     function startStory(index) {
-        stories.forEach(story => story.style.display = 'none');
+        // First, show the current story
         stories[index].style.display = 'block';
+
+        // Then, hide all other stories
+        stories.forEach((story, idx) => {
+            if (idx !== index) {
+                story.style.display = 'none';
+            }
+        });
 
         let video = stories[index].querySelector('video');
         if (video) {
@@ -62,13 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
             animateProgressBar(index, defaultStoryDuration);
             startStoryTimer(index, defaultStoryDuration);
         }
-    }
-
-    function animateProgressBar(index, duration) {
-        setTimeout(() => {
-            progressBarSegments[index].style.transition = `background-position ${duration}ms linear`;
-            progressBarSegments[index].style.backgroundPosition = 'left center';
-        }, 10);
     }
 
     function startStoryTimer(index, duration) {

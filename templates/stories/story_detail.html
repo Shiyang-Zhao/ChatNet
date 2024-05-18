@@ -2,9 +2,15 @@
 <div>
     <button type="button" class="btn" style="padding: 0; background: none; border: none; outline: none;"
         data-bs-toggle="modal" data-bs-target="#storyModal">
+        {% if active_stories %}
         <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
-            class="rounded-circle img-fluid position-absolute top-0 start-0"
-            style="object-fit: cover; width: 100%; height: 100%;">
+            class="rounded-circle img-thumbnail position-absolute top-0 start-0"
+            style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(252, 29, 29, 0.8);">
+        {% else %}
+        <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
+            class="rounded-circle img-thumbnail position-absolute top-0 start-0"
+            style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(116, 116, 116, 0.8)">
+        {% endif %}
     </button>
 
     <div class="modal fade" id="storyModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -18,7 +24,7 @@
                         {% endfor %}
                     </div>
                     {% for story in active_stories %}
-                    <div class="story-content mt-3" id="story-{{ story.pk }}" style="display: none;">
+                    <div class="story-content mt-3" id="story-{{ story.pk }}">
                         {% if story.file %}
                         {% if story.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
                         <div class="video-container d-flex flex-column align-items-center justify-content-center">
@@ -33,7 +39,14 @@
                         </div>
                         {% endif %}
                         {% endif %}
+                        <form method="post" action="{% url 'story-delete' pk=story.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </div>
+
+                    {% empty %}
+                    <p>You don't have any story - <a href="{% url 'story-create' %}">Create</a></p>
                     {% endfor %}
                     <div class="left-area"
                         style="position: absolute; left: 0; top: 0; bottom: 0; width: 50%; cursor: pointer;">
@@ -49,8 +62,5 @@
 </div>
 
 {% block javascripts %}
-<!-- <script type="module" src="{% static 'js/stories/story_common.js' %}"></script>
-<script type="module" src="{% static 'js/stories/video_story.js' %}"></script>
-<script type="module" src="{% static 'js/stories/other_story.js' %}"></script> -->
 <script type="module" src="{% static 'js/stories/story_detail.js' %}"></script>
 {% endblock %}
