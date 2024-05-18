@@ -20,9 +20,11 @@
                     </div>
                     {% for story in active_stories %}
                     <div class="story-content mt-3" id="story-{{ story.pk }}" style="display: none;">
+                        <p class="text-white">{{ story.content }}</p>
+
                         {% if story.file %}
                         {% if story.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
-                        <video controls class="img-fluid mb-3">
+                        <video class="img-fluid mb-3" controls preload="metadata">
                             <source src="{{ story.file.url }}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -30,7 +32,6 @@
                         <img src="{{ story.file.url }}" alt="Story image" class="img-fluid mb-3">
                         {% endif %}
                         {% endif %}
-                        <p class="text-white">{{ story.content }}</p>
                     </div>
                     {% endfor %}
                     <div class="left-area"
@@ -45,17 +46,6 @@
     </div>
 
 </div>
-<style>
-    .progress-bar {
-        width: 100%;
-        /* Ensure this spans the full width of its container */
-        margin-right: 5px;
-        /* Set a fixed height for the progress bar */
-        background: linear-gradient(to right, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0.5) 50%);
-        background-size: 200% 100%;
-        background-position: 100% center;
-    }
-</style>
 
 {% block javascripts %}
 <script src="{% static 'js/stories/story_detail.js' %}"></script>
