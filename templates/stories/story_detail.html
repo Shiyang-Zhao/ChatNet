@@ -1,5 +1,4 @@
 {% load static %}
-
 <div>
     <button type="button" class="btn" style="padding: 0; background: none; border: none; outline: none;"
         data-bs-toggle="modal" data-bs-target="#storyModal">
@@ -20,16 +19,18 @@
                     </div>
                     {% for story in active_stories %}
                     <div class="story-content mt-3" id="story-{{ story.pk }}" style="display: none;">
-                        <p class="text-white">{{ story.content }}</p>
-
                         {% if story.file %}
                         {% if story.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
-                        <video class="img-fluid mb-3" controls preload="metadata">
-                            <source src="{{ story.file.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+                        <div class="video-container d-flex flex-column align-items-center justify-content-center">
+                            <video class="img-fluid mb-3" controls autoplay muted preload="auto">
+                                <source src="{{ story.file.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
                         {% else %}
-                        <img src="{{ story.file.url }}" alt="Story image" class="img-fluid mb-3">
+                        <div class="image-container d-flex flex-column align-items-center justify-content-center">
+                            <img src="{{ story.file.url }}" alt="Story image" class="img-fluid mb-3">
+                        </div>
                         {% endif %}
                         {% endif %}
                     </div>
@@ -48,5 +49,8 @@
 </div>
 
 {% block javascripts %}
-<script src="{% static 'js/stories/story_detail.js' %}"></script>
+<!-- <script type="module" src="{% static 'js/stories/story_common.js' %}"></script>
+<script type="module" src="{% static 'js/stories/video_story.js' %}"></script>
+<script type="module" src="{% static 'js/stories/other_story.js' %}"></script> -->
+<script type="module" src="{% static 'js/stories/story_detail.js' %}"></script>
 {% endblock %}
