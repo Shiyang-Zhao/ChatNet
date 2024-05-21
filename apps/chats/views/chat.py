@@ -3,7 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, DetailView
 from ..models.chat import Chat
-from ..forms.chat import GroupChatCreateForm, PrivateChatCreateForm
+from ..forms.chat import GroupChatCreateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.contrib import messages
@@ -26,7 +26,7 @@ class ChatListAndDetailView(View):
 
 class PrivateChatCreateView(LoginRequiredMixin, CreateView):
     model = Chat
-    form_class = PrivateChatCreateForm
+    fields = []
 
     def form_valid(self, form):
         receiver_username = self.kwargs.get("receiver_username")

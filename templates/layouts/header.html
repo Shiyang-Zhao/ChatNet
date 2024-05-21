@@ -32,8 +32,10 @@
             <span id="notification-count" class="notification-count"></span>
           </a>
         </li>
+
+
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+          <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             {% if user.profile.profile_image %}
             <img src="{{ user.profile.profile_image.url }}" alt="{{ user.username }}'s Profile Image"
@@ -42,15 +44,29 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li>
-              <a class="dropdown-item" href="{% url 'user-profile-detail' username=user.username %}">Profile</a>
+              <a class="dropdown-item" href="{% url 'user-profile-detail' username=user.username %}">
+                <i class="fa-regular fa-user"></i>Profile
+              </a>
             </li>
             <li>
-              <a class="dropdown-item" href="{% url 'story-create' %}">Create Stroy</a>
+              <a class="dropdown-item" href="{% url 'story-create' %}">
+                <i class="fa-regular fa-pen"></i>Create Story
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'history' %}">
+                <i class="fa-regular fa-rectangle-history"></i>History
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'setting' %}"><i class="fa-regular fa-gear"></i>Setting</a>
             </li>
             <li>
               <form method="post" action="{% url 'user-logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="dropdown-item">Logout</button>
+                <button type="submit" class="dropdown-item">
+                  <i class="fa-regular fa-right-from-bracket"></i>Logout
+                </button>
               </form>
             </li>
           </ul>

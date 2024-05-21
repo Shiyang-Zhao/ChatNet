@@ -1,8 +1,7 @@
 document.getElementById('file-input').addEventListener('change', function (event) {
     const file = event.target.files[0];
-    const previewContainer = document.getElementById('preview-container');
-    const imagePreview = document.getElementById('image-preview');
-    const videoPreview = document.getElementById('video-preview');
+    const imagePreview = document.querySelector('#image-preview');
+    const videoPreview = document.querySelector('#video-preview');
 
     imagePreview.style.display = 'none';
     videoPreview.style.display = 'none';

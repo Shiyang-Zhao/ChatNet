@@ -7,12 +7,6 @@ from django.core.exceptions import ValidationError
 User = get_user_model()
 
 
-class PrivateChatCreateForm(forms.ModelForm):
-    class Meta:
-        model = Chat
-        fields = []
-
-
 class GroupChatCreateForm(forms.ModelForm):
     class Meta:
         model = Chat

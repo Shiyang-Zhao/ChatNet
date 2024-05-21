@@ -24,6 +24,9 @@ class Story(models.Model):
     file = models.FileField(upload_to=story_file_directory_path, null=True, blank=True)
     date_posted = models.DateTimeField(default=timezone.now)
     date_expired = models.DateTimeField(default=default_expiration_date)
+    liked_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="liked_stories", blank=True
+    )
     viewed_by = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="viewed_stories", blank=True
     )
@@ -39,17 +42,24 @@ class Story(models.Model):
     def file_extension(self):
         return Path(self.file.name).suffix
 
+    @classmethod
+    def active_stories(cls, user):
+        """Return active stories for a given user."""
+        return cls.objects.filter(
+            author=user,
+            is_archived=False,
+            date_expired__gt=timezone.now(),
+        )
+
     def __str__(self):
         return f"{self.user.username}'s Story at {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
     def archive(self):
         """Archive the story. This function will change its archival status."""
         self.is_archived = True
+        self.date_expired = timezone.now()
         self.save()
 
-    @classmethod
-    def active_stories(cls, user):
-        """Return active stories for a given user."""
-        return cls.objects.filter(
-            author=user, is_archived=False, date_expired__gt=timezone.now()
-        )
+    def like(self, user_pk):
+        if not self.liked_by.filter(pk=user_pk).exists():
+            self.liked_by.add(user_pk)

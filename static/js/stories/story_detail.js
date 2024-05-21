@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStoryIndex = 0;
     let storyTimer;
 
+    // Initilize stories and progress bar style
     progressBarSegments.forEach(segment => {
         Object.assign(segment.style, {
             width: '100%',
@@ -16,6 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
             backgroundSize: '200% 100%',
             backgroundPosition: 'right center'
         });
+    });
+
+    stories.forEach((story, idx) => {
+        if (idx === currentStoryIndex) {
+            story.style.display = "block";
+        } else {
+            story.style.display = "none";
+        }
     });
 
     leftArea.addEventListener('click', () => navigateStory(-1));
@@ -58,15 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startStory(index) {
-        // First, show the current story
-        stories[index].style.display = 'block';
-
-        // Then, hide all other stories
         stories.forEach((story, idx) => {
-            if (idx !== index) {
-                story.style.display = 'none';
+            if (idx === currentStoryIndex) {
+                story.style.display = "block";
+            } else {
+                story.style.display = "none";
             }
         });
+        stories[index].style.display = 'block';
 
         let video = stories[index].querySelector('video');
         if (video) {

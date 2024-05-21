@@ -19,9 +19,9 @@
 
     {% if request.user == post.author %}
     <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
-    <form method="post" action="{% url 'post-delete' pk=post.pk %}">
+    <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
       {% csrf_token %}
-      <button type="submit" class="btn btn-danger">Delete</button>
+      <button type="submit" class="btn btn-danger">Soft Delete</button>
     </form>
     {% endif %}
   </div>

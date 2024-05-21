@@ -14,14 +14,15 @@ from ..models.post import Post
 from ..forms.post import PostCreateForm, PostUpdateForm
 from ..forms.comment import CommentCreateForm, ReplyCreateForm
 from django.http import JsonResponse
+from django.utils import timezone
 
 
-class PostListView(ListView):
-    model = Post
-    template_name = "posts/post_list.html"
-    context_object_name = "posts"
-    ordering = ["-date_posted"]
-    paginate_by = 10
+# class PostListView(ListView):
+#     model = Post
+#     template_name = "posts/post_list.html"
+#     context_object_name = "posts"
+#     ordering = ["-date_posted"]
+#     paginate_by = 10
 
 
 class PostDetailView(DetailView):
@@ -48,21 +49,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# class PostUpdateView(LoginRequiredMixin, UpdateView):
-#     model = Post
-#     form_class = PostUpdateForm
-#     template_name = "posts/post_update_form.html"
-
-#     def get_object(self):
-#         return get_object_or_404(
-#             Post, pk=self.kwargs.get("pk"), author=self.request.user
-#         )
-
-#     def form_valid(self, form):
-#         messages.success(self.request, "Post updated successfully.")
-#         return super().form_valid(form)
-
-
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostUpdateForm
@@ -77,30 +63,40 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == post.author
 
 
-# class PostDeleteView(LoginRequiredMixin, DeleteView):
+# class PostSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 #     model = Post
-#     template_name = "posts/post_confirm_delete.html"
+#     fields = []
+#     success_url = reverse_lazy("home")
 
-#     def get_object(self):
-#         return get_object_or_404(
-#             Post, pk=self.kwargs.get("pk"), author=self.request.user
-#         )
+#     def form_valid(self, form):
+#         self.object = form.save(commit=False)
+#         self.object.is_deleted = True
+#         self.object.soft_deleted_at = timezone.now()
+#         messages.success(self.request, "Post soft deleted successfully.")
+#         return super().form_valid(form)
 
-#     def get_success_url(self):
-#         return reverse("home")
-
-#     def delete(self, request, *args, **kwargs):
-#         messages.success(request, "Post deleted successfully.")
-#         return super().delete(request, *args, **kwargs)
+#     def test_func(self):
+#         post = self.get_object()
+#         return self.request.user == post.author
 
 
-class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class PostSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, pk=kwargs.get("pk"))
+        if self.request.user == post.author:
+            post.is_deleted = True
+            post.soft_deleted_at = timezone.now()
+            post.save()
+        return redirect(reverse_lazy("home"))
+
+    def test_func(self):
+        post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
+        return self.request.user == post.author
+
+
+class PostHardDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = reverse_lazy("home")
-
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, "Post deleted successfully.")
-        return super().delete(request, *args, **kwargs)
 
     def test_func(self):
         post = self.get_object()

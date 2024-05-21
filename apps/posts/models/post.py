@@ -28,9 +28,11 @@ class Post(models.Model):
     disliked_by = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="disliked_posts", blank=True
     )
-    comments_count = models.IntegerField(default=0)
-    is_published = models.BooleanField(default=True)
+    # comments_count = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
+    is_published = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)  # Soft delete field
+    soft_deleted_at = models.DateTimeField(null=True, blank=True)
 
     @property
     def file_extension(self):
@@ -52,8 +54,12 @@ class Post(models.Model):
             self.disliked_by.add(user_pk)
             self.liked_by.remove(user_pk)
 
-    def is_liked_by(self, user):
-        return self.liked_by.filter(pk=user.pk).exists()
+    def soft_delete(self):
+        self.is_deleted = True
+        self.soft_deleted_at = timezone.now()
+        self.save()
 
-    def is_disliked_by(self, user):
-        return self.disliked_by.filter(pk=user.pk).exists()
+    def restore(self):
+        self.is_deleted = False
+        self.soft_deleted_at = None
+        self.save()

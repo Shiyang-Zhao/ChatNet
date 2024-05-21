@@ -1,10 +1,11 @@
 from django.urls import path
 from .views.post import (
-    PostListView,
+    # PostListView,
     PostDetailView,
     PostCreateView,
     PostUpdateView,
-    PostDeleteView,
+    PostHardDeleteView,
+    PostSoftDeleteView,
     LikePostView,
     DislikePostView,
 )
@@ -19,11 +20,20 @@ from .views.comment import (
 )
 
 urlpatterns = [
-    path("", PostListView.as_view(), name="post-list"),
+    # path("", PostListView.as_view(), name="post-list"),
     path("post/create/", PostCreateView.as_view(), name="post-create"),
     path("post/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
     path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
-    path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
+    path(
+        "post/<int:pk>/soft/delete/",
+        PostSoftDeleteView.as_view(),
+        name="post-soft-delete",
+    ),
+    path(
+        "post/<int:pk>/hard/delete/",
+        PostHardDeleteView.as_view(),
+        name="post-hard-delete",
+    ),
     path(
         "post/<int:pk>/comment/create/",
         CommentCreateView.as_view(),

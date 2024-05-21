@@ -9,7 +9,7 @@
 {% block content %}
 <div class="container mt-5">
   <h2 class="mb-3 text-center">Welcome to Metasphere</h2>
-  {% for post in posts %}
+  {% for post in active_posts %}
   <div class="card mb-4 shadow-sm post-card" id="post-{{ post.pk }}" data-href="{% url 'post-detail' post.pk %}">
     <div class="card-body">
       <h3 class="card-title">{{ post.title }}</h3>

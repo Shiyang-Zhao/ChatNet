@@ -1,15 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import (
     ListView,
     DetailView,
     CreateView,
     UpdateView,
     DeleteView,
+    View,
 )
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .models import Story
 from .forms import StoryCreateForm, StoryUpdateForm
+from django.utils import timezone
 
 
 # class StoryListView(ListView):
@@ -36,15 +38,15 @@ class StoryCreateView(LoginRequiredMixin, CreateView):
     form_class = StoryCreateForm
     template_name = "stories/story_create_form.html"
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
     def get_success_url(self):
         # return reverse_lazy("story-list", kwargs={"pk": self.object.pk})
         return reverse_lazy(
             "user-profile-detail", kwargs={"username": self.request.user.username}
         )
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
 class StoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -62,6 +64,14 @@ class StoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == story.author
 
 
+class StoryArchiveView(View):
+
+    def get_redirect_url(self, *args, **kwargs):
+        story = get_object_or_404(Story, pk=kwargs.get("pk"))
+        story.archive()
+        return super().get_redirect_url(*args, **kwargs)
+
+
 class StoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Story
 
@@ -73,12 +83,3 @@ class StoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         story = self.get_object()
         return self.request.user == story.author
-
-
-# class StoryArchiveView(RedirectView):
-#     pattern_name = 'story_list'  # Redirect to the story list after archiving
-
-#     def get_redirect_url(self, *args, **kwargs):
-#         story = get_object_or_404(Story, pk=kwargs['pk'])
-#         story.archive()
-#         return super().get_redirect_url(*args, **kwargs)
