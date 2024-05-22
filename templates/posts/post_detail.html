@@ -13,9 +13,21 @@
     {% include 'posts/like_and_dislike_button.html' with post=post user=user %}
 
     <div class="d-flex justify-content-between align-items-center">
-      <p><strong>Comments:</strong> {{ post.comments.count }}</p>
-      <p><strong>Views:</strong> {{ post.views }}</p>
+      <div>
+        <p class="mb-0"><strong>Comments:</strong> {{ post.comments.count }}</p>
+      </div>
+      <div>
+        <p class="mb-0"><strong>Views:</strong> {{ post.views }}</p>
+      </div>
+      {% if post.file %}
+      <div>
+        <a href="{{ post.file.url }}" class="btn btn-sm btn-outline-primary file-download-button" download>
+          <i class="fa-regular fa-download"></i>
+        </a>
+      </div>
+      {% endif %}
     </div>
+
 
     {% if request.user == post.author %}
     <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>

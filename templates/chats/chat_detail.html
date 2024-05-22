@@ -3,36 +3,61 @@
 {% block title %}My Chats{%endblock%}
 
 {% block content %}
-<div class="container mt-5">
-  <h2>My Chats</h2>
-
+<div class="container">
   {% include 'chats/group_chat_create_form.html' %}
-
-  {% if chats %}
-  <ul class="list-group mt-3">
-    {% for chat in chats %}
-    <div>
-      <li class="list-group-item" data-chat-pk="{{ chat.pk }}" data-href="{% url 'chat-detail' pk=chat.pk %}">
-        {% for participant in chat.participants.all %}
-        {{ participant.username}}
+  <div class="row g-0" style="height: 80vh;">
+    <!-- Left part: List of chats -->
+    <div class="col-md-4 d-flex flex-column" style="height: 100%; overflow-y: auto; border: 1px solid #ccc;">
+      <form method="get" action="" style="position: relative; display: flex; align-items: center;">
+        <input type="text" class="form-control" name="query" placeholder="Search users..."
+          style="padding-left: 40px; padding-right: 5px;">
+        <button
+          style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; padding: 0; pointer-events: all;">
+          <i class="fa fa-search"></i>
+        </button>
+      </form>
+      {% if chats %}
+      <ul class="list-group mt-3 flex-grow-1" style="overflow-y: auto;">
+        {% for chat in chats %}
+        <li class="list-group-item chat-item d-flex flex-column align-items-start" data-chat-pk="{{ chat.pk }}"
+          data-href="{% url 'chat-detail' pk=chat.pk %}">
+          <div class="w-100">
+            <strong>Participants:</strong>
+            {% for participant in chat.participants.all %}
+            {{ participant.username }}
+            {% endfor %}
+          </div>
+          <div class="w-100">
+            <small class="text-muted">{{ chat.chat_type }}</small>
+          </div>
+          <div class="w-100 mt-2">
+            <small class="text-muted">
+              Created by: {{ chat.creator }} at {{ chat.date_created|date:"F j, Y, G:i" }}
+            </small>
+          </div>
+        </li>
         {% endfor %}
-        ({{ chat.chat_type }})
-        <p>
-          Created by: {{ chat.creator }} at {{ chat.date_created|date:"F j, Y,G:i" }}
-        </p>
-      </li>
-
-      <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
-        <div class="chat-detail">
-          {% include 'chats/message_detail.html' with chat=chat %}
-        </div>
-      </div>
+      </ul>
+      {% else %}
+      <p class="text-center mt-3">No chats found.</p>
+      {% endif %}
     </div>
-    {% endfor %}
-  </ul>
-  {% else %}
-  <p>No chats found.</p>
-  {% endif %}
+
+    <!-- Right part: Chat details -->
+    <div class="col-md-8">
+      {% if chats %}
+      {% for chat in chats %}
+      <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
+        {% include 'chats/message_detail.html' with chat=chat %}
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="alert alert-info mt-3" role="alert">
+        Select a chat to view details.
+      </div>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock %}
 

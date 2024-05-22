@@ -1,28 +1,36 @@
 {% load static %}
-<div class="chat-detail">
-  <div class="chat-messages">
+<div class="chat-detail d-flex flex-column" style="height: 80vh; border: 1px solid #ccc; overflow: hidden;">
+
+  <div class="chat-header p-2" style="border-bottom: 1px solid #ccc; background-color: #f8f9fa;">
+    <h5 class="mb-0">{{ chat.chat_type }} Chat</h5>
+    <small class="text-muted">Participants:
+      {% for participant in chat.participants.all %}
+      {{ participant.username }}{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </small>
+  </div>
+  <!-- Upper part: Messages display -->
+  <div class="chat-messages p-3 flex-grow-1 overflow-auto" style="border-bottom: 1px solid #ccc;">
     {% if chat.messages.all %}
     {% for message in chat.messages.all %}
-    <div class="message">
-      <p>
-        <strong>{{ message.sender.username }}:</strong> {{ message.content }}
-      </p>
-      <span class="date-sent">{{ message.date_sent|date:"F j, Y, G:i" }}</span>
+    <div class="message mb-2">
+      <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
+      <span class="date-sent text-muted" style="font-size: 0.9em;">{{ message.date_sent|date:"F j, Y, G:i" }}</span>
     </div>
-    {% endfor %} {% else %}
+    {% endfor %}
+    {% else %}
     <p>No messages yet. Start the conversation!</p>
     {% endif %}
   </div>
+
+  <!-- Lower part: Message input -->
   <div>
-    <form id="message-form" method="post" enctype="multipart/form-data">
+    <form id="message-form-{{ chat.pk }}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="form-group" style="position: relative;">
-        <label for="message-input">Message:</label><br />
-        <textarea id="message-input" class="form-control" name="message" rows="4" cols="50" style="min-height: 50px;"
-          required></textarea>
-        <!-- <label for="attachment">Attachment:</label><br>
-            <input type="file" id="attachment" name="attachment"><br><br> -->
-        <button id="send-button" type="submit" class="btn btn-primary" data-bs-toggle="popover"
+      <div class="form-group mb-0 position-relative">
+        <textarea id="message-input-{{ chat.pk }}" class="form-control" name="message" rows="3"
+          placeholder="Type your message here..." style="resize: none;" required></textarea>
+        <button id="send-button-{{ chat.pk }}" type="submit" class="btn btn-primary" data-bs-toggle="popover"
           style="position: absolute; right: 7px; bottom: 5px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden; ">
           <i class="fa-regular fa-paper-plane"></i>
         </button>

@@ -12,7 +12,14 @@
   {% for post in active_posts %}
   <div class="card mb-4 shadow-sm post-card" id="post-{{ post.pk }}" data-href="{% url 'post-detail' post.pk %}">
     <div class="card-body">
-      <h3 class="card-title">{{ post.title }}</h3>
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3 class="card-title">{{ post.title }}</h3>
+        {% if post.file %}
+        <a href="{{ post.file.url }}" class="btn btn-sm btn-outline-primary file-download-button" download>
+          Download File
+        </a>
+        {% endif %}
+      </div>
       <h6 class="card-subtitle mb-2 text-muted">
         By <a href="{% url 'user-profile-detail' username=post.author.username %}"
           class="text-decoration-none card-author">

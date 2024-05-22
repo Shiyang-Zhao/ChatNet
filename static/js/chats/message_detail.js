@@ -1,10 +1,18 @@
 import { sendChatMessage } from '../websockets/chat_websocket.js';
 
-const showMessageDetail = (detailPlaceholder) => {
-    const messageForm = detailPlaceholder.querySelector('#message-form');
-    const messageInput = detailPlaceholder.querySelector('#message-input');
-    const sendButton = detailPlaceholder.querySelector('#send-button');
-    messageInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+const scrollToLatestMessage = (container) => {
+    const latestMessage = container.lastElementChild;
+    if (latestMessage) {
+        latestMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+};
+
+const showMessageDetail = (detailPlaceholder, chatPk) => {
+    const messageForm = detailPlaceholder.querySelector(`#message-form-${chatPk}`);
+    const messageInput = detailPlaceholder.querySelector(`#message-input-${chatPk}`);
+    const sendButton = detailPlaceholder.querySelector(`#send-button-${chatPk}`);
+    const messagesContainer = detailPlaceholder.querySelector('.chat-messages');
+    scrollToLatestMessage(messagesContainer);
 
     const sendButtonPopover = new bootstrap.Popover(sendButton, {
         trigger: 'manual',
@@ -31,6 +39,7 @@ const showMessageDetail = (detailPlaceholder) => {
             sendButtonPopover.show();
             setTimeout(() => { sendButtonPopover.hide(); }, 3000);
         }
+        scrollToLatestMessage(messagesContainer);
     });
 
     messageInput.addEventListener('keydown', (event) => {
@@ -46,6 +55,11 @@ const showMessageDetail = (detailPlaceholder) => {
                 setTimeout(() => { sendButtonPopover.hide(); }, 3000);
             }
         }
+        scrollToLatestMessage(messagesContainer);
+    });
+
+    messageInput.addEventListener('focus', () => {
+        scrollToLatestMessage(messagesContainer);
     });
 }
 export { showMessageDetail }

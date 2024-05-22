@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import (
     ListView,
     DetailView,
@@ -64,12 +64,20 @@ class StoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == story.author
 
 
-class StoryArchiveView(View):
-
-    def get_redirect_url(self, *args, **kwargs):
+class StoryArchiveView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def post(self, request, *args, **kwargs):
         story = get_object_or_404(Story, pk=kwargs.get("pk"))
-        story.archive()
-        return super().get_redirect_url(*args, **kwargs)
+        if self.request.user == story.author:
+            story.archive()
+        return redirect(
+            reverse_lazy(
+                "user-profile-detail", kwargs={"username": self.request.user.username}
+            )
+        )
+
+    def test_func(self):
+        story = get_object_or_404(Story, pk=self.kwargs.get("pk"))
+        return self.request.user == story.author
 
 
 class StoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

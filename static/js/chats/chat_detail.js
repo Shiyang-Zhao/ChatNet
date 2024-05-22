@@ -11,7 +11,7 @@ const showDetailPlaceholder = (chatPk) => {
     if (detailPlaceholder) {
         detailPlaceholder.style.display = "block";
         establishChatWebSocket(chatPk);
-        showMessageDetail(detailPlaceholder);
+        showMessageDetail(detailPlaceholder, chatPk);
     }
 };
 
@@ -23,12 +23,14 @@ document.addEventListener("DOMContentLoaded", function () {
         showDetailPlaceholder(chatPk);
     }
 
-    document.querySelectorAll(".list-group-item").forEach((item) => {
+    document.querySelectorAll(".chat-item").forEach((item) => {
         item.addEventListener("click", () => {
             const chatPk = item.getAttribute("data-chat-pk");
             showDetailPlaceholder(chatPk);
             const url = item.getAttribute("data-href");
-            window.history.pushState(null, "", url);
+            if (document.querySelector(`#chat-detail-placeholder-${chatPk}`)) {
+                window.history.pushState(null, "", url);
+            }
         });
     });
 });

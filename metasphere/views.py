@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from apps.posts.models.post import Post
 from apps.stories.models import Story
 from django.db.models import Q
+from django.utils import timezone
 import re
 
 
@@ -46,5 +47,10 @@ def history(request):
             author=request.user, is_published=True, is_deleted=True
         ),
         "archived_stories": Story.objects.filter(author=request.user, is_archived=True),
+        "expired_stories": Story.objects.filter(
+            author=request.user,
+            is_archived=False,
+            date_expired__lt=timezone.now(),
+        ),
     }
     return render(request, "layouts/history.html", context)
