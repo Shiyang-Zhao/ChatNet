@@ -2,6 +2,7 @@ import { establishChatWebSocket } from "../websockets/chat_websocket.js";
 import { showMessageDetail } from "./message_detail.js";
 
 const showDetailPlaceholder = (chatPk) => {
+    const chooseChatPlaceholder = document.querySelector("#choose-chat-placeholder");
     document.querySelectorAll(".chat-detail-placeholder").forEach((placeholder) => {
         placeholder.style.display = "none";
     });
@@ -12,6 +13,9 @@ const showDetailPlaceholder = (chatPk) => {
         detailPlaceholder.style.display = "block";
         establishChatWebSocket(chatPk);
         showMessageDetail(detailPlaceholder);
+    }
+    if (chooseChatPlaceholder) {
+        chooseChatPlaceholder.style.display = "none";
     }
 };
 

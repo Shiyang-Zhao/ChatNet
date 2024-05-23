@@ -1,14 +1,17 @@
 {% load crispy_forms_tags %}
 {% load static %}
 <div>
-  <button type="button" id="openModalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-    <i class="fa-regular fa-plus"></i>Group Chat
-  </button>
-  <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="d-flex justify-content-center align-items-center">
+    <button type="button" id="openModalButton" class="btn btn-primary w-100 rounded-0" data-bs-toggle="modal"
+      data-bs-target="#myModal">
+      <i class="fa-regular fa-plus fa-lg"></i> Group Chat
+    </button>
+  </div>
+  <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title mb-0" id="exampleModalLabel">Modal Title</h5>
+          <h5 class="modal-title mb-0" id="myModalLabel">Modal Title</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -16,8 +19,8 @@
           <form method="get" action="" style="position: relative; display: flex; align-items: center;">
             <input type="text" class="form-control" name="query" placeholder="Search users..."
               style="padding-left: 40px; padding-right: 5px;">
-            <button
-              style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; padding: 0; pointer-events: all;">
+            <button type="submit"
+              style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; padding: 0;">
               <i class="fa fa-search"></i>
             </button>
           </form>

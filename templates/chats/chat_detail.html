@@ -7,24 +7,25 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  {% include 'chats/group_chat_create_form.html' %}
+<div class="container mt-5">
   <div class="row g-0" style="height: 80vh;">
     <!-- Left part: List of chats -->
-    <div class="col-md-4 d-flex flex-column" style="height: 100%; overflow-y: auto; border: 1px solid #ccc;">
-      <form method="get" action="" style="position: relative; display: flex; align-items: center;">
-        <input type="text" class="form-control" name="query" placeholder="Search users..."
-          style="padding-left: 40px; padding-right: 5px;">
+    <div class="col-md-3 d-flex flex-column border-start border-top border-bottom"
+      style="height: 100%; overflow-y: auto;">
+      {% include 'chats/group_chat_create_form.html' %}
+      <form method="get" action="" class="d-flex align-items-center position-relative ps-0 pe-0 w-100">
+        <input type="text" class="form-control rounded-0" name="query" placeholder="Search users..."
+          style="padding-left: 30px; padding-right: 5px;">
         <button
           style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; padding: 0; pointer-events: all;">
           <i class="fa fa-search"></i>
         </button>
       </form>
       {% if chats %}
-      <ul class="list-group mt-3 flex-grow-1" style="overflow-y: auto;">
+      <ul class="list-group chat-list flex-grow-1 rounded-0" style="overflow-y: auto;">
         {% for chat in chats %}
         <li class="list-group-item chat-item d-flex flex-column align-items-start" data-chat-pk="{{ chat.pk }}"
-          data-href="{% url 'chat-detail' pk=chat.pk %}">
+          data-href="{% url 'chat-detail' pk=chat.pk %}" style="border-right: none; border-left: none;">
           <div class="w-100">
             <strong>Participants:</strong>
             {% for participant in chat.participants.all %}
@@ -48,8 +49,19 @@
     </div>
 
     <!-- Right part: Chat details -->
-    <div class="col-md-8">
+    <div class="col-md-9">
       {% if chats %}
+      <div id="choose-chat-placeholder">
+        <div class="chat-detail d-flex flex-column border" style="height: 80vh;">
+          <div class="p-1 border-bottom" style="background-color: #f8f9fa;">
+            <h5>Welcome to My Chats</h5>
+            <small class="text-muted">Please choose a chat room from the list on the left</small>
+          </div>
+          <div class="flex-grow-1 d-flex justify-content-center align-items-center">
+            <p class="text-muted">No chat selected.</p>
+          </div>
+        </div>
+      </div>
       {% for chat in chats %}
       <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
         {% include 'chats/message_detail.html' with chat=chat %}

@@ -1,24 +1,59 @@
 {% load static %}
-<div class="chat-detail d-flex flex-column" style="height: 80vh; border: 1px solid #ccc; overflow: hidden;">
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/chats/message_detail.css' %}">
+{% endblock %}
 
-  <div class="chat-header p-2" style="border-bottom: 1px solid #ccc; background-color: #f8f9fa;">
-    <h5 class="mb-0">{{ chat.chat_type }} Chat</h5>
-    <small class="text-muted">Participants:
-      {% for participant in chat.participants.all %}
-      {{ participant.username }}{% if not forloop.last %}, {% endif %}
-      {% endfor %}
-    </small>
+<div class="chat-detail d-flex flex-column border" style="height: 80vh; overflow: hidden;">
+  <div class="chat-header d-flex justify-content-between align-items-center p-1"
+    style="border-bottom: 1px solid #ccc; background-color: #f8f9fa;">
+    <div>
+      <h5 class="mb-0">
+        {% if chat.chat_type == 'private' %}
+        {% for participant in chat.participants.all %}
+        {% if participant != user %}
+        <div class="d-flex align-items-center mb-2">
+          <img class="img-fluid rounded-circle me-1" src="{{ participant.profile.profile_image.url }}"
+            style="width: 40px; height: 40px; object-fit: cover;">
+          <div>
+            <span>{{ participant.username }}</span>
+            <div>
+              {% if participant.activity_status == -1 %}
+              <small>Never active</small>
+              {% elif participant.activity_status > 2 %}
+              <small>Active {{ participant.activity_status }} minutes ago</small>
+              {% else %}
+              <small><i class="fa fa-circle text-success">Online</i> </small>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+        
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        {% for participant in chat.participants.all|slice:":2" %}
+        {{ participant.username }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+        {% if chat.participants.count > 2 %}
+        , and more
+        {% endif %}
+        {% endif %}
+      </h5>
+    </div>
+
   </div>
+
   <!-- Upper part: Messages display -->
-  <div class="chat-messages flex-grow-1 overflow-auto" style="border-bottom: 1px solid #ccc;"
-    data-username="{{ user.username }}">
+  <div class="chat-messages flex-grow-1 overflow-auto" data-username="{{ user.username }}">
     {% if chat.messages.all %}
     {% for message in chat.messages.all %}
     {% if message.sender == user %}
     <div class="message d-flex justify-content-end">
-      <div class="bg-success text-white p-2 rounded" style="max-width: 75%;">
+      <div class="bg-success text-white p-2" style="max-width: 75%;">
         <div class="d-flex align-items-center flex-row-reverse">
-          <strong class="text-right ml-2">{{ message.sender.username }}</strong>
+          <img class="img-fluid rounded-circle" src="{{ message.sender.profile.profile_image.url }}"
+            style="width: 35px; height: 35px; object-fit: cover;">
           <p class="mb-1 text-right" style="margin: 0;">{{ message.content }}</p>
         </div>
         <span class="date-sent text-muted text-right" style="font-size: 0.9em; display: block;">
@@ -28,9 +63,10 @@
     </div>
     {% else %}
     <div class="message d-flex justify-content-start">
-      <div class="bg-light text-dark p-2 rounded" style="max-width: 75%;">
+      <div class="bg-light text-dark p-2" style="max-width: 75%;">
         <div class="d-flex align-items-center">
-          <strong class="text-left">{{ message.sender.username }}</strong>
+          <img class="img-fluid rounded-circle" src="{{ message.sender.profile.profile_image.url }}"
+            style="width: 35px; height: 35px; object-fit: cover;">
           <p class="mb-1 text-left ml-2" style="margin: 0;">{{ message.content }}</p>
         </div>
         <span class="date-sent text-muted text-left" style="font-size: 0.9em; display: block;">
@@ -50,7 +86,7 @@
     <form id="message-form" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group mb-0 position-relative">
-        <textarea id="message-input" class="form-control" name="message" rows="3"
+        <textarea id="message-input" class="form-control rounded-0" name="message" rows="3"
           placeholder="Type your message here..." style="resize: none;" required></textarea>
         <button id="send-button" type="submit" class="btn btn-primary" data-bs-toggle="popover"
           style="position: absolute; right: 7px; bottom: 5px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden; ">

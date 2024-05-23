@@ -1,16 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ query }} - Search Results{%endblock %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/posts/search_results.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-5">
   <h2>Search Results for "{{ query }}"</h2>
   {% if results.exists %}
   <div class="list-group">
     {% for post in results %}
-    <div class="card mb-4 shadow-sm" id="post-{{ post.pk }}">
+    <div class="card mb-4 shadow-sm result-card" id="post-{{ post.pk }}" data-href="{% url 'post-detail' post.pk %}">
       <div class="card-body">
-        <h3 class="card-title">{{ post.title }}</h3>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h3 class="card-title">{{ post.title }}</h3>
+          {% if post.file %}
+          <a href="{{ post.file.url }}" class="btn btn-sm btn-outline-primary file-download-button" download>
+            Download File
+          </a>
+          {% endif %}
+        </div>
         <h6 class="card-subtitle mb-2 text-muted">
-          By <a href="{% url 'user-profile-detail' username=post.author.username %}" class="text-decoration-none">
+          By <a href="{% url 'user-profile-detail' username=post.author.username %}"
+            class="text-decoration-none card-author">
             {{ post.author }}
           </a> - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
 
@@ -23,7 +37,7 @@
 
           </div>
           <a href="{% url 'post-detail' post.pk %}" class="btn btn-outline-secondary">
-            {{ post.comments.count }} Comments
+            <i class="fa-regular fa-comments me-1"></i>{{ post.comments.count }}
           </a>
         </div>
       </div>
@@ -34,4 +48,8 @@
   <p>No posts found matching your search.</p>
   {% endif %}
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{% static 'js/posts/search_results.js' %}"></script>
 {% endblock %}

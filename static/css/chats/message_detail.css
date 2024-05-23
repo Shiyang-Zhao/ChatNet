@@ -1,0 +1,10 @@
+/* For Webkit browsers (Chrome, Safari) */
+.chat-messages::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.chat-messages {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
