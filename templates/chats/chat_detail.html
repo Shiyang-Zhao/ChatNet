@@ -2,6 +2,10 @@
 {% load static %}
 {% block title %}My Chats{%endblock%}
 
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/chats/chat_detail.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container">
   {% include 'chats/group_chat_create_form.html' %}
@@ -53,7 +57,7 @@
       {% endfor %}
       {% else %}
       <div class="alert alert-info mt-3" role="alert">
-        Select a chat to view details.
+        No chat.
       </div>
       {% endif %}
     </div>

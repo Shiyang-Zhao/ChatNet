@@ -1,16 +1,16 @@
 import { sendChatMessage } from '../websockets/chat_websocket.js';
 
 const scrollToLatestMessage = (container) => {
-    const latestMessage = container.lastElementChild;
-    if (latestMessage) {
-        latestMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
+    container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+    });
 };
 
-const showMessageDetail = (detailPlaceholder, chatPk) => {
-    const messageForm = detailPlaceholder.querySelector(`#message-form-${chatPk}`);
-    const messageInput = detailPlaceholder.querySelector(`#message-input-${chatPk}`);
-    const sendButton = detailPlaceholder.querySelector(`#send-button-${chatPk}`);
+const showMessageDetail = (detailPlaceholder) => {
+    const messageForm = detailPlaceholder.querySelector('#message-form');
+    const messageInput = detailPlaceholder.querySelector('#message-input');
+    const sendButton = detailPlaceholder.querySelector('#send-button');
     const messagesContainer = detailPlaceholder.querySelector('.chat-messages');
     scrollToLatestMessage(messagesContainer);
 
@@ -20,6 +20,7 @@ const showMessageDetail = (detailPlaceholder, chatPk) => {
         content: "You can't send an empty message",
         placement: 'right',
     });
+
     messageInput.addEventListener('input', () => {
         if (messageInput.value.trim() === '') {
             gsap.to(sendButton, { x: 5, width: 0, autoAlpha: 0, duration: 0.2 });

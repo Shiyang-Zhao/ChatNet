@@ -10,13 +10,35 @@
     </small>
   </div>
   <!-- Upper part: Messages display -->
-  <div class="chat-messages p-3 flex-grow-1 overflow-auto" style="border-bottom: 1px solid #ccc;">
+  <div class="chat-messages flex-grow-1 overflow-auto" style="border-bottom: 1px solid #ccc;"
+    data-username="{{ user.username }}">
     {% if chat.messages.all %}
     {% for message in chat.messages.all %}
-    <div class="message mb-2">
-      <p><strong>{{ message.sender.username }}:</strong> {{ message.content }}</p>
-      <span class="date-sent text-muted" style="font-size: 0.9em;">{{ message.date_sent|date:"F j, Y, G:i" }}</span>
+    {% if message.sender == user %}
+    <div class="message d-flex justify-content-end">
+      <div class="bg-success text-white p-2 rounded" style="max-width: 75%;">
+        <div class="d-flex align-items-center flex-row-reverse">
+          <strong class="text-right ml-2">{{ message.sender.username }}</strong>
+          <p class="mb-1 text-right" style="margin: 0;">{{ message.content }}</p>
+        </div>
+        <span class="date-sent text-muted text-right" style="font-size: 0.9em; display: block;">
+          {{ message.date_sent|date:"F j, Y, G:i" }}
+        </span>
+      </div>
     </div>
+    {% else %}
+    <div class="message d-flex justify-content-start">
+      <div class="bg-light text-dark p-2 rounded" style="max-width: 75%;">
+        <div class="d-flex align-items-center">
+          <strong class="text-left">{{ message.sender.username }}</strong>
+          <p class="mb-1 text-left ml-2" style="margin: 0;">{{ message.content }}</p>
+        </div>
+        <span class="date-sent text-muted text-left" style="font-size: 0.9em; display: block;">
+          {{ message.date_sent|date:"F j, Y, G:i" }}
+        </span>
+      </div>
+    </div>
+    {% endif %}
     {% endfor %}
     {% else %}
     <p>No messages yet. Start the conversation!</p>
@@ -25,12 +47,12 @@
 
   <!-- Lower part: Message input -->
   <div>
-    <form id="message-form-{{ chat.pk }}" method="post" enctype="multipart/form-data">
+    <form id="message-form" method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group mb-0 position-relative">
-        <textarea id="message-input-{{ chat.pk }}" class="form-control" name="message" rows="3"
+        <textarea id="message-input" class="form-control" name="message" rows="3"
           placeholder="Type your message here..." style="resize: none;" required></textarea>
-        <button id="send-button-{{ chat.pk }}" type="submit" class="btn btn-primary" data-bs-toggle="popover"
+        <button id="send-button" type="submit" class="btn btn-primary" data-bs-toggle="popover"
           style="position: absolute; right: 7px; bottom: 5px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden; ">
           <i class="fa-regular fa-paper-plane"></i>
         </button>

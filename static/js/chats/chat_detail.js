@@ -11,7 +11,7 @@ const showDetailPlaceholder = (chatPk) => {
     if (detailPlaceholder) {
         detailPlaceholder.style.display = "block";
         establishChatWebSocket(chatPk);
-        showMessageDetail(detailPlaceholder, chatPk);
+        showMessageDetail(detailPlaceholder);
     }
 };
 
@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll(".chat-item").forEach((item) => {
         item.addEventListener("click", () => {
+            document.querySelectorAll(".chat-item").forEach((i) => i.style.backgroundColor = "");
+            item.style.backgroundColor = "#f0f0f0";
             const chatPk = item.getAttribute("data-chat-pk");
             showDetailPlaceholder(chatPk);
             const url = item.getAttribute("data-href");

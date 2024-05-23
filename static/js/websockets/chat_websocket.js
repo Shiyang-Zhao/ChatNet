@@ -31,7 +31,6 @@ const establishChatWebSocket = (chatPk) => {
 
     socket.onclose = function (e) {
         console.error(`Chat socket closed: ${e.code}  ${e.reason}`);
-        // reconnect(chatPk);
     };
 
     socket.onerror = function (e) {
@@ -66,16 +65,63 @@ const displayChatMessage = (chatPk, message) => {
     var messagesContainer = document.querySelector(
         `#chat-detail-placeholder-${chatPk} .chat-messages`
     );
+
     var messageElement = document.createElement("div");
-    messageElement.classList.add("message");
+    messageElement.classList.add("message", "d-flex");
+
+    const loggedInUsername = messagesContainer.dataset.username;
+    const isSentByCurrentUser = message.sender_username === loggedInUsername;
+
+    if (isSentByCurrentUser) {
+        messageElement.classList.add("justify-content-end");
+    } else {
+        messageElement.classList.add("justify-content-start");
+    }
+
+    var messageContentElement = document.createElement("div");
+    messageContentElement.classList.add("p-2", "rounded");
+    messageContentElement.style.maxWidth = "75%";
+
+    if (isSentByCurrentUser) {
+        messageContentElement.classList.add("bg-success", "text-white");
+    } else {
+        messageContentElement.classList.add("bg-light", "text-dark");
+    }
+
+    var contentContainer = document.createElement("div");
+    contentContainer.classList.add("d-flex", "align-items-center");
+    if (isSentByCurrentUser) {
+        contentContainer.classList.add("flex-row-reverse");
+    }
+
     var usernameElement = document.createElement("strong");
-    usernameElement.textContent = message.sender_username + ": ";
-    messageElement.appendChild(usernameElement);
-    var contentElement = document.createElement("span");
+    usernameElement.textContent = message.sender_username;
+    if (isSentByCurrentUser) {
+        usernameElement.classList.add("text-right", "ml-2");
+    } else {
+        usernameElement.classList.add("text-left");
+    }
+
+    var contentElement = document.createElement("p");
     contentElement.textContent = message.content;
-    messageElement.appendChild(contentElement);
+    contentElement.classList.add("mb-1");
+    contentElement.style.margin = "0";
+
+    if (isSentByCurrentUser) {
+        contentElement.classList.add("text-right");
+    } else {
+        contentElement.classList.add("text-left", "ml-2");
+    }
+
     var dateSentElement = document.createElement("span");
-    dateSentElement.classList.add("date-sent");
+    dateSentElement.classList.add("date-sent", "text-muted");
+    dateSentElement.style.fontSize = "0.9em";
+    dateSentElement.style.display = "block";
+    if (isSentByCurrentUser) {
+        dateSentElement.classList.add("text-right");
+    } else {
+        dateSentElement.classList.add("text-left");
+    }
 
     var dateSent = new Date(message.date_sent);
     var options = {
@@ -88,7 +134,12 @@ const displayChatMessage = (chatPk, message) => {
     };
     dateSentElement.textContent = dateSent.toLocaleString("en-US", options);
 
-    messageElement.appendChild(dateSentElement);
+    contentContainer.appendChild(usernameElement);
+    contentContainer.appendChild(contentElement);
+
+    messageContentElement.appendChild(contentContainer);
+    messageContentElement.appendChild(dateSentElement);
+    messageElement.appendChild(messageContentElement);
     messagesContainer.appendChild(messageElement);
 };
 
