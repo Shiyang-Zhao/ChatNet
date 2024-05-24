@@ -30,7 +30,6 @@ class CommentCreateForm(forms.ModelForm):
                 }
             ),
         }
-        labels = {"content": "", "attachments": ""}
 
 
 class ReplyCreateForm(forms.ModelForm):
@@ -57,4 +56,37 @@ class ReplyCreateForm(forms.ModelForm):
                 }
             ),
         }
-        labels = {"content": "", "attachments": ""}
+
+
+class CommentUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["content"]
+
+        widgets = {
+            "content": forms.Textarea(
+                attrs={
+                    "cols": 40,
+                    "rows": 3,
+                    "class": "form-control",
+                    "style": "min-height: 60px;",
+                }
+            ),
+        }
+
+
+class ReplyUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["content"]
+
+        widgets = {
+            "content": forms.Textarea(
+                attrs={
+                    "cols": 40,
+                    "rows": 3,
+                    "class": "form-control",
+                    "style": "min-height: 60px;",
+                }
+            ),
+        }

@@ -52,7 +52,7 @@ const displayUnreadNotificationCount = (count) => {
         countElement.textContent = count;
         countElement.style.display = 'inline-block';
     } else {
-        iconElement.className = "fa-regular fa-bell fa-xl";
+        iconElement.className = "fa-solid fa-bell fa-xl";
         countElement.textContent = '';
         countElement.style.display = 'none';
     }

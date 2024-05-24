@@ -22,13 +22,15 @@
               {% elif participant.activity_status > 2 %}
               <small>Active {{ participant.activity_status }} minutes ago</small>
               {% else %}
-              <small><i class="fa fa-circle text-success">Online</i> </small>
+              <div class="text-success"> 
+                <small><i class="fa fa-circle"></i>Online</small>
+              </div>
               {% endif %}
             </div>
           </div>
 
         </div>
-        
+
         {% endif %}
         {% endfor %}
         {% else %}

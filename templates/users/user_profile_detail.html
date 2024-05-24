@@ -16,14 +16,14 @@
     <div class="ml-4">
       <h2>{{ viewed_user.username }}</h2>
       <p>Bio: {{ viewed_user.profile.bio }}</p>
-      {% if viewed_user != user%}
       {% if viewed_user.activity_status == -1 %}
       <p>Never active</p>
       {% elif viewed_user.activity_status > 2 %}
       <p>Active {{ viewed_user.activity_status }} minutes ago</p>
       {% else %}
-      <i class="fa fa-circle text-success">Online</i> 
-      {% endif %}
+      <div class="text-success">
+        <i class="fa fa-circle text-success"></i>Online
+      </div>
       {% endif %}
 
       {% include 'users/follower_and_following_detail.html' with viewed_user=viewed_user %}

@@ -4,7 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView, UpdateView, DeleteView, View
 from ..models.comment import Comment
 from ..models.post import Post
-from ..forms.comment import CommentCreateForm, ReplyCreateForm
+from ..forms.comment import (
+    CommentCreateForm,
+    ReplyCreateForm,
+    CommentUpdateForm,
+    ReplyUpdateForm,
+)
 from django.http import JsonResponse
 
 
@@ -38,35 +43,41 @@ class ReplyCreateView(LoginRequiredMixin, CreateView):
         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
 
 
-##################### UserPassesTestMixin ######################
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
+    template_name = "comments/comment_update.html"
 
-# class CommentUpdateView(LoginRequiredMixin, UpdateView):
-#     model = Comment
-#     form_class = CommentForm
-#     template_name = "comment/edit_comment_form.html"
+    def get_success_url(self):
+        return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
 
-#     def get_object(self, queryset=None):
-#         comment = super().get_object(queryset)
-#         if comment.author != self.request.user:
-#             pass
-#         return comment
-
-#     def get_success_url(self):
-#         return self.object.content.get_absolute_url()
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
 
 
-# class CommentDeleteView(LoginRequiredMixin, DeleteView):
-#     model = Comment
-#     template_name = "comment/delete_comment.html"
+class ReplyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = ReplyUpdateForm
+    template_name = "comments/reply_update.html"
 
-#     def get_object(self, queryset=None):
-#         comment = super().get_object(queryset)
-#         if comment.author != self.request.user:
-#             pass
-#         return comment
+    def get_success_url(self):
+        return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
 
-#     def get_success_url(self):
-#         return self.object.content.get_absolute_url()
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = "comment/delete_comment.html"
+
+    def get_object(self, queryset=None):
+        comment = super().get_object(queryset)
+        if comment.author != self.request.user:
+            pass
+        return comment
 
 
 class LikeCommentView(LoginRequiredMixin, View):
