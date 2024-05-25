@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="d-flex align-items-center">
+    <form class="like-form" data-comment-pk="{{ comment.pk }}" data-url="{% url 'like-comment' pk=comment.pk %}"
+        data-listener-added="0">
+        {% csrf_token %}
+        <button type="submit" id="like-button-comment-{{ comment.pk }}" class="btn btn-sm">
+            <i class="fa-regular fa-thumbs-up">
+                <span id="likes-count-comment-{{ comment.pk }}">{{ comment.liked_by.count }}</span>
+            </i>
+        </button>
+    </form>
+
+    <form class="dislike-form" data-comment-pk="{{ comment.pk }}" data-url="{% url 'dislike-comment' pk=comment.pk %}"
+        data-listener-added="0">
+        {% csrf_token %}
+        <button type="submit" id="dislike-button-comment-{{ comment.pk }}" class="btn btn-sm">
+            <i class="fa-regular fa-thumbs-down">
+                <span id="dislikes-count-comment-{{ comment.pk }}">{{ comment.disliked_by.count }}</span>
+            </i>
+        </button>
+    </form>
+</div>
+
+{% block javascripts %}
+<script src="{% static 'js/posts/comment_like_and_dislike_buttons.js' %}"></script>
+{% endblock %}

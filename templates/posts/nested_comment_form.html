@@ -2,31 +2,45 @@
 <ul>
   {% for reply in replies %}
   <li>
-    <div>
-      <strong>{{ reply.author.username }}</strong>
-      -- <small>{{ reply.date_posted|date:"F j, Y, G:i" }}</small>
-    </div>
-    <p class="mb-2">{{ reply.content }}</p>
-    <div>
-      <a id="reply-link-{{ reply.pk }}" class="reply-link btn btn-outline-secondary rounded-pill border-0 pt-0 pb-0"
-        data-pk="{{ reply.pk }}">Reply</a>
+    <div class="reply-item">
+      <div>
+        <strong>{{ reply.author.username }}</strong>
+        -- <small>{{ reply.date_posted|date:"F j, Y, G:i" }}</small>
+        <p class="mb-2">{{ reply.content }}</p>
+        <div class="d-flex justify-content-start align-items-center">
+
+          {% include 'posts/comment_like_and_dislike_button.html' with comment=reply user=user %}
+          <a id="reply-link-{{ reply.pk }}" class="reply-link btn btn-outline-secondary rounded-pill border-0 pt-0 pb-0"
+            data-pk="{{ reply.pk }}">
+            <i class="fa-regular fa-message me-1"></i>{{ parent_comment.children.count}}
+          </a>
+          <i id="reply-dropdown-{{ reply.pk }}" class="fa-solid fa-ellipsis" style="color: #000000; cursor: pointer;"
+            data-bs-toggle="dropdown" aria-expanded="false"></i>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reply-dropdown-{{ reply.pk }}">
+            <li>
+              <a class="dropdown-item" href="#">Save</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="reply-form-wrapper-{{ reply.pk }}" class="reply-form-wrapper" style="display: none;">
+        <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
+          {% csrf_token %}
+          <div class="reply-form-container" style="position: relative; min-height: fit-content;">
+            <div class="form-group">
+              <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
+                required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
+              style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
+              Reply
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div id="reply-form-wrapper-{{ reply.pk }}" class="reply-form-wrapper" style="display: none;">
-      <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
-        {% csrf_token %}
-        <div class="reply-form-container" style="position: relative; min-height: fit-content;">
-          <div class="form-group">
-            <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
-              required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
-            style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
-            Reply
-          </button>
-        </div>
-      </form>
-    </div>
     {% include 'posts/nested_comment_form.html' with replies=reply.children %}
   </li>
   {% endfor %}

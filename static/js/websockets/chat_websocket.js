@@ -62,84 +62,68 @@ const sendChatMessage = (content) => {
 };
 
 const displayChatMessage = (chatPk, message) => {
-    var messagesContainer = document.querySelector(
+    let messageHtml = '';
+    let messagesContainer = document.querySelector(
         `#chat-detail-placeholder-${chatPk} .chat-messages`
     );
+    const profileUrl = `/users/user/${message.sender_username}/profile/detail/`;
 
-    var messageElement = document.createElement("div");
-    messageElement.classList.add("message", "d-flex");
 
-    const loggedInUsername = messagesContainer.getAttribute("data-username");
+    if (!messagesContainer) {
+        console.error(`Messages container not found for chatPk: ${chatPk}`);
+        return;
+    }
+
+    const loggedInUsername = document.body.getAttribute("data-username");
     const isSentByCurrentUser = message.sender_username === loggedInUsername;
+    const formattedDate = new Date(message.date_sent).toLocaleString("en-US", {
+        year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: false
+    });
+
 
     if (isSentByCurrentUser) {
-        messageElement.classList.add("justify-content-end");
+        messageHtml = `
+            <div class="message d-flex justify-content-end">
+                <div class="text-white p-2" style="max-width: 75%;">
+                    <div class="d-flex align-items-center flex-row-reverse">
+                        <a href="${profileUrl}" class="text-decoration-none text-reset">
+                            <img class="img-fluid rounded-circle ms-2" src="${message.sender_profile_image_url}"
+                                style="width: 35px; height: 35px; object-fit: cover;">
+                        </a>
+                        <div class="rounded-pill bg-primary ps-2 pe-2">
+                            <p class="text-right m-1">${message.content}</p>
+                        </div>
+                    </div>
+                    <span class="date-sent text-muted text-right" style="font-size: 0.9em; display: block;">
+                        ${formattedDate}
+                    </span>
+                </div>
+            </div>
+        `;
     } else {
-        messageElement.classList.add("justify-content-start");
+        messageHtml = `
+            <div class="message d-flex justify-content-start">
+                <div class="text-dark p-2" style="max-width: 75%;">
+                    <div class="d-flex align-items-center">
+                        <a href="${profileUrl}" class="text-decoration-none text-reset">
+                            <img class="img-fluid rounded-circle me-2" src="${message.sender_profile_image_url}"
+                                style="width: 35px; height: 35px; object-fit: cover;">
+                        </a>
+                        <div class="rounded-pill bg-secondary-subtle text-dark ps-2 pe-2">
+                            <p class="text-left m-1">${message.content}</p>
+                        </div>
+                    </div>
+                    <span class="date-sent text-muted text-left" style="font-size: 0.9em; display: block;">
+                        ${formattedDate}
+                    </span>
+                </div>
+            </div>
+        `;
     }
 
-    var messageContentElement = document.createElement("div");
-    messageContentElement.classList.add("p-2", "rounded");
-    messageContentElement.style.maxWidth = "75%";
-
-    if (isSentByCurrentUser) {
-        messageContentElement.classList.add("bg-success", "text-white");
-    } else {
-        messageContentElement.classList.add("bg-light", "text-dark");
-    }
-
-    var contentContainer = document.createElement("div");
-    contentContainer.classList.add("d-flex", "align-items-center");
-    if (isSentByCurrentUser) {
-        contentContainer.classList.add("flex-row-reverse");
-    }
-
-    var usernameElement = document.createElement("strong");
-    usernameElement.textContent = message.sender_username;
-    if (isSentByCurrentUser) {
-        usernameElement.classList.add("text-right", "ml-2");
-    } else {
-        usernameElement.classList.add("text-left");
-    }
-
-    var contentElement = document.createElement("p");
-    contentElement.textContent = message.content;
-    contentElement.classList.add("mb-1");
-    contentElement.style.margin = "0";
-
-    if (isSentByCurrentUser) {
-        contentElement.classList.add("text-right");
-    } else {
-        contentElement.classList.add("text-left", "ml-2");
-    }
-
-    var dateSentElement = document.createElement("span");
-    dateSentElement.classList.add("date-sent", "text-muted");
-    dateSentElement.style.fontSize = "0.9em";
-    dateSentElement.style.display = "block";
-    if (isSentByCurrentUser) {
-        dateSentElement.classList.add("text-right");
-    } else {
-        dateSentElement.classList.add("text-left");
-    }
-
-    var dateSent = new Date(message.date_sent);
-    var options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: false,
-    };
-    dateSentElement.textContent = dateSent.toLocaleString("en-US", options);
-
-    contentContainer.appendChild(usernameElement);
-    contentContainer.appendChild(contentElement);
-
-    messageContentElement.appendChild(contentContainer);
-    messageContentElement.appendChild(dateSentElement);
-    messageElement.appendChild(messageContentElement);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = messageHtml.trim();
+    const messageElement = tempDiv.firstChild;
     messagesContainer.appendChild(messageElement);
 };
 

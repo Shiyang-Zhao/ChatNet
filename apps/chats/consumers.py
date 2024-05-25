@@ -32,6 +32,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             # Save message to the database
             await self.save_message(sender, content, date_sent)
+            sender_profile_image_url = await self.get_profile_image_url(sender)
 
             # Send the chat message to the chat group
             await self.channel_layer.group_send(
@@ -39,6 +40,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 {
                     "type": "chat_message",
                     "sender_username": sender.username,
+                    "sender_profile_image_url": sender_profile_image_url,
                     "content": content,
                     "date_sent": date_sent.isoformat(),
                 },
@@ -46,6 +48,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def chat_message(self, event):
         sender_username = event["sender_username"]
+        sender_profile_image_url = event["sender_profile_image_url"]
         content = event["content"]
         date_sent = event["date_sent"]
 
@@ -55,6 +58,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 {
                     "type": "chat_message",
                     "sender_username": sender_username,
+                    "sender_profile_image_url": sender_profile_image_url,
                     "content": content,
                     "date_sent": date_sent,
                 }
@@ -73,3 +77,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_chat(self, pk):
         return Chat.objects.get(pk=pk)
+
+    @database_sync_to_async
+    def get_profile_image_url(self, user):
+        return user.profile.profile_image.url  # Adjust this to match your model

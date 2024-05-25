@@ -6,11 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelectorAll(".like-form, .dislike-form").forEach((form) => {
-        if (form.dataset.listenerAdded === "false") {
+        if (form.getAttribute('data-listener-added') === "0") {
             form.addEventListener("submit", (event) => {
                 event.preventDefault();
-                const postPk = form.dataset.postPk;
-                const url = form.dataset.url;
+                const postPk = form.getAttribute('data-post-pk');
+                const url = form.getAttribute('data-url');
                 const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
                 axios.post(url, { pk: postPk }, { headers: { "X-CSRFToken": csrfToken } })
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     });
             });
-            form.dataset.listenerAdded = "true";
+            form.setAttribute('data-listener-added', "1");
         }
     });
 });

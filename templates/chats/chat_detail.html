@@ -27,19 +27,46 @@
         <li class="list-group-item chat-item d-flex flex-column align-items-start" data-chat-pk="{{ chat.pk }}"
           data-href="{% url 'chat-detail' pk=chat.pk %}" style="border-right: none; border-left: none;">
           <div class="w-100">
-            <strong>Participants:</strong>
+            {% if chat.chat_type == 'private' %}
             {% for participant in chat.participants.all %}
-            {{ participant.username }}
+            {% if participant != user %}
+            <div class="d-flex align-items-center">
+              <img class="img-fluid rounded-circle me-1" src="{{ participant.profile.profile_image.url }}"
+                style="width: 50px; height: 50px; object-fit: cover;">
+              <div class="d-flex flex-column justify-content-start">
+                <span class="h6 mb-0">{{ participant.username }}</span>
+                {% if participant.activity_status == -1 %}
+                <small class="text-muted">Never active</small>
+                {% elif participant.activity_status > 2 %}
+                <small class="text-muted">Active {{ participant.activity_status }} minutes ago</small>
+                {% else %}
+                <small class="text-success">
+                  <i class="fa fa-circle text-success me-1"></i>Online
+                </small>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
             {% endfor %}
+            {% else %}
+            <div>
+              {% if chat.image %}
+              <img class="img-fluid rounded-3 border border-secondary-subtle me-1" src="{{ chat.image.url }}"
+                style="width: 50px; height: 50px; object-fit: contain;">
+              {% endif %}
+              {{ chat.title }}
+            </div>
+
+            {% endif %}
           </div>
-          <div class="w-100">
+          <!-- <div class="w-100">
             <small class="text-muted">{{ chat.chat_type }}</small>
-          </div>
-          <div class="w-100 mt-2">
+          </div> -->
+          <!-- <div class="w-100 mt-2">
             <small class="text-muted">
               Created by: {{ chat.creator }} at {{ chat.date_created|date:"F j, Y, G:i" }}
             </small>
-          </div>
+          </div> -->
         </li>
         {% endfor %}
       </ul>

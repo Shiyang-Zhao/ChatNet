@@ -1,0 +1,10 @@
+.comment-item,
+.reply-item {
+    transition: background-color 0.3s ease;
+}
+
+.comment-item:hover,
+.reply-item:hover {
+    background-color: #f0f0f0;
+    /* cursor: pointer; */
+}

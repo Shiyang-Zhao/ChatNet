@@ -3,6 +3,11 @@ from django.conf import settings
 from django.utils import timezone
 from django.urls import reverse
 from django.db.models import Count, Q
+from pathlib import Path
+
+
+def chat_image_directory_path(instance, filename):
+    return str(Path("chat_images") / f"chat_{instance.pk}" / filename)
 
 
 class Chat(models.Model):
@@ -30,7 +35,9 @@ class Chat(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=255, default="default title")
     description = models.TextField(blank=True, default="default_description")
-    image = models.ImageField(upload_to="chat_images/", null=True, blank=True)
+    image = models.ImageField(
+        upload_to=chat_image_directory_path, null=True, blank=True
+    )
     last_active = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

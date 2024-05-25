@@ -3,14 +3,18 @@
 {% block title %}{{ post.title }}{% endblock %}
 {% block content %}
 
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/posts/post_detail.css' %}">
+{% endblock %}
+
 <div class="container mt-5">
   <div class="d-flex justify-content-between align-items-center">
     <h2>{{ post.title }}</h2>
-    {% if user == post.author %}
     <div class="dropdown">
       <i id="post-dropdown-{{ post.pk }}" class="fa-solid fa-ellipsis fa-xl" style="color: #000000; cursor: pointer;"
         data-bs-toggle="dropdown" aria-expanded="false"></i>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-dropdown-{{ post.pk }}">
+        {% if user == post.author %}
         <li>
           <a class="dropdown-item" href="{% url 'post-update' pk=post.pk %}">Edit</a>
         </li>
@@ -20,9 +24,14 @@
             <button type="submit" class="dropdown-item">Delete</button>
           </form>
         </li>
+        {% else %}
+        <li>
+          <a class="dropdown-item" href="#">Save</a>
+        </li>
+        {% endif %}
+
       </ul>
     </div>
-    {% endif %}
 
   </div>
   <p>By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}</p>
@@ -30,7 +39,7 @@
   {% include 'posts/post_file_detail.html' with post=post %}
   <div class="d-flex justify-content-between align-items-center">
 
-    {% include 'posts/like_and_dislike_button.html' with post=post user=user %}
+    {% include 'posts/post_like_and_dislike_button.html' with post=post user=user %}
 
     <div class="d-flex justify-content-between align-items-center mt-3">
       <div class="me-3">
@@ -62,7 +71,6 @@
         </div>
         <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
           style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
-          <!-- <i class="fa-solid fa-reply"></i> -->
           Comment
         </button>
       </div>
@@ -76,32 +84,45 @@
     <ul class="list-group">
       {% for parent_comment in parent_comments %}
       <li class="list-group-item">
-        <div>
-          <strong>{{ parent_comment.author.username }}</strong>
-          -- <small>{{ parent_comment.date_posted|date:"F j, Y, G:i" }}</small>
-        </div>
-        <p class="mb-2">{{ parent_comment.content }}</p>
-        <div>
-          <a id="reply-link-{{ parent_comment.pk }}"
-            class="reply-link btn btn-outline-secondary rounded-pill border-0 pt-0 pb-0"
-            data-pk="{{ parent_comment.pk }}">Reply</a>
+        <div class="comment-item">
+          <div>
+            <strong>{{ parent_comment.author.username }}</strong>
+            -- <small>{{ parent_comment.date_posted|date:"F j, Y, G:i" }}</small>
+            <p class="mb-2">{{ parent_comment.content }}</p>
+            <div class="d-flex justify-content-start align-items-center">
+              {% include 'posts/comment_like_and_dislike_button.html' with comment=parent_comment user=user %}
+              <a id="reply-link-{{ parent_comment.pk }}"
+                class="reply-link btn btn-outline-secondary rounded-pill border-0 pt-0 pb-0"
+                data-pk="{{ parent_comment.pk }}">
+                <i class="fa-regular fa-message me-1"></i>{{ parent_comment.children.count}}
+              </a>
+              <i id="comment-dropdown-{{ parent_comment.pk }}" class="fa-solid fa-ellipsis"
+                style="color: #000000; cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false"></i>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="comment-dropdown-{{ parent_comment.pk }}">
+                <li>
+                  <a class="dropdown-item" href="#">Save</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div id="reply-form-wrapper-{{ parent_comment.pk }}" class="reply-form-wrapper" style="display: none;">
+            <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
+              {% csrf_token %}
+              <div class="reply-form-container" style="position: relative; min-height: fit-content;">
+                <div class="form-group">
+                  <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
+                    required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
+                  style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
+                  Reply
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
 
-        <div id="reply-form-wrapper-{{ parent_comment.pk }}" class="reply-form-wrapper" style="display: none;">
-          <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
-            {% csrf_token %}
-            <div class="reply-form-container" style="position: relative; min-height: fit-content;">
-              <div class="form-group">
-                <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
-                  required></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
-                style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
-                Reply
-              </button>
-            </div>
-          </form>
-        </div>
         {% include 'posts/nested_comment_form.html' with replies=parent_comment.children %}
       </li>
       {% endfor %}

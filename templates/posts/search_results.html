@@ -33,7 +33,7 @@
         <div class="d-flex justify-content-between align-items-center">
           <div class="d-flex justify-content-between align-items-center">
 
-            {% include 'posts/like_and_dislike_button.html' with post=post user=user %}
+            {% include 'posts/post_like_and_dislike_button.html' with post=post user=user %}
 
           </div>
           <a href="{% url 'post-detail' post.pk %}" class="btn btn-outline-secondary">
