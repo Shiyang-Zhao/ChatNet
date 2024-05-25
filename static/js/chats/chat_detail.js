@@ -27,16 +27,19 @@ document.addEventListener("DOMContentLoaded", function () {
         showDetailPlaceholder(chatPk);
     }
 
-    document.querySelectorAll(".chat-item").forEach((item) => {
-        item.addEventListener("click", () => {
+    document.body.addEventListener("click", (event) => {
+        const item = event.target.closest(".chat-item");
+        if (item) {
             document.querySelectorAll(".chat-item").forEach((i) => i.style.backgroundColor = "");
             item.style.backgroundColor = "#f0f0f0";
+
             const chatPk = item.getAttribute("data-chat-pk");
             showDetailPlaceholder(chatPk);
+
             const url = item.getAttribute("data-href");
             if (document.querySelector(`#chat-detail-placeholder-${chatPk}`)) {
                 window.history.pushState(null, "", url);
             }
-        });
+        }
     });
 });

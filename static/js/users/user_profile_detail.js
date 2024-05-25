@@ -14,13 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
             button.classList.add("btn-primary", "follow");
             button.textContent = "Follow";
             // Update the form action to follow
-            form.action = form.dataset.followUrl;
+            form.action = form.getAttribute("data-follow-url");
           } else {
             button.classList.remove("btn-primary", "follow");
             button.classList.add("btn-secondary", "following");
             button.textContent = "Following";
             // Update the form action to unfollow
-            form.action = form.dataset.unfollowUrl;
+            form.action = form.getAttribute("data-unfollow-url");
           }
         })
         .catch((error) => {

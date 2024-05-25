@@ -13,14 +13,14 @@
     <div class="col-md-3 d-flex flex-column border-start border-top border-bottom"
       style="height: 100%; overflow-y: auto;">
       {% include 'chats/group_chat_create_form.html' %}
-      <form method="get" action="" class="d-flex align-items-center position-relative ps-0 pe-0 w-100">
+      <!-- <form method="get" action="" class="d-flex align-items-center position-relative ps-0 pe-0 w-100">
         <input type="text" class="form-control rounded-0" name="query" placeholder="Search users..."
           style="padding-left: 30px; padding-right: 5px;">
         <button
           style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; padding: 0; pointer-events: all;">
           <i class="fa fa-search"></i>
         </button>
-      </form>
+      </form> -->
       {% if chats %}
       <ul class="list-group chat-list flex-grow-1 rounded-0" style="overflow-y: auto;">
         {% for chat in chats %}
@@ -53,10 +53,10 @@
       {% if chats %}
       <div id="choose-chat-placeholder">
         <div class="chat-detail d-flex flex-column border" style="height: 80vh;">
-          <div class="p-1 border-bottom" style="background-color: #f8f9fa;">
+          <!-- <div class="p-1 border-bottom" style="background-color: #f8f9fa;">
             <h5>Welcome to My Chats</h5>
             <small class="text-muted">Please choose a chat room from the list on the left</small>
-          </div>
+          </div> -->
           <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
             <i class="fa-brands fa-rocketchat fa-2xl fa-bounce"></i>
             <br>

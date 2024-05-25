@@ -1,26 +1,32 @@
-{% load crispy_forms_tags %}
-<!-- Display replies if any -->
 {% if replies %}
 <ul>
   {% for reply in replies %}
   <li>
-    <p>
-      <strong>{{ reply.author.username }}</strong> on {{ reply.date_posted|date:"F j, Y, G:i" }}
-    </p>
-    <p>{{ reply.content }}</p>
+    <div>
+      <strong>{{ reply.author.username }}</strong>
+      -- <small>{{ reply.date_posted|date:"F j, Y, G:i" }}</small>
+    </div>
+    <p class="mb-2">{{ reply.content }}</p>
+    <div>
+      <a id="reply-link-{{ reply.pk }}" class="reply-link btn btn-outline-secondary rounded-pill border-0 pt-0 pb-0"
+        data-pk="{{ reply.pk }}">Reply</a>
+    </div>
 
-    <div style="position: relative;">
+    <div id="reply-form-wrapper-{{ reply.pk }}" class="reply-form-wrapper" style="display: none;">
       <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
         {% csrf_token %}
-        <div style="position: relative; margin-bottom: 50px;">
-          {{ reply_create_form|crispy }}
-          <button type="submit" class="btn btn-primary" style="position: absolute; right: 10px; bottom: 10px;">
-            <i class="fa-solid fa-reply"></i>
+        <div class="reply-form-container" style="position: relative; min-height: fit-content;">
+          <div class="form-group">
+            <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
+              required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
+            style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
+            Reply
           </button>
         </div>
       </form>
     </div>
-
     {% include 'posts/nested_comment_form.html' with replies=reply.children %}
   </li>
   {% endfor %}

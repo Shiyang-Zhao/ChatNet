@@ -34,14 +34,14 @@
         </li>
 
         <li class="nav-item dropdown">
-          <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+          <a class="nav-link" href="#" id="navbar-dropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             {% if user.profile.profile_image %}
             <img src="{{ user.profile.profile_image.url }}" alt="{{ user.username }}'s Profile Image"
               class="rounded-circle" style="width: 30px; height: 30px; object-fit: cover;">
             {% endif %}
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <ul class="dropdown-menu" aria-labelledby="navbar-dropdown">
             <li>
               <a class="dropdown-item" href="{% url 'user-profile-detail' username=user.username %}">
                 <i class="fa-solid fa-user me-2"></i>Profile

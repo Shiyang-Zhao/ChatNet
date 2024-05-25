@@ -1,88 +1,115 @@
-{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %}
+{% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ post.title }}{% endblock %}
 {% block content %}
 
 <div class="container mt-5">
-  <h2>{{ post.title }}</h2>
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>{{ post.title }}</h2>
+    {% if user == post.author %}
+    <div class="dropdown">
+      <i id="post-dropdown-{{ post.pk }}" class="fa-solid fa-ellipsis fa-xl" style="color: #000000; cursor: pointer;"
+        data-bs-toggle="dropdown" aria-expanded="false"></i>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-dropdown-{{ post.pk }}">
+        <li>
+          <a class="dropdown-item" href="{% url 'post-update' pk=post.pk %}">Edit</a>
+        </li>
+        <li>
+          <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-item">Delete</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+
+  </div>
   <p>By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}</p>
   <p>{{ post.content }}</p>
-
   {% include 'posts/post_file_detail.html' with post=post %}
   <div class="d-flex justify-content-between align-items-center">
 
     {% include 'posts/like_and_dislike_button.html' with post=post user=user %}
 
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <i class="fa-solid fa-comments fa-lg me-1"></i>{{ post.comments.count }}
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div class="me-3">
+        <a href="#comment-form-container" class="text-decoration-none text-reset">
+          <i class="fa-solid fa-comments fa-xl me-1"></i>{{ post.comments.count }}
+        </a>
       </div>
-      <div>
-        <i class="fa-solid fa-eye fa-lg me-1"></i>{{ post.views }}
+      <div class="me-3">
+        <i class="fa-solid fa-eye fa-xl me-1"></i>{{ post.views }}
       </div>
       {% if post.file %}
       <div>
-        <a href="{{ post.file.url }}" class="btn btn-sm btn-outline-primary file-download-button" download>
+        <a href="{{ post.file.url }}" class="btn btn-outline-primary file-download-button" download>
           <i class="fa-solid fa-download"></i>
         </a>
       </div>
       {% endif %}
     </div>
-
-
-    {% if request.user == post.author %}
-    <a class="btn btn-warning" href="{% url 'post-update' pk=post.pk %}">Edit</a>
-    <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-danger">Soft Delete</button>
-    </form>
-    {% endif %}
   </div>
 
   <!-- Comment Form with Crispy Forms -->
-  <div style="position: relative;">
+  <div class="mt-3">
     <form method="post" action="{% url 'comment-create' pk=post.pk %}">
       {% csrf_token %}
-      <div style="position: relative; margin-bottom: 50px;">
-        {{ comment_create_form|crispy }}
-        <button type="submit" class="btn btn-primary" style="position: absolute; right: 10px; bottom: 10px;">
-          <i class="fa-solid fa-reply"></i>
+      <div id="comment-form-container" style="position: relative; min-height: fit-content;">
+        <div class="form-group">
+          <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
+            placeholder="Add a comment" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
+          style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
+          <!-- <i class="fa-solid fa-reply"></i> -->
+          Comment
         </button>
       </div>
     </form>
   </div>
 
   <!-- Display existing comments -->
-  <h3>Comments</h3>
-  {% if parent_comments %}
-  <ul class="list-group">
-    {% for parent_comment in parent_comments %}
-    <li class="list-group-item">
-      <p>
-        <strong> {{ parent_comment.author.username }} </strong>
-        on
-        {{ parent_comment.date_posted|date:"F j, Y, G:i" }}
-      </p>
-      <p>{{ parent_comment.content }}</p>
+  <div class="position-relative">
+    <h3>Comments</h3>
+    {% if parent_comments %}
+    <ul class="list-group">
+      {% for parent_comment in parent_comments %}
+      <li class="list-group-item">
+        <div>
+          <strong>{{ parent_comment.author.username }}</strong>
+          -- <small>{{ parent_comment.date_posted|date:"F j, Y, G:i" }}</small>
+        </div>
+        <p class="mb-2">{{ parent_comment.content }}</p>
+        <div>
+          <a id="reply-link-{{ parent_comment.pk }}"
+            class="reply-link btn btn-outline-secondary rounded-pill border-0 pt-0 pb-0"
+            data-pk="{{ parent_comment.pk }}">Reply</a>
+        </div>
 
-      <div style="position: relative;">
-        <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
-          {% csrf_token %}
-          <div style="position: relative; margin-bottom: 50px;">
-            {{ reply_create_form|crispy }}
-            <button type="submit" class="btn btn-primary" style="position: absolute; right: 10px; bottom: 10px;">
-              <i class="fa-solid fa-reply"></i>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {% include 'posts/nested_comment_form.html' with replies=parent_comment.children %}
-    </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-  <p>No comments yet.</p>
-  {% endif %}
+        <div id="reply-form-wrapper-{{ parent_comment.pk }}" class="reply-form-wrapper" style="display: none;">
+          <form method="post" action="{% url 'reply-create' pk=parent_comment.pk %}">
+            {% csrf_token %}
+            <div class="reply-form-container" style="position: relative; min-height: fit-content;">
+              <div class="form-group">
+                <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
+                  required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
+                style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
+                Reply
+              </button>
+            </div>
+          </form>
+        </div>
+        {% include 'posts/nested_comment_form.html' with replies=parent_comment.children %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No comments yet.</p>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
 

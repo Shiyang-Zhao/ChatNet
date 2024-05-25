@@ -69,7 +69,7 @@ const displayChatMessage = (chatPk, message) => {
     var messageElement = document.createElement("div");
     messageElement.classList.add("message", "d-flex");
 
-    const loggedInUsername = messagesContainer.dataset.username;
+    const loggedInUsername = messagesContainer.getAttribute("data-username");
     const isSentByCurrentUser = message.sender_username === loggedInUsername;
 
     if (isSentByCurrentUser) {
