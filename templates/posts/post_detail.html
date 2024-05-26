@@ -9,6 +9,15 @@
 
 <div class="container mt-5">
   <div class="d-flex justify-content-between align-items-center">
+    <a href="{% url 'user-profile-detail' username=post.author.username %}"
+      class="card-author text-decoration-none text-reset">
+      <img src="{{ post.author.profile.profile_image.url }}" class="rounded-circle"
+        style="width: 30px; height: 30px; object-fit: cover;" alt="{{ post.author.username }}'s profile image">
+      {{ post.author }}
+    </a>
+    <small class="text-muted">{{ post.date_posted|date:"M d, Y H:i" }}</small>
+  </div>
+  <div class="d-flex justify-content-between align-items-center">
     <h2>{{ post.title }}</h2>
     <div class="dropdown">
       <i id="post-dropdown-{{ post.pk }}" class="fa-solid fa-ellipsis fa-xl" style="color: #000000; cursor: pointer;"
@@ -32,9 +41,7 @@
 
       </ul>
     </div>
-
   </div>
-  <p>By {{ post.author }} on {{ post.date_posted|date:"F j, Y, G:i" }}</p>
   <p>{{ post.content }}</p>
   {% include 'posts/post_file_detail.html' with post=post %}
   <div class="d-flex justify-content-between align-items-center">
@@ -70,7 +77,7 @@
             placeholder="Add a comment" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
-          style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
+          style="position: absolute; bottom: 3px; right: 10px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">
           Comment
         </button>
       </div>
@@ -86,8 +93,9 @@
       <li class="list-group-item">
         <div class="comment-item">
           <div>
-            <strong>{{ parent_comment.author.username }}</strong>
-            -- <small>{{ parent_comment.date_posted|date:"F j, Y, G:i" }}</small>
+            <strong class="me-1">{{ parent_comment.author.username }}</strong>
+            <small class="text-muted me-1">-</small>
+            <small class="text-muted me-1">{{ parent_comment.date_posted|date:"F j, Y, G:i" }}</small>
             <p class="mb-2">{{ parent_comment.content }}</p>
             <div class="d-flex justify-content-start align-items-center">
               {% include 'posts/comment_like_and_dislike_button.html' with comment=parent_comment user=user %}
@@ -115,7 +123,7 @@
                     required></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
-                  style="position: absolute; bottom: 3px; right: 10px; display: none; opacity: 0;">
+                  style="position: absolute; bottom: 3px; right: 10px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">
                   Reply
                 </button>
               </div>

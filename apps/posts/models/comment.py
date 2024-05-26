@@ -54,9 +54,3 @@ class Comment(models.Model):
         if not self.disliked_by.filter(pk=user_pk).exists():
             self.disliked_by.add(user_pk)
             self.liked_by.remove(user_pk)
-
-    # def is_liked_by(self, user):
-    #     return self.liked_by.filter(pk=user.pk).exists()
-
-    # def is_disliked_by(self, user):
-    #     return self.disliked_by.filter(pk=user.pk).exists()

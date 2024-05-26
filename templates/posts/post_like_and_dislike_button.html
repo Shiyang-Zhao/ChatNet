@@ -1,31 +1,31 @@
 {% load static %}
 {% load post_tags %}
-{% check_like_status post user as is_user_liked %}
+{% check_post_like_status post user as is_user_liked_post %}
 
 <div class="d-flex justify-content-between align-items-center">
-    <form class="like-form" data-post-pk="{{ post.pk }}" data-url="{% url 'like-post' pk=post.pk %}"
+    <form class="post-like-form" data-post-pk="{{ post.pk }}" data-url="{% url 'like-post' pk=post.pk %}"
         data-listener-added="0">
         {% csrf_token %}
-        <button type="submit" id="like-button-{{ post.pk }}"
-            class="btn {% if is_user_liked == 1 %}btn-success{% else %}btn-outline-success{% endif %} like-btn">
+        <button type="submit" id="post-like-button-{{ post.pk }}"
+            class="btn {% if is_user_liked_post == 1 %}btn-success{% else %}btn-outline-success{% endif %} post-like-btn">
             <i class="fa-regular fa-thumbs-up">
-                <span id="likes-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
+                <span id="post-like-count-{{ post.pk }}">{{ post.liked_by.count }}</span>
             </i>
         </button>
     </form>
 
-    <form class="dislike-form" data-post-pk="{{ post.pk }}" data-url="{% url 'dislike-post' pk=post.pk %}"
+    <form class="post-dislike-form" data-post-pk="{{ post.pk }}" data-url="{% url 'dislike-post' pk=post.pk %}"
         data-listener-added="0">
         {% csrf_token %}
-        <button type="submit" id="dislike-button-{{ post.pk }}"
-            class="btn {% if is_user_liked == -1 %}btn-danger{% else %}btn-outline-danger{% endif %} dislike-btn">
+        <button type="submit" id="post-dislike-button-{{ post.pk }}"
+            class="btn {% if is_user_liked_post == -1 %}btn-danger{% else %}btn-outline-danger{% endif %} post-dislike-btn">
             <i class="fa-regular fa-thumbs-down">
-                <span id="dislikes-count-{{ post.pk }}">{{ post.disliked_by.count }}</span>
+                <span id="post-dislike-count-{{ post.pk }}">{{ post.disliked_by.count }}</span>
             </i>
         </button>
     </form>
 </div>
 
 {% block javascripts %}
-<script src="{% static 'js/posts/post_like_and_dislike_buttons.js' %}"></script>
+<script src="{% static 'js/posts/post_like_and_dislike_button.js' %}"></script>
 {% endblock %}

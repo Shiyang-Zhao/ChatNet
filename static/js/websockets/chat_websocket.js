@@ -61,6 +61,16 @@ const sendChatMessage = (content) => {
     socket.send(JSON.stringify(messageData));
 };
 
+// const createChat = (chat) => {
+//     if (!document.querySelector(`#chat-item-${chatPk}`)) {
+//         console.log(`Creating chat: chat_${chatPk}`);
+//         const chatList = document.querySelector('#chat-list');
+//         chatHtml = ``
+
+//     }
+//     console.log(`chat_${chatPk} created`);
+// }
+
 const displayChatMessage = (chatPk, message) => {
     let messageHtml = '';
     let messagesContainer = document.querySelector(
@@ -68,10 +78,8 @@ const displayChatMessage = (chatPk, message) => {
     );
     const profileUrl = `/users/user/${message.sender_username}/profile/detail/`;
 
-
     if (!messagesContainer) {
-        console.error(`Messages container not found for chatPk: ${chatPk}`);
-        return;
+
     }
 
     const loggedInUsername = document.body.getAttribute("data-username");
@@ -79,7 +87,6 @@ const displayChatMessage = (chatPk, message) => {
     const formattedDate = new Date(message.date_sent).toLocaleString("en-US", {
         year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: false
     });
-
 
     if (isSentByCurrentUser) {
         messageHtml = `

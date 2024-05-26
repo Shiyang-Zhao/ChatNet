@@ -62,23 +62,6 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return self.request.user == post.author
 
 
-# class PostSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-#     model = Post
-#     fields = []
-#     success_url = reverse_lazy("home")
-
-#     def form_valid(self, form):
-#         self.object = form.save(commit=False)
-#         self.object.is_deleted = True
-#         self.object.soft_deleted_at = timezone.now()
-#         messages.success(self.request, "Post soft deleted successfully.")
-#         return super().form_valid(form)
-
-#     def test_func(self):
-#         post = self.get_object()
-#         return self.request.user == post.author
-
-
 class PostSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
     def post(self, request, *args, **kwargs):
         post = get_object_or_404(Post, pk=kwargs.get("pk"))

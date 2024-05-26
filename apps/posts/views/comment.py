@@ -82,23 +82,39 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class LikeCommentView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        user = request.user
         comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
+        user = request.user
+        like_status = 0
         if user in comment.liked_by.all():
             comment.liked_by.remove(user)
         else:
             comment.like(user.pk)
-        return JsonResponse({"success": True, "likes_count": comment.liked_by.count()})
+            like_status = 1
+        return JsonResponse(
+            {
+                "success": True,
+                "likes_count": comment.liked_by.count(),
+                "dislikes_count": comment.disliked_by.count(),
+                "like_status": like_status,
+            }
+        )
 
 
 class DislikeCommentView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        user = request.user
         comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
+        user = request.user
+        like_status = 0
         if user in comment.disliked_by.all():
             comment.disliked_by.remove(user)
         else:
             comment.dislike(user.pk)
+            like_status = -1
         return JsonResponse(
-            {"success": True, "dislikes_count": comment.disliked_by.count()}
+            {
+                "success": True,
+                "likes_count": comment.liked_by.count(),
+                "dislikes_count": comment.disliked_by.count(),
+                "like_status": like_status,
+            }
         )

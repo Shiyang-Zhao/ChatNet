@@ -24,16 +24,24 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    commentTextarea.addEventListener("input", function () {
-        if (commentTextarea.value.trim() !== "") {
-            gsap.set(commentButton, { display: 'block' });
-            gsap.to(commentButton, { opacity: 1, duration: 0.3 });
+    // commentTextarea.addEventListener("input", function () {
+    //     if (commentTextarea.value.trim() !== "") {
+    //         gsap.set(commentButton, { display: 'block' });
+    //         gsap.to(commentButton, { opacity: 1, duration: 0.3 });
+    //     } else {
+    //         gsap.to(commentButton, {
+    //             opacity: 0, duration: 0.3, onComplete: function () {
+    //                 gsap.set(commentButton, { display: 'none' });
+    //             }
+    //         });
+    //     }
+    // });
+
+    commentTextarea.addEventListener('input', function () {
+        if (commentTextarea.value.trim() !== '') {
+            gsap.to(commentButton, { x: 0, width: 'auto', autoAlpha: 1, duration: 0.2 });
         } else {
-            gsap.to(commentButton, {
-                opacity: 0, duration: 0.3, onComplete: function () {
-                    gsap.set(commentButton, { display: 'none' });
-                }
-            });
+            gsap.to(commentButton, { x: 5, width: 0, autoAlpha: 0, duration: 0.2 });
         }
     });
 
@@ -84,16 +92,24 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-        textarea.addEventListener("input", function () {
-            if (textarea.value.trim() !== "") {
-                gsap.set(button, { display: 'block' });
-                gsap.to(button, { opacity: 1, duration: 0.3 });
+        // textarea.addEventListener("input", function () {
+        //     if (textarea.value.trim() !== "") {
+        //         gsap.set(button, { display: 'block' });
+        //         gsap.to(button, { opacity: 1, duration: 0.3 });
+        //     } else {
+        //         gsap.to(button, {
+        //             opacity: 0, duration: 0.3, onComplete: function () {
+        //                 gsap.set(button, { display: 'none' });
+        //             }
+        //         });
+        //     }
+        // });
+
+        textarea.addEventListener('input', function () {
+            if (textarea.value.trim() !== '') {
+                gsap.to(button, { x: 0, width: 'auto', autoAlpha: 1, duration: 0.2 });
             } else {
-                gsap.to(button, {
-                    opacity: 0, duration: 0.3, onComplete: function () {
-                        gsap.set(button, { display: 'none' });
-                    }
-                });
+                gsap.to(button, { x: 5, width: 0, autoAlpha: 0, duration: 0.2 });
             }
         });
 
