@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import CreateView, UpdateView, DeleteView, View
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView, View
 from ..models.comment import Comment
 from ..models.post import Post
 from ..forms.comment import (
@@ -11,6 +11,17 @@ from ..forms.comment import (
     ReplyUpdateForm,
 )
 from django.http import JsonResponse
+from django.utils import timezone
+
+
+class CommentDetailView(DetailView):
+    model = Comment
+    template_name = "posts/post_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post"] = get_object_or_404(Post, pk=self.kwargs.get("post_pk"))
+        return context
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
@@ -22,9 +33,6 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         form.instance.post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
         return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
 
 
 class ReplyCreateView(LoginRequiredMixin, CreateView):
@@ -39,45 +47,58 @@ class ReplyCreateView(LoginRequiredMixin, CreateView):
         form.instance.post = parent_comment.post
         return super().form_valid(form)
 
-    def get_success_url(self):
-        return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
+
+# class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Comment
+#     form_class = CommentUpdateForm
+#     template_name = "comments/comment_update.html"
+
+#     def get_success_url(self):
+#         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
+
+#     def test_func(self):
+#         comment = self.get_object()
+#         return self.request.user == comment.author
 
 
-class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+# class ReplyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+#     model = Comment
+#     form_class = ReplyUpdateForm
+#     template_name = "comments/reply_update.html"
+
+#     def get_success_url(self):
+#         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
+
+#     def test_func(self):
+#         comment = self.get_object()
+#         return self.request.user == comment.author
+
+
+class CommentSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
     model = Comment
-    form_class = CommentUpdateForm
-    template_name = "comments/comment_update.html"
 
-    def get_success_url(self):
-        return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
+    def post(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, pk=kwargs.get("pk"))
+        if self.request.user == comment.author:
+            comment.is_deleted = True
+            comment.soft_deleted_at = timezone.now()
+            comment.save()
+        return redirect(reverse_lazy("post-detail", kwargs={"pk": comment.post.pk}))
 
     def test_func(self):
-        comment = self.get_object()
+        comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
         return self.request.user == comment.author
 
 
-class ReplyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class CommentHardDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
-    form_class = ReplyUpdateForm
-    template_name = "comments/reply_update.html"
 
     def get_success_url(self):
-        return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
+        return reverse("post-detail", kwargs={"pk": self.object.post.pk})
 
     def test_func(self):
-        comment = self.get_object()
+        comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
         return self.request.user == comment.author
-
-
-class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Comment
-    template_name = "comment/delete_comment.html"
-
-    def get_object(self, queryset=None):
-        comment = super().get_object(queryset)
-        if comment.author != self.request.user:
-            pass
-        return comment
 
 
 class LikeCommentView(LoginRequiredMixin, View):

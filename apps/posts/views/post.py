@@ -12,29 +12,13 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect
 from ..models.post import Post
 from ..forms.post import PostCreateForm, PostUpdateForm
-from ..forms.comment import CommentCreateForm, ReplyCreateForm
 from django.http import JsonResponse
 from django.utils import timezone
-
-
-# class PostListView(ListView):
-#     model = Post
-#     template_name = "posts/post_list.html"
-#     context_object_name = "posts"
-#     ordering = ["-date_posted"]
-#     paginate_by = 10
 
 
 class PostDetailView(DetailView):
     model = Post
     template_name = "posts/post_detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        post = self.get_object()
-        context["comment_create_form"] = CommentCreateForm()
-        context["parent_comments"] = post.comments.filter(parent_comment__isnull=True)
-        return context
 
 
 class PostCreateView(LoginRequiredMixin, CreateView):

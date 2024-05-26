@@ -30,6 +30,8 @@ class Comment(models.Model):
     )
     visibility = models.BooleanField(default=True)
     report_count = models.IntegerField(default=0)
+    is_deleted = models.BooleanField(default=False)  # Soft delete field
+    soft_deleted_at = models.DateTimeField(null=True, blank=True)
 
     @property
     def is_parent(self):
@@ -43,7 +45,9 @@ class Comment(models.Model):
         return f'Comment by {self.author.username} on {self.date_posted.strftime("%Y-%m-%d %H:%M")}'
 
     def get_absolute_url(self):
-        return reverse("comment-detail", kwargs={"pk": self.pk})
+        return reverse(
+            "comment-detail", kwargs={"post_pk": self.post.pk, "comment_pk": self.pk}
+        )
 
     def like(self, user_pk):
         if not self.liked_by.filter(pk=user_pk).exists():

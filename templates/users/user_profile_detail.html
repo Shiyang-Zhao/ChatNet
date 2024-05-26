@@ -3,16 +3,13 @@
 {% block title %}{{viewed_user.username }}'s Profile{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-  <div class="profile-header d-flex align-items-center">
-
+<div class="container mt-5 d-flex flex-column align-items-center">
+  <div class="profile-header d-flex align-items-ceneter">
     {% if viewed_user.profile.profile_image %}
-    <div class="d-inline-block position-relative" style="width: 150px; height: 150px;">
+    <div class="d-inline-block position-relative me-3" style="width: 150px; height: 150px;">
       {% include 'stories/story_detail.html' with active_stories=active_stories %}
     </div>
-
     {% endif %}
-
     <div class="ml-4">
       <h2>{{ viewed_user.username }}</h2>
       <p>Bio: {{ viewed_user.profile.bio }}</p>
@@ -22,7 +19,7 @@
       <small class="text-muted">Online {{ participant.activity_status }} minutes ago</small>
       {% else %}
       <small class="text-success">
-        <i class="fa fa-circle text-success"></i>Online
+        <i class="fa fa-circle text-success me-1"></i>Online
       </small>
       {% endif %}
       {% include 'users/follower_and_following_detail.html' with viewed_user=viewed_user %}
@@ -30,7 +27,7 @@
   </div>
 
   <div class="profile-details mt-4">
-    <p><strong>Location:</strong> {{ viewed_user.profile.location }}</p>
+    <!-- <p><strong>Location:</strong> {{ viewed_user.profile.location }}</p>
 
     <p>
       <strong>Website:</strong>
@@ -49,12 +46,10 @@
     <p>
       <strong>Birthday:</strong> {{ viewed_user.profile.birthday|date:"F j, Y" }}
     </p>
-    {% endif %}
+    {% endif %} -->
 
     {% if viewed_user == user %}
-    <div>
-      <a href="{% url 'user-profile-update' %}" class="btn btn-primary">Update Profile</a>
-    </div>
+    <a href="{% url 'user-profile-update' %}" class="btn btn-primary">Update Profile</a>
     {% else %}
     <div>
       {% if is_following %}
@@ -80,50 +75,7 @@
       </form>
     </div>
     {% endif %}
-
-    <!-- Posts, Stories, Liked Posts, and Commented Sections -->
-    <div class="card mt-4">
-      <div class="card-header">Posts by {{ viewed_user.username }}</div>
-      <ul class="list-group list-group-flush">
-        {% for post in viewed_user.posts.all %}
-        <li class="list-group-item">
-          <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
-        </li>
-        {% empty %}
-        <li class="list-group-item">No posts available.</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div class="card mt-4">
-      <div class="card-header">Liked Posts</div>
-      <ul class="list-group list-group-flush">
-        {% for post in user.liked_posts.all %}
-        <li class="list-group-item">
-          <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
-        </li>
-        {% empty %}
-        <li class="list-group-item">No liked posts.</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div class="card mt-4">
-      <div class="card-header">Commented Posts</div>
-      <ul class="list-group list-group-flush">
-        {% for comment in user.posted_comments.all %}
-        <li class="list-group-item">
-          <strong>Comment on <a href="{% url 'post-detail' pk=comment.post.pk %}">
-              {{ comment.post.title }}</a>:</strong>
-          "{{ comment.content|truncatewords:20 }}"
-          <small>— posted on {{ comment.date_posted|date:"F j, Y, G:i" }}</small>
-        </li>
-        {% empty %}
-        <li class="list-group-item">No posts commented on.</li>
-        {% endfor %}
-      </ul>
-    </div>
-
+    {% include 'users/user_profile_sections.html' with viewed_user=viewed_user %}
   </div>
 </div>
 {% endblock %}

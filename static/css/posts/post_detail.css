@@ -9,6 +9,10 @@
     cursor: pointer;
 } */
 
+.reply-link:hover {
+    background-color: #f0f0f0;
+}
+
 .comment-like-btn:hover,
 .comment-dislike-btn:hover {
     background-color: #f0f0f0;

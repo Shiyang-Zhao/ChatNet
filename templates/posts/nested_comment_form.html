@@ -1,27 +1,54 @@
+{% load static %}
 {% if replies %}
 <ul>
   {% for reply in replies %}
-  <li>
-    <div class="reply-item">
+  <li id="comment-item-{{ reply.pk }}" class="list-group-item">
+    <div>
+      {% if reply.is_deleted %}
       <div>
-        <strong class="me-1">{{ reply.author.username }}</strong>
+        <img src="{% get_media_prefix %}profile_images/default_profile_image.jpg" class="rounded-circle"
+          style="width: 30px; height: 30px; object-fit: contain;" alt="deleted profile image">
+        <strong class="me-1">[deleted]</strong>
         <small class="text-muted me-1">-</small>
-        <small class="text-muted me-1">{{ reply.date_posted|date:"F j, Y, G:i" }}</small>
-        <p class="mb-2">{{ reply.content }}</p>
-        <div class="d-flex justify-content-start align-items-center">
-
-          {% include 'posts/comment_like_and_dislike_button.html' with comment=reply user=user %}
-          <a id="reply-link-{{ reply.pk }}" class="reply-link btn btn-outline-secondary rounded-pill border-0 pt-0 pb-0"
-            data-pk="{{ reply.pk }}">
-            <i class="fa-regular fa-message me-1"></i>{{ reply.children.count}}
-          </a>
-          <i id="reply-dropdown-{{ reply.pk }}" class="fa-solid fa-ellipsis" style="color: #000000; cursor: pointer;"
-            data-bs-toggle="dropdown" aria-expanded="false"></i>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reply-dropdown-{{ reply.pk }}">
-            <li>
-              <a class="dropdown-item" href="#">Delete</a>
-            </li>
-          </ul>
+        <small class="text-muted me-1">{{ reply.soft_deleted_at|date:"F j, Y, G:i" }}</small>
+        <div class="ms-4">
+          <p class="text-muted ms-2 mb-2">Comment deleted by user</p>
+        </div>
+      </div>
+      {% else %}
+      <div>
+        <a href="{% url 'user-profile-detail' username=reply.author.username %}"
+          class="text-decoration-none text-reset">
+          <img src="{{ reply.author.profile.profile_image.url }}" class="rounded-circle"
+            style="width: 30px; height: 30px; object-fit: cover;" alt="{{ reply.author.username }}'s profile image">
+          <strong class="me-1">{{ reply.author.username }}</strong>
+          <small class="text-muted me-1">-</small>
+          <small class="text-muted me-1">{{ reply.date_posted|date:"F j, Y, G:i" }}</small>
+        </a>
+        <div class="ms-4">
+          <p class="ms-2 mb-0">{{ reply.content }}</p>
+          <div class="d-flex justify-content-start align-items-center">
+            {% include 'posts/comment_like_and_dislike_button.html' with comment=reply user=user %}
+            <a id="reply-link-{{ reply.pk }}" class="reply-link btn text-primary rounded-pill border-0 pt-0 pb-0 me-1"
+              data-pk="{{ reply.pk }}">
+              <i class="fa-regular fa-message me-1"></i>{{ reply.children.count}}
+            </a>
+            <i id="reply-dropdown-{{ reply.pk }}" class="fa-solid fa-ellipsis" style="color: #000000; cursor: pointer;"
+              data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reply-dropdown-{{ reply.pk }}">
+              {% if reply.author == user %}
+              <li>
+                <form method="post" action="{% url 'comment-soft-delete' pk=reply.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item">Delete</button>
+                </form>
+              </li>
+              {% endif %}
+              <li>
+                <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -40,6 +67,7 @@
           </div>
         </form>
       </div>
+      {% endif %}
     </div>
 
     {% include 'posts/nested_comment_form.html' with replies=reply.children %}

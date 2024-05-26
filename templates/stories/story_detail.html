@@ -45,8 +45,7 @@
                                     <li><a class="dropdown-item" href="#">Edit</a></li>
                                     <li><a class="dropdown-item" href="#">Save</a></li>
                                     <li>
-                                        <form method="post" action="{% url 'story-archive' pk=story.pk %}"
-                                            style="margin: 0;">
+                                        <form method="post" action="{% url 'story-archive' pk=story.pk %}">
                                             {% csrf_token %}
                                             <button type="submit" class="dropdown-item">Archive</button>
                                         </form>

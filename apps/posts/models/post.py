@@ -28,11 +28,14 @@ class Post(models.Model):
     disliked_by = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="disliked_posts", blank=True
     )
-    # comments_count = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
     is_published = models.BooleanField(default=True)
     is_deleted = models.BooleanField(default=False)  # Soft delete field
     soft_deleted_at = models.DateTimeField(null=True, blank=True)
+
+    @property
+    def parent_comments(self):
+        return self.comments.filter(parent_comment__isnull=True)
 
     @property
     def file_extension(self):

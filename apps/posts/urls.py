@@ -11,10 +11,11 @@ from .views.post import (
 )
 
 from .views.comment import (
+    CommentDetailView,
     CommentCreateView,
     ReplyCreateView,
-    # CommentUpdateView,
-    # CommentDeleteView,
+    CommentSoftDeleteView,
+    CommentHardDeleteView,
     LikeCommentView,
     DislikeCommentView,
 )
@@ -34,6 +35,13 @@ urlpatterns = [
         PostHardDeleteView.as_view(),
         name="post-hard-delete",
     ),
+    path("post/<int:pk>/like/", LikePostView.as_view(), name="like-post"),
+    path("post/<int:pk>/dislike/", DislikePostView.as_view(), name="dislike-post"),
+    path(
+        "post/<int:post_pk>/comment/<int:pk>/",
+        CommentDetailView.as_view(),
+        name="comment-detail",
+    ),
     path(
         "post/<int:pk>/comment/create/",
         CommentCreateView.as_view(),
@@ -44,8 +52,16 @@ urlpatterns = [
         ReplyCreateView.as_view(),
         name="reply-create",
     ),
-    path("post/<int:pk>/like/", LikePostView.as_view(), name="like-post"),
-    path("post/<int:pk>/dislike/", DislikePostView.as_view(), name="dislike-post"),
+    path(
+        "comment/<int:pk>/soft/delete/",
+        CommentSoftDeleteView.as_view(),
+        name="comment-soft-delete",
+    ),
+    path(
+        "comment/<int:pk>/hard/delete/",
+        CommentHardDeleteView.as_view(),
+        name="comment-hard-delete",
+    ),
     path("comment/<int:pk>/like/", LikeCommentView.as_view(), name="like-comment"),
     path(
         "comment/<int:pk>/dislike/",

@@ -1,54 +1,79 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const commentContainer = document.querySelector("#comment-form-container");
+    const commentFormContainer = document.querySelector("#comment-form-container");
+    const commentFormTextarea = commentFormContainer.querySelector("textarea");
+    const commentFormButton = commentFormContainer.querySelector("button");
     const replyContainers = document.querySelectorAll(".reply-form-container");
     const replyLinks = document.querySelectorAll('.reply-link');
-    const commentTextarea = commentContainer.querySelector("textarea");
-    const commentButton = commentContainer.querySelector("button");
 
-    commentTextarea.addEventListener("focus", function () {
-        gsap.to(commentTextarea, { height: "80px", duration: 0.3 });
-        if (commentTextarea.value.trim() !== "") {
-            gsap.set(commentButton, { display: 'block' });
-            gsap.to(commentButton, { opacity: 1, duration: 0.3, delay: 0.3 });
+    const commentPattern = /^\/posts\/post\/\d+\/comment\/\d+\/$/;
+    const currentPath = window.location.pathname;
+
+    if (commentPattern.test(currentPath)) {
+        const pathSegments = currentPath.split('/');
+        const commentPk = pathSegments[pathSegments.length - 2];
+        const targetComment = document.querySelector(`#comment-item-${commentPk}`);
+        if (targetComment) {
+            targetComment.scrollIntoView({ behavior: 'smooth' });
+            gsap.fromTo(targetComment,
+                { backgroundColor: "#ffffff" }, // Start color (white)
+                {
+                    backgroundColor: "#f0f0f0", // Blink color
+                    repeat: 5,
+                    yoyo: true,
+                    duration: 0.8,
+                    ease: "power1.inOut",
+                    onComplete: function () {
+                        gsap.to(targetComment, { backgroundColor: "#ffffff", duration: 0.8 }); // Ensure it ends on white
+                    }
+                }
+            );
+        }
+    }
+
+    commentFormTextarea.addEventListener("focus", function () {
+        gsap.to(commentFormTextarea, { height: "80px", duration: 0.3 });
+        if (commentFormTextarea.value.trim() !== "") {
+            gsap.set(commentFormButton, { display: 'block' });
+            gsap.to(commentFormButton, { opacity: 1, duration: 0.3, delay: 0.3 });
         }
     });
 
-    commentTextarea.addEventListener("blur", function () {
-        gsap.to(commentTextarea, { height: "40px", duration: 0.3 });
-        if (commentTextarea.value.trim() === "") {
-            gsap.to(commentButton, {
+    commentFormTextarea.addEventListener("blur", function () {
+        gsap.to(commentFormTextarea, { height: "40px", duration: 0.3 });
+        if (commentFormTextarea.value.trim() === "") {
+            gsap.to(commentFormButton, {
                 opacity: 0, duration: 0.3, onComplete: function () {
-                    gsap.set(commentButton, { display: 'none' });
+                    gsap.set(commentFormButton, { display: 'none' });
                 }
             });
         }
     });
 
-    // commentTextarea.addEventListener("input", function () {
-    //     if (commentTextarea.value.trim() !== "") {
-    //         gsap.set(commentButton, { display: 'block' });
-    //         gsap.to(commentButton, { opacity: 1, duration: 0.3 });
+    // commentFormTextarea.addEventListener("input", function () {
+    //     if (commentFormTextarea.value.trim() !== "") {
+    //         gsap.set(commentFormButton, { display: 'block' });
+    //         gsap.to(commentFormButton, { opacity: 1, duration: 0.3 });
     //     } else {
-    //         gsap.to(commentButton, {
+    //         gsap.to(commentFormButton, {
     //             opacity: 0, duration: 0.3, onComplete: function () {
-    //                 gsap.set(commentButton, { display: 'none' });
+    //                 gsap.set(commentFormButton, { display: 'none' });
     //             }
     //         });
     //     }
     // });
 
-    commentTextarea.addEventListener('input', function () {
-        if (commentTextarea.value.trim() !== '') {
-            gsap.to(commentButton, { x: 0, width: 'auto', autoAlpha: 1, duration: 0.2 });
+    commentFormTextarea.addEventListener('input', function () {
+        if (commentFormTextarea.value.trim() !== '') {
+            gsap.to(commentFormButton, { x: 0, width: 'auto', autoAlpha: 1, duration: 0.2 });
         } else {
-            gsap.to(commentButton, { x: 5, width: 0, autoAlpha: 0, duration: 0.2 });
+            gsap.to(commentFormButton, { x: 5, width: 0, autoAlpha: 0, duration: 0.2 });
         }
     });
 
-    commentTextarea.addEventListener("keydown", function (e) {
+    commentFormTextarea.addEventListener("keydown", function (e) {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            commentContainer.closest('form').submit();
+            commentFormContainer.closest('form').submit();
         }
     });
 
