@@ -4,6 +4,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
 from pathlib import Path
+from apps.stories.models import Story
 
 
 def profile_image_directory_path(instance, filename):
@@ -27,6 +28,10 @@ class Profile(models.Model):
     following = models.ManyToManyField(
         "self", symmetrical=False, blank=True, related_name="followers"
     )
+
+    @property
+    def active_stories(self):
+        return Story.active_stories(self.user)
 
     def __str__(self):
         return self.user.username

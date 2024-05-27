@@ -46,7 +46,7 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         return reverse(
-            "comment-detail", kwargs={"post_pk": self.post.pk, "comment_pk": self.pk}
+            "comment-detail", kwargs={"post_pk": self.post.pk, "pk": self.pk}
         )
 
     def like(self, user_pk):

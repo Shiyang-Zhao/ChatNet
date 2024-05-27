@@ -8,7 +8,17 @@ import re
 
 
 def home(request):
+    user = request.user
     context = {"active_posts": Post.objects.filter(is_published=True, is_deleted=False)}
+    if user.is_authenticated:
+        active_authors = set()
+        if Story.active_stories(user).exists():
+            active_authors.add(user)
+        for followed_user in user.profile.following.all():
+            if Story.active_stories(followed_user.user).exists():
+                active_authors.add(followed_user.user)
+        context["active_authors"] = active_authors
+
     return render(request, "layouts/home.html", context)
 
 

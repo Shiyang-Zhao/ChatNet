@@ -1,10 +1,10 @@
 <div class="mt-2">
     <!-- Badges that trigger modals -->
     <div class="mt-2">
-        <a href="#" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#followingModal">
+        <a href="#" class="text-decoration-none me-2" data-bs-toggle="modal" data-bs-target="#followingModal">
             Following: {{ viewed_user.profile.following.count }}
         </a>
-        <a href="#" class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#followersModal">
+        <a href="#" class="text-decoration-none me-2" data-bs-toggle="modal" data-bs-target="#followersModal">
             Followers: {{ viewed_user.profile.followers.count }}
         </a>
     </div>
@@ -20,6 +20,7 @@
             </div>
             <div class="modal-body">
                 <ul class="list-group">
+                    {% if viewed_user.profile.following.all %}
                     {% for profile in viewed_user.profile.following.all %}
                     <a href="{% url 'user-profile-detail' username=profile.user.username %}"
                         class="list-group-item list-group-item-action">
@@ -30,6 +31,11 @@
                         </div>
                     </a>
                     {% endfor %}
+                    {% else %}
+                    <div class="d-flex align-items-center">
+                        No following found
+                    </div>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -46,6 +52,7 @@
             </div>
             <div class="modal-body">
                 <ul class="list-group">
+                    {% if viewed_user.profile.followers.all %}
                     {% for profile in viewed_user.profile.followers.all %}
                     <a href="{% url 'user-profile-detail' username=profile.user.username %}"
                         class="list-group-item list-group-item-action">
@@ -56,6 +63,11 @@
                         </div>
                     </a>
                     {% endfor %}
+                    {% else %}
+                    <div class="d-flex align-items-center">
+                        No followers found
+                    </div>
+                    {% endif %}
                 </ul>
             </div>
         </div>

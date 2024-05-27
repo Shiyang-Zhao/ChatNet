@@ -46,13 +46,15 @@ const reconnect = () => {
 const displayUnreadNotificationCount = (count) => {
     const iconElement = document.querySelector("#notification-icon");
     const countElement = document.querySelector("#notification-count");
+    const soundElement = document.querySelector("#notification-sound");
 
     if (count > 0) {
-        iconElement.className = "fa-solid fa-bell fa-shake fa-xl";
+        iconElement.classList.add('fa-shake');
         countElement.textContent = count;
         countElement.style.display = 'inline-block';
+        soundElement.play();
     } else {
-        iconElement.className = "fa-solid fa-bell fa-xl";
+        iconElement.classList.remove("fa-shake");
         countElement.textContent = '';
         countElement.style.display = 'none';
     }

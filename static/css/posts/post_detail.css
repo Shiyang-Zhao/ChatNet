@@ -9,10 +9,8 @@
     cursor: pointer;
 } */
 
-.reply-link:hover {
-    background-color: #f0f0f0;
-}
-
+.reply-link:hover,
+.reply-toggle-btn:hover,
 .comment-like-btn:hover,
 .comment-dislike-btn:hover {
     background-color: #f0f0f0;

@@ -3,7 +3,7 @@
 <ul>
   {% for reply in replies %}
   <li id="comment-item-{{ reply.pk }}" class="list-group-item">
-    <div>
+    <div class="mt-1">
       {% if reply.is_deleted %}
       <div>
         <img src="{% get_media_prefix %}profile_images/default_profile_image.jpg" class="rounded-circle"
@@ -25,7 +25,7 @@
           <small class="text-muted me-1">-</small>
           <small class="text-muted me-1">{{ reply.date_posted|date:"F j, Y, G:i" }}</small>
         </a>
-        <div class="ms-4">
+        <div class="ms-4" style="transform: translateX(3px);">
           <p class="ms-2 mb-0">{{ reply.content }}</p>
           <div class="d-flex justify-content-start align-items-center">
             {% include 'posts/comment_like_and_dislike_button.html' with comment=reply user=user %}
@@ -33,21 +33,25 @@
               data-pk="{{ reply.pk }}">
               <i class="fa-regular fa-message me-1"></i>{{ reply.children.count}}
             </a>
-            <i id="reply-dropdown-{{ reply.pk }}" class="fa-solid fa-ellipsis" style="color: #000000; cursor: pointer;"
-              data-bs-toggle="dropdown" aria-expanded="false"></i>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="reply-dropdown-{{ reply.pk }}">
-              {% if reply.author == user %}
-              <li>
-                <form method="post" action="{% url 'comment-soft-delete' pk=reply.pk %}">
-                  {% csrf_token %}
-                  <button type="submit" class="dropdown-item">Delete</button>
-                </form>
-              </li>
-              {% endif %}
-              <li>
-                <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
-              </li>
-            </ul>
+            <div class="btn-group dropup">
+              <button class="reply-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
+                id="reply-dropdown-{{ reply.pk }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-ellipsis"></i>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="reply-dropdown-{{ reply.pk }}">
+                {% if reply.author == user %}
+                <li>
+                  <form method="post" action="{% url 'comment-soft-delete' pk=reply.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item">Delete</button>
+                  </form>
+                </li>
+                {% endif %}
+                <li>
+                  <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

@@ -6,7 +6,8 @@
     <form class="comment-like-form" data-comment-pk="{{ comment.pk }}" data-url="{% url 'like-comment' pk=comment.pk %}"
         data-listener-added="0">
         {% csrf_token %}
-        <button type="submit" id="comment-like-button-{{ comment.pk }}" class="btn btn-sm comment-dislike-btn">
+        <button type="submit" id="comment-like-button-{{ comment.pk }}"
+            class="btn btn-sm comment-dislike-btn rounded-pill pt-0 pb-0">
             <i
                 class="{% if is_user_liked_comment == 1 %}fa-solid{% else %}fa-regular{% endif %} fa-thumbs-up text-success">
                 <span id="comment-like-count-{{ comment.pk }}">{{ comment.liked_by.count }}</span>
@@ -17,7 +18,8 @@
     <form class="comment-dislike-form" data-comment-pk="{{ comment.pk }}"
         data-url="{% url 'dislike-comment' pk=comment.pk %}" data-listener-added="0">
         {% csrf_token %}
-        <button type="submit" id="comment-dislike-button-{{ comment.pk }}" class="btn btn-sm comment-dislike-btn">
+        <button type="submit" id="comment-dislike-button-{{ comment.pk }}"
+            class="btn btn-sm comment-dislike-btn rounded-pill pt-0 pb-0">
             <i
                 class="{% if is_user_liked_comment == -1 %}fa-solid{% else %}fa-regular{% endif %} fa-thumbs-down text-danger">
                 <span id="comment-dislike-count-{{ comment.pk }}">{{ comment.disliked_by.count }}</span>

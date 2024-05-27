@@ -86,12 +86,11 @@
 
   <!-- Display existing comments -->
   <div class="position-relative">
-    <h3>Comments</h3>
     {% if post.parent_comments %}
     <ul class="p-0">
       {% for parent_comment in post.parent_comments %}
       <li id="comment-item-{{ parent_comment.pk }}" class="list-group-item">
-        <div>
+        <div class="mt-1">
           {% if parent_comment.is_deleted %}
           <div>
             <img src="{% get_media_prefix %}profile_images/default_profile_image.jpg" class="rounded-circle"
@@ -114,7 +113,7 @@
               <small class="text-muted me-1">-</small>
               <small class="text-muted me-1">{{ parent_comment.date_posted|date:"F j, Y, G:i" }}</small>
             </a>
-            <div class="ms-4">
+            <div class="ms-4" style="transform: translateX(3px);">
               <p class="ms-2 mb-0">{{ parent_comment.content }}</p>
               <div class="d-flex justify-content-start align-items-center">
                 {% include 'posts/comment_like_and_dislike_button.html' with comment=parent_comment user=user %}
@@ -123,21 +122,25 @@
                   data-pk="{{ parent_comment.pk }}">
                   <i class="fa-regular fa-message me-1"></i>{{ parent_comment.children.count}}
                 </a>
-                <i id="comment-dropdown-{{ parent_comment.pk }}" class="fa-solid fa-ellipsis"
-                  style="color: #000000; cursor: pointer;" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="comment-dropdown-{{ parent_comment.pk }}">
-                  {% if parent_comment.author == user %}
-                  <li>
-                    <form method="post" action="{% url 'comment-soft-delete' pk=parent_comment.pk %}">
-                      {% csrf_token %}
-                      <button type="submit" class="dropdown-item">Delete</button>
-                    </form>
-                  </li>
-                  {% endif %}
-                  <li>
-                    <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
-                  </li>
-                </ul>
+                <div class="btn-group dropup">
+                  <button class="reply-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0" id="comment-dropdown-{{ reply.pk }}" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-ellipsis"></i>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="comment-dropdown-{{ parent_comment.pk }}">
+                    {% if parent_comment.author == user %}
+                    <li>
+                      <form method="post" action="{% url 'comment-soft-delete' pk=parent_comment.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-item">Delete</button>
+                      </form>
+                    </li>
+                    {% endif %}
+                    <li>
+                      <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -164,7 +167,7 @@
       {% endfor %}
     </ul>
     {% else %}
-    <p>No comments yet.</p>
+    <p>No comments yet</p>
     {% endif %}
   </div>
 </div>
