@@ -91,38 +91,39 @@ const displayChatMessage = (chatPk, message) => {
     if (isSentByCurrentUser) {
         messageHtml = `
             <div class="message d-flex justify-content-end">
-                <div class="text-white p-2" style="max-width: 75%;">
-                    <div class="d-flex align-items-center flex-row-reverse">
+                <div class="text-white p-2" style="max-width: 80%;">
+                    <div class="d-flex align-items-start flex-row-reverse">
                         <a href="${profileUrl}" class="text-decoration-none text-reset">
                             <img class="img-fluid rounded-circle ms-2" src="${message.sender_profile_image_url}"
                                 style="width: 35px; height: 35px; object-fit: cover;">
                         </a>
-                        <div class="rounded-pill bg-primary ps-2 pe-2">
-                            <p class="text-right m-1">${message.content}</p>
+                        <div class="d-flex flex-column rounded bg-primary ps-2 pe-2" style="max-width: 90%;">
+                            <p class="text-start m-1">${message.content}</p>
+                            <span class="date-sent text-muted text-start" style="font-size: 0.9em;">
+                                ${formattedDate.replace(' at', ',')}
+                            </span>
                         </div>
                     </div>
-                    <span class="date-sent text-muted text-right" style="font-size: 0.9em; display: block;">
-                        ${formattedDate}
-                    </span>
                 </div>
             </div>
         `;
     } else {
         messageHtml = `
             <div class="message d-flex justify-content-start">
-                <div class="text-dark p-2" style="max-width: 75%;">
-                    <div class="d-flex align-items-center">
+                <div class="text-dark p-2" style="max-width: 80%;">
+                    <div class="d-flex align-items-start">
                         <a href="${profileUrl}" class="text-decoration-none text-reset">
                             <img class="img-fluid rounded-circle me-2" src="${message.sender_profile_image_url}"
                                 style="width: 35px; height: 35px; object-fit: cover;">
                         </a>
-                        <div class="rounded-pill bg-secondary-subtle text-dark ps-2 pe-2">
-                            <p class="text-left m-1">${message.content}</p>
+                        <div class="d-flex flex-column rounded bg-secondary-subtle ps-2 pe-2" style="max-width: 90%;">
+                            <p class="text-start m-1">${message.content}</p>
+                            <span class="date-sent text-muted text-end" style="font-size: 0.9em;">
+                                ${formattedDate.replace(' at', ',')}
+                            </span>
                         </div>
                     </div>
-                    <span class="date-sent text-muted text-left" style="font-size: 0.9em; display: block;">
-                        ${formattedDate}
-                    </span>
+                    
                 </div>
             </div>
         `;

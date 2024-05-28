@@ -3,12 +3,13 @@ let retryInterval = 1000;
 let maxRetryInterval = 60000;
 
 const establishNotificationWebSocket = () => {
-
     const socketProtocol =
         window.location.protocol === "https:" ? "wss://" : "ws://";
     const socketURL =
         socketProtocol + window.location.host + '/ws/notifications/';
     socket = new WebSocket(socketURL);
+    const soundElement = document.querySelector("#notification-sound");
+
 
     socket.onopen = function () {
         console.log("WebSocket connection to notification successfully established!");
@@ -22,6 +23,7 @@ const establishNotificationWebSocket = () => {
         console.log("Unread count: " + message.unread_count);
         displayUnreadNotificationCount(message.unread_count);
         if (message.type === "notification_message") {
+            soundElement.play();
             displayNotificationMessage(message);
         }
     };
@@ -46,13 +48,11 @@ const reconnect = () => {
 const displayUnreadNotificationCount = (count) => {
     const iconElement = document.querySelector("#notification-icon");
     const countElement = document.querySelector("#notification-count");
-    const soundElement = document.querySelector("#notification-sound");
 
     if (count > 0) {
         iconElement.classList.add('fa-shake');
         countElement.textContent = count;
         countElement.style.display = 'inline-block';
-        soundElement.play();
     } else {
         iconElement.classList.remove("fa-shake");
         countElement.textContent = '';
@@ -62,15 +62,47 @@ const displayUnreadNotificationCount = (count) => {
 
 const displayNotificationMessage = (message) => {
     const notificationContainer = document.querySelector("#notification-list");
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const markAsReadUrl = `/notifications/notification/${message.notification_pk}/read/`;
+    const markAsUnreadUrl = `/notifications/notification/${message.notification_pk}/unread/`;
+
     if (notificationContainer) {
-        const wrapperDiv = document.createElement("div");
-        const notificationElement = document.createElement("li");
-        notificationElement.classList.add("list-group-item");
-        const messageContent = document.createElement("span");
-        messageContent.textContent = message.content;
-        notificationElement.appendChild(messageContent);
-        wrapperDiv.appendChild(notificationElement);
-        notificationContainer.prepend(wrapperDiv);
+        const formattedDate = new Date(message.date_sent).toLocaleString("en-US", {
+            year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: false
+        });
+
+        let truncatedContent = message.content.split(" ").slice(0, 50).join(" ");
+        if (message.content.split(" ").length > 50) {
+            truncatedContent += ' …';
+        }
+
+        const notificationHtml = `
+            <div class="card mb-2">
+                <div class="card-body" style="background-color: #f0f0f0;">
+                    <h5 class="card-title">${truncatedContent}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        ${formattedDate.replace(' at', ',')}
+                    </h6>
+                    <div class="btn-group">
+                    <form class="mark-as-read-form mr-1" data-url="${markAsReadUrl}">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                        <button type="submit" class="btn btn-primary me-3">
+                            <i class="fas fa-envelope-open-text"></i>
+                        </button>
+                    </form>
+                    <form class="mark-as-unread-form" data-url="${markAsUnreadUrl}">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                    </form>
+                </div>
+                </div>
+            </div>
+        `;
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = notificationHtml.trim();
+        notificationContainer.prepend(tempDiv.firstChild);
     }
 };
 

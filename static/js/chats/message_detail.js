@@ -3,7 +3,6 @@ import { sendChatMessage } from '../websockets/chat_websocket.js';
 const scrollToLatestMessage = (container) => {
     container.scrollTo({
         top: container.scrollHeight,
-        behavior: 'smooth'
     });
 };
 

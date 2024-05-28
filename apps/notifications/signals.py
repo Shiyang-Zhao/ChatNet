@@ -16,7 +16,7 @@ def new_message_notification(sender, instance, created, **kwargs):
         chat = instance.chat
         receivers = chat.participants.exclude(pk=instance.sender.pk)
         channel_layer = get_channel_layer()
-        content = f"You have received a new message from {instance.sender.username} in chat '{chat.pk}'."
+        content = f"You have received a new message from {instance.sender.username} in chat {chat.pk}: {instance.content}"
 
         for receiver in receivers:
             notification = Notification.objects.create(
@@ -33,8 +33,10 @@ def new_message_notification(sender, instance, created, **kwargs):
                 f"notification_{receiver.pk}",
                 {
                     "type": "notification_message",
+                    "notification_pk": notification.pk,
                     "sender_username": instance.sender.username,
                     "content": content,
+                    "date_sent": notification.date_sent.isoformat(),
                     "unread_count": unread_count,
                 },
             )
