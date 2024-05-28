@@ -22,10 +22,6 @@ const establishChatWebSocket = (chatPk) => {
 
     socket.onmessage = function (event) {
         var message = JSON.parse(event.data);
-        // console.log("socket: " + chatPk);
-        // console.log("Sender: " + message.sender_username);
-        // console.log("Received message: " + message.content);
-        // console.log("Date sent: " + message.date_sent);
         displayChatMessage(chatPk, message);
     };
 
@@ -97,7 +93,7 @@ const displayChatMessage = (chatPk, message) => {
                             <img class="img-fluid rounded-circle ms-2" src="${message.sender_profile_image_url}"
                                 style="width: 35px; height: 35px; object-fit: cover;">
                         </a>
-                        <div class="d-flex flex-column rounded bg-primary ps-2 pe-2" style="max-width: 90%;">
+                        <div class="d-flex flex-column text-wrap text-break rounded-3 bg-primary ps-2 pe-2" style="max-width: 90%;">
                             <p class="text-start m-1">${message.content}</p>
                             <span class="date-sent text-muted text-start" style="font-size: 0.9em;">
                                 ${formattedDate.replace(' at', ',')}
@@ -116,7 +112,7 @@ const displayChatMessage = (chatPk, message) => {
                             <img class="img-fluid rounded-circle me-2" src="${message.sender_profile_image_url}"
                                 style="width: 35px; height: 35px; object-fit: cover;">
                         </a>
-                        <div class="d-flex flex-column rounded bg-secondary-subtle ps-2 pe-2" style="max-width: 90%;">
+                        <div class="d-flex flex-column text-wrap text-break rounded-3 bg-secondary-subtle ps-2 pe-2" style="max-width: 90%;">
                             <p class="text-start m-1">${message.content}</p>
                             <span class="date-sent text-muted text-end" style="font-size: 0.9em;">
                                 ${formattedDate.replace(' at', ',')}
@@ -133,6 +129,10 @@ const displayChatMessage = (chatPk, message) => {
     tempDiv.innerHTML = messageHtml.trim();
     const messageElement = tempDiv.firstChild;
     messagesContainer.appendChild(messageElement);
+
+    if (isSentByCurrentUser) {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
 };
 
 export { establishChatWebSocket, sendChatMessage }

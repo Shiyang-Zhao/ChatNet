@@ -53,27 +53,26 @@
               </ul>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div id="reply-form-wrapper-{{ reply.pk }}" class="reply-form-wrapper" style="display: none;">
-        <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
-          {% csrf_token %}
-          <div class="reply-form-container" style="position: relative; min-height: fit-content;">
-            <div class="form-group">
-              <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
-                required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
-              style="position: absolute; bottom: 3px; right: 10px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">
-              Reply
-            </button>
+          <div id="reply-form-wrapper-{{ reply.pk }}" class="reply-form-wrapper"
+            style="display: none; transform: translateX(3px);">
+            <form method="post" action="{% url 'reply-create' pk=reply.pk %}">
+              {% csrf_token %}
+              <div class="reply-form-container" style="position: relative; min-height: fit-content;">
+                <div class="form-group">
+                  <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
+                    required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
+                  style="position: absolute; bottom: 3px; right: 10px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">
+                  Reply
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
       {% endif %}
     </div>
-
     {% include 'posts/nested_comment_form.html' with replies=reply.children %}
   </li>
   {% endfor %}

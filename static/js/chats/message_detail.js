@@ -12,7 +12,6 @@ const sendMessage = (messageInput, sendButtonPopover, messagesContainer) => {
         sendChatMessage(messageContent);
         messageInput.value = '';
         sendButtonPopover.hide();
-        scrollToLatestMessage(messagesContainer);
     } else {
         sendButtonPopover.show();
         setTimeout(() => { sendButtonPopover.hide(); }, 3000);

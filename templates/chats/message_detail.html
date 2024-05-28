@@ -53,7 +53,7 @@
               <img class="img-fluid rounded-circle ms-2" src="{{ message.sender.profile.profile_image.url }}"
                 style="width: 35px; height: 35px; object-fit: cover;">
             </a>
-            <div class="d-flex flex-column rounded bg-primary ps-2 pe-2" style="max-width: 90%;">
+            <div class="d-flex flex-column text-wrap text-break rounded-3 bg-primary ps-2 pe-2" style="max-width: 90%;">
               <p class="text-start m-1">{{ message.content }}</p>
               <span class="date-sent text-muted text-start" style="font-size: 0.9em;">
                 {{ message.date_sent|date:"F j, Y, G:i" }}
@@ -75,7 +75,7 @@
               <img class="img-fluid rounded-circle me-2" src="{{ message.sender.profile.profile_image.url }}"
                 style="width: 35px; height: 35px; object-fit: cover;">
             </a>
-            <div class="d-flex flex-column rounded bg-secondary-subtle ps-2 pe-2" style="max-width: 90%;">
+            <div class="d-flex flex-column text-wrap text-break rounded-3 bg-secondary-subtle ps-2 pe-2" style="max-width: 90%;">
               <p class="text-start m-1" style="flex: 1;">{{ message.content }}</p>
               <span class="date-sent text-muted text-end" style="font-size: 0.9em;">
                 {{ message.date_sent|date:"F j, Y, G:i" }}
