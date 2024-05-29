@@ -13,7 +13,7 @@
     {% if active_authors %}
     <div class="d-flex justify-content-start align-items-center">
       {% for author in active_authors %}
-      <div id="story-container-{{ author.username }}" class="story-container">
+      <div id="story-container-{{ author.username }}" class="story-container me-2">
         {% if author.profile.active_stories %}
         <button type="button" class="btn" style="padding: 0; background: none; border: none; outline: none;"
           data-bs-toggle="modal" data-bs-target="#storyModal-{{ author.username }}">
@@ -83,7 +83,7 @@
     </div>
   </div>
   {% empty %}
-  <p class="text-center text-muted">No posts available.</p>
+  <p class="text-center text-muted">No posts found</p>
   {% endfor %}
 </div>
 {% endblock %}

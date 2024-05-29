@@ -1,111 +1,72 @@
 {% load static %}
 
-{% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="nav nav-tabs" id="profileTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="posts-tab" data-bs-toggle="tab" href="#posts" role="tab"
-                        aria-controls="posts" aria-selected="true">Posts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="comments-tab" data-bs-toggle="tab" href="#comments" role="tab"
-                        aria-controls="comments" aria-selected="false">Comments</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="liked-tab" data-bs-toggle="tab" href="#liked" role="tab"
-                        aria-controls="liked" aria-selected="false">Liked</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="disliked-tab" data-bs-toggle="tab" href="#disliked" role="tab"
-                        aria-controls="disliked" aria-selected="false">Disliked</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="commented-tab" data-bs-toggle="tab" href="#commented" role="tab"
-                        aria-controls="commented" aria-selected="false">Commented</a>
-                </li>
-            </ul>
-            <div class="tab-content mt-4" id="profileTabContent">
-                <!-- Posts Section -->
-                <div id="posts" class="tab-pane fade show active" role="tabpanel" aria-labelledby="posts-tab">
-                    <h3 class="mb-4">Posts by {{ viewed_user.username }}</h3>
-                    <ul class="list-group list-group-flush">
-                        {% for post in viewed_user.posts.all %}
-                        <li class="list-group-item">
-                            <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
-                        </li>
-                        {% empty %}
-                        <li class="list-group-item">No posts available.</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <!-- Comments Section -->
-                <div id="comments" class="tab-pane fade" role="tabpanel" aria-labelledby="comments-tab">
-                    <h3 class="mb-4">Comments</h3>
-                    <ul class="list-group list-group-flush">
-                        {% for comment in viewed_user.comments.all %}
-                        <li class="list-group-item">
-                            <a href="{% url 'comment-detail' post_pk=comment.post.pk pk=comment.pk %}">
-                                <strong>Comment on {{ comment.post.title }}:</strong>
-                            </a>
-                            "{{ comment.content|truncatewords:20 }}"
-                            <small>— posted on {{ comment.date_posted|date:"F j, Y, G:i" }}</small>
-                        </li>
-                        {% empty %}
-                        <li class="list-group-item">No comments available.</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <!-- Liked Posts Section -->
-                <div id="liked" class="tab-pane fade" role="tabpanel" aria-labelledby="liked-tab">
-                    <h3 class="mb-4">Liked Posts</h3>
-                    <ul class="list-group list-group-flush">
-                        {% for post in user.liked_posts.all %}
-                        <li class="list-group-item">
-                            <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
-                        </li>
-                        {% empty %}
-                        <li class="list-group-item">No liked posts.</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <!-- Disliked Posts Section -->
-                <div id="disliked" class="tab-pane fade" role="tabpanel" aria-labelledby="disliked-tab">
-                    <h3 class="mb-4">Disliked Posts</h3>
-                    <ul class="list-group list-group-flush">
-                        {% for post in user.disliked_posts.all %}
-                        <li class="list-group-item">
-                            <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
-                        </li>
-                        {% empty %}
-                        <li class="list-group-item">No disliked posts.</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <!-- Commented Posts Section -->
-                <div id="commented" class="tab-pane fade" role="tabpanel" aria-labelledby="commented-tab">
-                    <h3 class="mb-4">Commented Posts</h3>
-                    <ul class="list-group list-group-flush">
-                        {% for comment in user.posted_comments.all %}
-                        <li class="list-group-item">
-                            <a href="{% url 'comment-detail' post_pk=comment.post.pk pk=comment.pk %}">
-                                <strong>Comment on {{ comment.post.title }}:</strong>
-                            </a>
-                            "{{ comment.content|truncatewords:20 }}"
-                            <small>— posted on {{ comment.date_posted|date:"F j, Y, G:i" }}</small>
-                        </li>
-                        {% empty %}
-                        <li class="list-group-item">No posts commented on.</li>
-                        {% endfor %}
-                    </ul>
+<div class="row justify-content-center align-items-center mt-4">
+    <div class="col-md-8">
+        <ul class="nav nav-tabs d-flex justify-content-center" id="profileTab" role="tablist"
+            style="flex-wrap: nowrap;">
+            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+                <a class="nav-link active" id="posts-tab" data-bs-toggle="tab" href="#posts" role="tab"
+                    aria-controls="posts" aria-selected="true">Posts</a>
+            </li>
+            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+                <a class="nav-link" id="comments-tab" data-bs-toggle="tab" href="#comments" role="tab"
+                    aria-controls="comments" aria-selected="false">Comments</a>
+            </li>
+            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+                <a class="nav-link" id="liked-tab" data-bs-toggle="tab" href="#liked" role="tab" aria-controls="liked"
+                    aria-selected="false">Liked</a>
+            </li>
+            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+                <a class="nav-link" id="disliked-tab" data-bs-toggle="tab" href="#disliked" role="tab"
+                    aria-controls="disliked" aria-selected="false">Disliked</a>
+            </li>
+            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+                <a class="nav-link" id="commented-tab" data-bs-toggle="tab" href="#commented" role="tab"
+                    aria-controls="commented" aria-selected="false">Commented</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-10">
+        <div class="tab-content mt-4" id="profileTabContent">
+            <!-- Posts Section -->
+            <div id="posts" class="tab-pane fade show active" role="tabpanel" aria-labelledby="posts-tab">
+                <div class="row">
+                    {% for post in viewed_user.posts.all %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="list-group-item"
+                            style="border: 1px solid #e1e1e1; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                            <!-- Assume that post.image_url is the path to the image -->
+                            <img src="{% static post.image_url %}" alt="{{ post.title }}"
+                                style="width: 100%; height: auto; display: block;">
+                            <div style="padding: 10px;">
+                                <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
+
+            <!-- Comments Section -->
+            <!-- Similar setup, ensure images are involved if you want an Instagram-like feel -->
+            <div id="comments" class="tab-pane fade" role="tabpanel" aria-labelledby="comments-tab">
+                <div class="row">
+                    {% for comment in viewed_user.comments.all %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="list-group-item"
+                            style="border: 1px solid #e1e1e1; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                            <a href="{% url 'post-detail' pk=comment.post.pk %}">
+                                <strong>Comment on {{ comment.post.title }}:</strong>
+                                "{{ comment.content|truncatewords:20 }}"
+                            </a>
+                            <small style="display: block; padding: 10px;">— posted on {{ comment.date_posted|date:"F
+                                j, Y, G:i" }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
-{% endblock %}

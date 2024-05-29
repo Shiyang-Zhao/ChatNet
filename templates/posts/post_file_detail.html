@@ -1,60 +1,53 @@
 {% if post.file %}
 <div class="container mt-3">
     <div class="card">
-        <div class="card-body">
-            <!-- <h5 class="card-title">File: {{ post.file.name }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">File Type: {{ post.file_extension }}</h6> -->
-
+        <div class="card-body p-0">
             {% if post.file_extension in '.jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp' %}
-            <!-- <p>This is an image file.</p> -->
-            <img src="{{ post.file.url }}" alt="Image" class="img-fluid mb-2">
-
+            <img src="{{ post.file.url }}" alt="Image" class="img-fluid w-100 mb-2"
+                style="max-height: 400px; object-fit: contain;">
             {% elif post.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
-            <!-- <p>This is a video file.</p> -->
-            <video controls playsinline preload="auto" class="w-100">
+            <video controls playsinline preload="auto" class="w-100" style="max-height: 400px; object-fit: contain;">
                 <source src="{{ post.file.url }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
-
             {% elif post.file_extension == 'pdf' %}
-            <!-- <p>This is a PDF file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-primary">Open PDF</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-primary w-100"
+                style="height: 400px;">Open PDF</a>
 
             {% elif post.file_extension == 'doc' %}
-            <!-- <p>This is a DOC file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-secondary">Open DOC</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-secondary w-100"
+                style="height: 400px;">Open DOC</a>
 
             {% elif post.file_extension == 'docx' %}
-            <!-- <p>This is a DOCX file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-secondary">Open DOCX</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-secondary w-100"
+                style="height: 400px;">Open DOCX</a>
 
             {% elif post.file_extension == 'ppt' %}
-            <!-- <p>This is a PPT file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-danger">Open PPT</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-danger w-100"
+                style="height: 400px;">Open PPT</a>
 
             {% elif post.file_extension == 'pptx' %}
-            <!-- <p>This is a PPTX file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-danger">Open PPTX</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-danger w-100"
+                style="height: 400px;">Open PPTX</a>
 
             {% elif post.file_extension == 'xls' %}
-            <!-- <p>This is an XLS file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-success">Open XLS</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-success w-100"
+                style="height: 400px;">Open XLS</a>
 
             {% elif post.file_extension == 'xlsx' %}
-            <!-- <p>This is an XLSX file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-success">Open XLSX</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-success w-100"
+                style="height: 400px;">Open XLSX</a>
 
             {% elif post.file_extension == 'txt' %}
-            <!-- <p>This is a text file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-info">View Text</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-info w-100" style="height: 400px;">View
+                Text</a>
 
             {% elif post.file_extension == 'rtf' %}
-            <!-- <p>This is an RTF file.</p> -->
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-warning">Open RTF</a>
+            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-warning w-100"
+                style="height: 400px;">Open RTF</a>
 
             {% else %}
-            <!-- <p>This file has extension {{ post.file_extension }}.</p> -->
-            <a href="{{ post.file.url }}" class="btn btn-outline-dark">Download</a>
+            <a href="{{ post.file.url }}" class="btn btn-outline-dark w-100" style="height: 400px;">Download</a>
             {% endif %}
         </div>
     </div>

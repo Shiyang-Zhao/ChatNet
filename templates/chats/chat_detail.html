@@ -10,8 +10,7 @@
 <div class="container mt-5">
   <div class="row g-0" style="height: 80vh;">
     <!-- Left part: List of chats -->
-    <div class="col-md-3 d-flex flex-column border-start border-top border-bottom"
-      style="height: 100%; overflow-y: auto;">
+    <div class="col-md-3 d-flex flex-column border" style="height: 100%; overflow-y: auto;">
       {% include 'chats/group_chat_create_form.html' %}
       <!-- <form method="get" action="" class="d-flex align-items-center position-relative ps-0 pe-0 w-100">
         <input type="text" class="form-control rounded-0" name="query" placeholder="Search users..."
@@ -69,7 +68,6 @@
 
     <!-- Right part: Chat details -->
     <div class="col-md-9">
-      {% if chats %}
       <div id="choose-chat-placeholder">
         <div class="chat-detail d-flex flex-column border" style="height: 80vh;">
           <!-- <div class="p-1 border-bottom" style="background-color: #f8f9fa;">
@@ -83,15 +81,12 @@
           </div>
         </div>
       </div>
+      {% if chats %}
       {% for chat in chats %}
       <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
         {% include 'chats/message_detail.html' with chat=chat %}
       </div>
       {% endfor %}
-      {% else %}
-      <div class="alert alert-info mt-3" role="alert">
-        No chat.
-      </div>
       {% endif %}
     </div>
   </div>
