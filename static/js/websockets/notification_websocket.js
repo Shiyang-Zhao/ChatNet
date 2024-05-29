@@ -67,9 +67,19 @@ const displayNotificationMessage = (message) => {
     const markAsUnreadUrl = `/notifications/notification/${message.notification_pk}/unread/`;
 
     if (notificationContainer) {
-        const formattedDate = new Date(message.date_sent).toLocaleString("en-US", {
-            year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: false
-        });
+        const date = new Date(message.date_sent);
+
+        const year = date.getUTCFullYear();
+        const month = date.toLocaleString("en-US", { month: "long", timeZone: "UTC" });
+        const day = date.getUTCDate();
+        let hours = date.getUTCHours();
+        const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+
+        if (hours < 10) {
+            hours = hours.toString(); // Convert single-digit hours to string without leading zero
+        }
+
+        const formattedDate = `${month} ${day}, ${year}, ${hours}:${minutes}`;
 
         let truncatedContent = message.content.split(" ").slice(0, 50).join(" ");
         if (message.content.split(" ").length > 50) {
@@ -79,12 +89,14 @@ const displayNotificationMessage = (message) => {
         const notificationHtml = `
             <div class="card mb-2">
                 <div class="card-body" style="background-color: #f0f0f0;">
-                    <h5 class="card-title">${truncatedContent}</h5>
+                    <h5 class="card-title"  style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; max-height: 7.5em;">
+                        ${truncatedContent}
+                    </h5>
                     <h6 class="card-subtitle mb-2 text-muted">
                         ${formattedDate.replace(' at', ',')}
                     </h6>
                     <div class="btn-group">
-                    <form class="mark-as-read-form mr-1" data-url="${markAsReadUrl}">
+                    <form class="mark-as-read-form me-1" data-url="${markAsReadUrl}">
                         <input type="hidden" name="csrfmiddlewaretoken" value="${csrfToken}">
                         <button type="submit" class="btn btn-primary me-3">
                             <i class="fas fa-envelope-open-text"></i>

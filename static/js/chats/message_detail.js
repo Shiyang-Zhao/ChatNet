@@ -6,7 +6,7 @@ const scrollToLatestMessage = (container) => {
     });
 };
 
-const sendMessage = (messageInput, sendButtonPopover, messagesContainer) => {
+const sendMessage = (messageInput, sendButtonPopover) => {
     const messageContent = messageInput.value.trim();
     if (messageContent !== '') {
         sendChatMessage(messageContent);
@@ -20,7 +20,7 @@ const sendMessage = (messageInput, sendButtonPopover, messagesContainer) => {
 
 const showMessageDetail = (detailPlaceholder) => {
     const messageForm = detailPlaceholder.querySelector('#message-form');
-    const oldMessageInput = detailPlaceholder.querySelector('#message-input');
+    const messageInput = detailPlaceholder.querySelector('#message-input');
     const sendButton = detailPlaceholder.querySelector('#send-button');
     const messagesContainer = detailPlaceholder.querySelector('.chat-messages');
     scrollToLatestMessage(messagesContainer);
@@ -32,33 +32,33 @@ const showMessageDetail = (detailPlaceholder) => {
         placement: 'right',
     });
 
-    // Clone the message input to remove existing event listeners
-    const messageInput = oldMessageInput.cloneNode(true);
-    oldMessageInput.parentNode.replaceChild(messageInput, oldMessageInput);
-
-    messageInput.addEventListener('input', () => {
-        if (messageInput.value.trim() === '') {
-            gsap.to(sendButton, { x: 5, width: 0, autoAlpha: 0, duration: 0.2 });
-        } else {
-            gsap.to(sendButton, { x: 0, width: 'auto', autoAlpha: 1, duration: 0.2 });
-        }
-    });
-
-    messageForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        sendMessage(messageInput, sendButtonPopover, messagesContainer);
-    });
-
-    messageInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
+    if (messageForm.getAttribute('data-listener-added') === "0") {
+        messageForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            sendMessage(messageInput, sendButtonPopover, messagesContainer);
-        }
-    });
+            sendMessage(messageInput, sendButtonPopover);
+        });
 
-    messageInput.addEventListener('focus', () => {
-        scrollToLatestMessage(messagesContainer);
-    });
+        messageInput.addEventListener('input', () => {
+            if (messageInput.value.trim() === '') {
+                gsap.to(sendButton, { x: 5, width: 0, autoAlpha: 0, duration: 0.2 });
+            } else {
+                gsap.to(sendButton, { x: 0, width: 'auto', autoAlpha: 1, duration: 0.2 });
+            }
+        });
+
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage(messageInput, sendButtonPopover);
+            }
+        });
+
+        messageInput.addEventListener('focus', () => {
+            scrollToLatestMessage(messagesContainer);
+        });
+
+        messageForm.setAttribute('data-listener-added', "1");
+    }
 };
 
 export { showMessageDetail };

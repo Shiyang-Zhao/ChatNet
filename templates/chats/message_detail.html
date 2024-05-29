@@ -97,7 +97,7 @@
 
   <!-- Lower part: Message input -->
   <div>
-    <form id="message-form" method="post" enctype="multipart/form-data">
+    <form id="message-form" method="post" enctype="multipart/form-data" data-listener-added="0">
       {% csrf_token %}
       <div class="form-group mb-0 position-relative">
         <textarea id="message-input" class="form-control rounded-0" name="message" rows="3"

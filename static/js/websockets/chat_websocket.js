@@ -57,16 +57,6 @@ const sendChatMessage = (content) => {
     socket.send(JSON.stringify(messageData));
 };
 
-// const createChat = (chat) => {
-//     if (!document.querySelector(`#chat-item-${chatPk}`)) {
-//         console.log(`Creating chat: chat_${chatPk}`);
-//         const chatList = document.querySelector('#chat-list');
-//         chatHtml = ``
-
-//     }
-//     console.log(`chat_${chatPk} created`);
-// }
-
 const displayChatMessage = (chatPk, message) => {
     let messageHtml = '';
     let messagesContainer = document.querySelector(
