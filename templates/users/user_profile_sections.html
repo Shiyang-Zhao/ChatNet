@@ -4,23 +4,23 @@
     <div class="col-md-8">
         <ul class="nav nav-tabs d-flex justify-content-center" id="profileTab" role="tablist"
             style="flex-wrap: nowrap;">
-            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+            <li class="nav-item text-center" style="min-width: 150px;">
                 <a class="nav-link active" id="posts-tab" data-bs-toggle="tab" href="#posts" role="tab"
                     aria-controls="posts" aria-selected="true">Posts</a>
             </li>
-            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+            <li class="nav-item text-center" style="min-width: 150px;">
                 <a class="nav-link" id="comments-tab" data-bs-toggle="tab" href="#comments" role="tab"
                     aria-controls="comments" aria-selected="false">Comments</a>
             </li>
-            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+            <li class="nav-item text-center" style="min-width: 150px;">
                 <a class="nav-link" id="liked-tab" data-bs-toggle="tab" href="#liked" role="tab" aria-controls="liked"
                     aria-selected="false">Liked</a>
             </li>
-            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+            <li class="nav-item text-center" style="min-width: 150px;">
                 <a class="nav-link" id="disliked-tab" data-bs-toggle="tab" href="#disliked" role="tab"
                     aria-controls="disliked" aria-selected="false">Disliked</a>
             </li>
-            <li class="nav-item text-center" style="flex-grow: 0; min-width: 150px;">
+            <li class="nav-item text-center" style="min-width: 150px;">
                 <a class="nav-link" id="commented-tab" data-bs-toggle="tab" href="#commented" role="tab"
                     aria-controls="commented" aria-selected="false">Commented</a>
             </li>
@@ -32,7 +32,7 @@
             <div id="posts" class="tab-pane fade show active" role="tabpanel" aria-labelledby="posts-tab">
                 <div class="row">
                     {% for post in viewed_user.posts.all %}
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
                         <div class="list-group-item"
                             style="border: 1px solid #e1e1e1; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                             <!-- Assume that post.image_url is the path to the image -->

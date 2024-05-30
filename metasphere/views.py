@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from apps.posts.models.post import Post
+from apps.users.models.user import User
+from apps.posts.models.comment import Comment
 from apps.stories.models import Story
 from django.db.models import Q
 from django.utils import timezone
@@ -9,7 +11,11 @@ import re
 
 def home(request):
     user = request.user
-    context = {"active_posts": Post.objects.filter(is_published=True, is_deleted=False)}
+    context = {
+        "active_posts": Post.objects.filter(
+            is_published=True, is_deleted=False
+        ).order_by("-date_posted")
+    }
     if user.is_authenticated:
         active_authors = set()
         if Story.active_stories(user).exists():
@@ -33,15 +39,31 @@ def search(request):
     if not query:
         return redirect("home")
 
-    results = Post.objects.filter(
+    # Search in Posts
+    posts = Post.objects.filter(
         Q(title__icontains=query)
         | Q(content__icontains=query)
         | Q(author__username__icontains=query),
         is_published=True,
     ).distinct()
 
+    # Search in Users
+    users = User.objects.filter(username__icontains=query).distinct()
+
+    # Search in Comments
+    comments = Comment.objects.filter(
+        Q(content__icontains=query) | Q(author__username__icontains=query)
+    ).distinct()
+
     return render(
-        request, "posts/search_results.html", {"results": results, "query": query}
+        request,
+        "layouts/search_results.html",
+        {
+            "result_posts": posts,
+            "result_users": users,
+            "result_comments": comments,
+            "query": query,
+        },
     )
 
 

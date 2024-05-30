@@ -38,12 +38,15 @@
           <a class="dropdown-item" href="#">Save</a>
         </li>
         {% endif %}
-
       </ul>
     </div>
   </div>
-  <p>{{ post.content }}</p>
-  {% include 'posts/post_file_detail.html' with post=post %}
+  <div>
+    <p>{{ post.content }}</p>
+  </div>
+  <div>
+    {% include 'posts/post_file_detail.html' with post=post %}
+  </div>
   <div class="d-flex justify-content-between align-items-center">
 
     {% include 'posts/post_like_and_dislike_button.html' with post=post user=user %}
@@ -57,13 +60,6 @@
       <div class="me-3">
         <i class="fa-solid fa-eye fa-xl me-1"></i>{{ post.views }}
       </div>
-      {% if post.file %}
-      <div>
-        <a href="{{ post.file.url }}" class="btn btn-outline-primary file-download-button" download>
-          <i class="fa-solid fa-download"></i>
-        </a>
-      </div>
-      {% endif %}
     </div>
   </div>
 

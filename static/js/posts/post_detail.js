@@ -49,19 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // commentFormTextarea.addEventListener("input", function () {
-    //     if (commentFormTextarea.value.trim() !== "") {
-    //         gsap.set(commentFormButton, { display: 'block' });
-    //         gsap.to(commentFormButton, { opacity: 1, duration: 0.3 });
-    //     } else {
-    //         gsap.to(commentFormButton, {
-    //             opacity: 0, duration: 0.3, onComplete: function () {
-    //                 gsap.set(commentFormButton, { display: 'none' });
-    //             }
-    //         });
-    //     }
-    // });
-
     commentFormTextarea.addEventListener('input', function () {
         if (commentFormTextarea.value.trim() !== '') {
             gsap.to(commentFormButton, { x: 0, width: 'auto', autoAlpha: 1, duration: 0.2 });
@@ -116,19 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         });
-
-        // textarea.addEventListener("input", function () {
-        //     if (textarea.value.trim() !== "") {
-        //         gsap.set(button, { display: 'block' });
-        //         gsap.to(button, { opacity: 1, duration: 0.3 });
-        //     } else {
-        //         gsap.to(button, {
-        //             opacity: 0, duration: 0.3, onComplete: function () {
-        //                 gsap.set(button, { display: 'none' });
-        //             }
-        //         });
-        //     }
-        // });
 
         textarea.addEventListener('input', function () {
             if (textarea.value.trim() !== '') {

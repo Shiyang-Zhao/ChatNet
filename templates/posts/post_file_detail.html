@@ -1,55 +1,24 @@
+{% load static %}
 {% if post.file %}
-<div class="container mt-3">
-    <div class="card">
-        <div class="card-body p-0">
-            {% if post.file_extension in '.jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp' %}
-            <img src="{{ post.file.url }}" alt="Image" class="img-fluid w-100 mb-2"
-                style="max-height: 400px; object-fit: contain;">
-            {% elif post.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
-            <video controls playsinline preload="auto" class="w-100" style="max-height: 400px; object-fit: contain;">
-                <source src="{{ post.file.url }}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            {% elif post.file_extension == 'pdf' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-primary w-100"
-                style="height: 400px;">Open PDF</a>
-
-            {% elif post.file_extension == 'doc' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-secondary w-100"
-                style="height: 400px;">Open DOC</a>
-
-            {% elif post.file_extension == 'docx' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-secondary w-100"
-                style="height: 400px;">Open DOCX</a>
-
-            {% elif post.file_extension == 'ppt' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-danger w-100"
-                style="height: 400px;">Open PPT</a>
-
-            {% elif post.file_extension == 'pptx' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-danger w-100"
-                style="height: 400px;">Open PPTX</a>
-
-            {% elif post.file_extension == 'xls' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-success w-100"
-                style="height: 400px;">Open XLS</a>
-
-            {% elif post.file_extension == 'xlsx' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-success w-100"
-                style="height: 400px;">Open XLSX</a>
-
-            {% elif post.file_extension == 'txt' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-info w-100" style="height: 400px;">View
-                Text</a>
-
-            {% elif post.file_extension == 'rtf' %}
-            <a href="{{ post.file.url }}" target="_blank" class="btn btn-outline-warning w-100"
-                style="height: 400px;">Open RTF</a>
-
-            {% else %}
-            <a href="{{ post.file.url }}" class="btn btn-outline-dark w-100" style="height: 400px;">Download</a>
-            {% endif %}
-        </div>
-    </div>
+<div class="my-2 rounded-4">
+    {% if post.file_extension in '.jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp' %}
+    <img src="{{ post.file.url }}" alt="Image" class="img-fluid rounded-3 shadow-sm w-100"
+        style="max-height: 400px; object-fit: contain;">
+    {% elif post.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
+    <video controls playsinline preload="auto" class="file-video rounded-3 shadow-sm w-100"
+        style="max-height: 400px; object-fit: contain;">
+        <source src="{{ post.file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    {% else %}
+    <a href="{{ post.file.url }}" target="_blank"
+        class="file-download file-download-button btn btn-outline-secondary rounded-3 shadow-sm w-100 ">
+        <i class="fa-solid fa-file-circle-question"></i>
+    </a>
+    {% endif %}
 </div>
 {% endif %}
+
+{% block javascripts %}
+<script src="{% static 'js/posts/post_file_detail.js' %}"></script>
+{% endblock %}

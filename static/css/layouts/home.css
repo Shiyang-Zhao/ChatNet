@@ -1,8 +1,8 @@
-.post-card {
+.home-card {
     transition: background-color 0.3s ease;
 }
 
-.post-card:hover {
+.home-card:hover {
     background-color: #f0f0f0;
     cursor: pointer;
 }

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.post-card').forEach(card => {
+    document.querySelectorAll('.home-card').forEach(card => {
         card.addEventListener('click', function () {
             window.location.href = this.getAttribute('data-href');
         });

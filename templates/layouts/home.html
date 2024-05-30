@@ -11,12 +11,12 @@
   <div class="mb-3">
     {% if user.is_authenticated %}
     {% if active_authors %}
-    <div class="d-flex justify-content-start align-items-center">
+    <div class="d-flex justify-content-start align-items-center ms-5 me-5 p-2">
       {% for author in active_authors %}
       <div id="story-container-{{ author.username }}" class="story-container me-2">
         {% if author.profile.active_stories %}
-        <button type="button" class="btn" style="padding: 0; background: none; border: none; outline: none;"
-          data-bs-toggle="modal" data-bs-target="#storyModal-{{ author.username }}">
+        <button type="button" class="btn p-0 bg-0 border-0" data-bs-toggle="modal"
+          data-bs-target="#storyModal-{{ author.username }}">
           <img src="{{ author.profile.profile_image.url }}" alt="{{ author.username }}'s Profile Image"
             class="rounded-circle img-thumbnail"
             style="width: 70px; height: 70px; object-fit: cover; border-radius: 50%; border: 2px solid rgba(252, 29, 29, 0.8);">
@@ -33,58 +33,62 @@
     {% endif %}
     {% endif %}
   </div>
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    {% for post in active_posts %}
+    <div id="post-{{ post.pk }}" class="card mb-4 shadow-sm home-card w-75" data-href="{% url 'post-detail' post.pk %}">
+      <div class="card-body">
+        <div class="card-subtitle d-flex justify-content-between align-items-center text-muted">
+          <div>
+            <a href="{% url 'user-profile-detail' username=post.author.username %}"
+              class="card-author text-decoration-none text-reset">
+              <img src="{{ post.author.profile.profile_image.url }}" class="rounded-circle me-1"
+                style="width: 35px; height: 35px; object-fit: cover;" alt="{{ post.author.username }}'s profile image">
+              <span class="text-dark">{{ post.author.username }}</span>
+            </a>
+            - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
+          </div>
+          <div class="btn-group dropstart">
+            <button class="post-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
+              id="post-dropdown-{{ post.pk }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-ellipsis"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="post-dropdown-{{ post.pk }}">
+              {% if post.author == user %}
+              <li>
+                <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item">Delete</button>
+                </form>
+              </li>
+              {% endif %}
+              <li>
+                <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
+              </li>
+            </ul>
+          </div>
+        </div>
 
-  {% for post in active_posts %}
-  <div class="card mb-4 shadow-sm post-card" id="post-{{ post.pk }}" data-href="{% url 'post-detail' post.pk %}">
-    <div class="card-body">
-      <div class="card-subtitle d-flex justify-content-between align-items-center text-muted">
         <div>
-          By <a href="{% url 'user-profile-detail' username=post.author.username %}"
-            class="text-decoration-none card-author">
-            {{ post.author }}
-          </a> - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
+          <h6 class="card-title">{{ post.title }}</h6>
+          {% if post.file %}
+          {% include 'posts/post_file_detail.html' with post=post %}
+          {% else %}
+          <p class="card-text text-muted">{{ post.content|truncatewords:50 }}</p>
+          {% endif %}
         </div>
-        <div class="btn-group dropstart">
-          <button class="post-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0" id="post-dropdown-{{ post.pk }}"
-            type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa-solid fa-ellipsis"></i>
-          </button>
-          <ul class="dropdown-menu" aria-labelledby="post-dropdown-{{ post.pk }}">
-            {% if post.author == user %}
-            <li>
-              <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="dropdown-item">Delete</button>
-              </form>
-            </li>
-            {% endif %}
-            <li>
-              <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between align-items-center">
-        <h3 class="card-title">{{ post.title }}</h3>
-        {% if post.file %}
-        <a href="{{ post.file.url }}" class="btn btn-sm btn-outline-primary file-download-button" download>
-          Download File
-        </a>
-        {% endif %}
-      </div>
 
-      <p class="card-text">{{ post.content|truncatewords:50 }}</p>
-      <div class="d-flex justify-content-between align-items-center">
-        {% include 'posts/post_like_and_dislike_button.html' with post=post user=user %}
-        <button class="btn btn-outline-secondary">
-          <i class="fa-solid fa-comments me-1"></i>{{ post.comments.count }}
-        </button>
+        <div class="d-flex justify-content-between align-items-center">
+          {% include 'posts/post_like_and_dislike_button.html' with post=post user=user %}
+          <button class="btn btn-outline-secondary">
+            <i class="fa-solid fa-comments me-1"></i>{{ post.comments.count }}
+          </button>
+        </div>
       </div>
     </div>
+    {% empty %}
+    <p class="text-center text-muted">No posts found</p>
+    {% endfor %}
   </div>
-  {% empty %}
-  <p class="text-center text-muted">No posts found</p>
-  {% endfor %}
 </div>
 {% endblock %}
 

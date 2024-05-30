@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    document.querySelectorAll('.card-author, .file-download-button').forEach(element => {
+    document.querySelectorAll('.card-author, .file-download-button, .post-toggle-btn').forEach(element => {
         element.addEventListener('click', function (event) {
             event.stopPropagation();
         });
