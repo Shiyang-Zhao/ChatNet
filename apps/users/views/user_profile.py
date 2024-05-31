@@ -23,9 +23,6 @@ class UserAndProfileDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["is_following"] = self.request.user.profile.is_following(
-            self.object.profile
-        )
         context["active_stories"] = Story.active_stories(self.object)
         return context
 

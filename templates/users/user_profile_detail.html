@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load profile_tags %}
+
 {% block title %}{{viewed_user.username }}'s Profile{% endblock %}
 
 {% block content %}
+{% check_profile_follow_status user viewed_user as is_following %}
 <div class="container mt-5 d-flex flex-column align-items-center">
   <div class="profile-header d-flex align-items-ceneter">
     {% if viewed_user.profile.profile_image %}
@@ -68,7 +71,6 @@
     </form>
     {% endif %}
   </div>
-
 
   {% include 'users/user_profile_sections.html' with viewed_user=viewed_user %}
 </div>

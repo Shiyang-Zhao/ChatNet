@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
             button.classList.remove("btn-primary", "follow");
             button.classList.add("btn-secondary", "following");
             button.textContent = "Following";
-            // Update the form action to unfollow
             form.action = form.getAttribute("data-unfollow-url");
           }
         })

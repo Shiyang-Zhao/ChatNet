@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load profile_tags %}
 
 {% block title %}{{ query }} - Search Results{% endblock %}
 
@@ -95,13 +96,19 @@
     <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
       <div class="d-flex flex-column justify-content-center align-items-center">
         {% if result_users %}
-        {% for user in result_users %}
-        <div class="list-group-item border-0 mb-4 p-3 shadow-sm result-card w-50">
-          <a href="{% url 'user-profile-detail' username=user.username %}"
-            class="card-author text-decoration-none text-reset">
-            <img src="{{ user.profile.profile_image.url }}" class="rounded-circle me-1"
-              style="width: 35px; height: 35px; object-fit: cover;" alt="{{ user.username }}'s profile image">
-            <span class="text-dark">{{ user.username }}</span>
+        {% for result_user in result_users %}
+        <div class="border mb-4 p-3 shadow-sm result-card w-50">
+          <a href="{% url 'user-profile-detail' username=result_user.username %}"
+            class="card-author d-flex align-items-center text-decoration-none text-reset">
+            <img src="{{ result_user.profile.profile_image.url }}" class="rounded-circle me-1"
+              style="width: 35px; height: 35px; object-fit: cover;" alt="{{ result_user.username }}'s profile image">
+            <div class="d-flex flex-column">
+              <span class="text-dark">{{ result_user.username }}</span>
+              {% check_profile_follow_status user result_user as is_following %}
+              {% if is_following %}
+              <small class="text-muted">Following</small>
+              {% endif %}
+            </div>
           </a>
         </div>
         {% endfor %}
@@ -115,16 +122,16 @@
     <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
       <div class="d-flex flex-column justify-content-center align-items-center">
         {% if result_comments %}
-        {% for comment in result_comments %}
-        <div class="list-group-item border-0 mb-4 p-3 shadow-sm result-card w-50">
-          <a href="{% url 'comment-detail' comment.post.pk comment.pk %}"
+        {% for result_comment in result_comments %}
+        <div class="border mb-4 p-3 shadow-sm result-card w-50">
+          <a href="{% url 'comment-detail' post_pk=result_comment.post.pk pk=result_comment.pk %}"
             class="d-flex flex-column text-primary text-decoration-none text-reset">
-            <span class="text-muted">Title: {{ comment.post.title }}</span>
+            <span class="text-muted">Title: {{ result_comment.post.title }}</span>
             <span class="text-muted">
-              <strong class="text-dark">{{ comment.author.username }}</strong>
-              commented on {{ comment.date_posted|date:"M d, Y H:i" }}
+              <strong class="text-dark">{{ result_comment.author.username }}</strong>
+              commented on {{ result_comment.date_posted|date:"M d, Y H:i" }}
             </span>
-            <p class="mb-1 text-muted">{{ comment.content }}</p>
+            <p class="mb-1 text-muted">Comment: {{ result_comment.content }}</p>
           </a>
         </div>
         {% endfor %}

@@ -20,6 +20,18 @@ class PostDetailView(DetailView):
     model = Post
     template_name = "posts/post_detail.html"
 
+    def get(self, request, *args, **kwargs):
+        self.object = get_object_or_404(Post, pk=kwargs["pk"])
+
+        session_key = f"viewed_post_{self.object.pk}"
+        if not request.session.get(session_key, False):
+            self.object.views += 1
+            self.object.save(update_fields=["views"])
+            request.session[session_key] = True
+
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post

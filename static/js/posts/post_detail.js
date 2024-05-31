@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
             gsap.fromTo(targetComment,
                 { backgroundColor: "#ffffff" }, // Start color (white)
                 {
-                    backgroundColor: "#f0f0f0", // Blink color
+                    backgroundColor: "#aaaaaa", // Blink color
                     repeat: 5,
                     yoyo: true,
                     duration: 0.8,
