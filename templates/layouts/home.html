@@ -33,6 +33,26 @@
     {% endif %}
     {% endif %}
   </div>
+
+  <div class="d-flex align-items-center mb-3">
+    <span class="text-muted me-2">Sort By:</span>
+    <select id="sortSelect" class="form-select form-select-sm rounded-pill text-dark" style="width: fit-content;">
+      {% for key, name in sort_options.items %}
+      {% if request.GET.sort == key %}
+      {% with selected='selected' %}
+      <option value="{% url 'sort-posts' %}?sort={{ key }}" {{ selected }}>
+        {{ name }}
+      </option>
+      {% endwith %}
+      {% else %}
+      <option value="{% url 'sort-posts' %}?sort={{ key }}">
+        {{ name }}
+      </option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+
   <div class="d-flex flex-column justify-content-center align-items-center">
     {% for post in active_posts %}
     <div id="post-{{ post.pk }}" class="card mb-4 shadow-sm home-card w-75" data-href="{% url 'post-detail' post.pk %}">

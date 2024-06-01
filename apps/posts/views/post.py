@@ -21,7 +21,7 @@ class PostDetailView(DetailView):
     template_name = "posts/post_detail.html"
 
     def get(self, request, *args, **kwargs):
-        self.object = get_object_or_404(Post, pk=kwargs["pk"])
+        self.object = get_object_or_404(Post, pk=kwargs.get("pk"))
 
         session_key = f"viewed_post_{self.object.pk}"
         if not request.session.get(session_key, False):

@@ -6,6 +6,7 @@ from apps.posts.models.comment import Comment
 from apps.stories.models import Story
 from django.db.models import Q
 from django.utils import timezone
+from django.db.models import Count
 import re
 
 
@@ -47,10 +48,8 @@ def search(request):
         is_published=True,
     ).distinct()
 
-    # Search in Users
     users = User.objects.filter(username__icontains=query).distinct()
 
-    # Search in Comments
     comments = Comment.objects.filter(
         Q(content__icontains=query) | Q(author__username__icontains=query)
     ).distinct()
@@ -65,6 +64,53 @@ def search(request):
             "query": query,
         },
     )
+
+
+def sort(request):
+    # Define the base query for posts
+    base_query = Post.objects.filter(is_published=True, is_deleted=False)
+
+    # Define the sort options and their corresponding query annotations and orders
+    sort_options = {
+        "new": ("New", "-date_posted"),
+        "controversial": (
+            "Controversial",
+            "comment_count",
+            Count("comments"),
+            "-comment_count",
+            "-date_posted",
+        ),
+        "old": ("Old", "date_posted"),
+        "top": (
+            "Top",
+            "net_likes",
+            Count("liked_by", distinct=True) - Count("disliked_by", distinct=True),
+            "-net_likes",
+            "-date_posted",
+        ),
+    }
+
+    # Get the sorting method from the request, default to 'new'
+    sort_method = request.GET.get("sort", "new")
+    sort_method = sort_method if sort_method in sort_options else "new"
+
+    # Prepare query based on the selected sort option
+    sort_params = sort_options[sort_method]
+    if sort_method in ["controversial", "top"]:
+        # Annotate and order by the annotation
+        active_posts = base_query.annotate(**{sort_params[1]: sort_params[2]}).order_by(
+            sort_params[3], sort_params[4]
+        )
+    else:
+        # No annotation needed, just order by the provided fields
+        active_posts = base_query.order_by(sort_params[1])
+
+    context = {
+        "active_posts": active_posts,
+        "sort_options": {key: val[0] for key, val in sort_options.items()},
+    }
+
+    return render(request, "layouts/home.html", context)
 
 
 @login_required
