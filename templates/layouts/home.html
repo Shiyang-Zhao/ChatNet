@@ -39,11 +39,9 @@
     <select id="sortSelect" class="form-select form-select-sm rounded-pill text-dark" style="width: fit-content;">
       {% for key, name in sort_options.items %}
       {% if request.GET.sort == key %}
-      {% with selected='selected' %}
-      <option value="{% url 'sort-posts' %}?sort={{ key }}" {{ selected }}>
+      <option value="{% url 'sort-posts' %}?sort={{ key }}" selected>
         {{ name }}
       </option>
-      {% endwith %}
       {% else %}
       <option value="{% url 'sort-posts' %}?sort={{ key }}">
         {{ name }}

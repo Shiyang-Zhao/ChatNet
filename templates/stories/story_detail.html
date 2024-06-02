@@ -48,7 +48,7 @@
                     {% if story.file %}
                     {% if story.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
                     <div class="video-container d-flex flex-column align-items-center justify-content-center">
-                        <video class="img-fluid mb-3" autoplay muted preload="auto"
+                        <video class="img-fluid mb-3" preload="auto"
                             style="max-height: 400px; object-fit: contain;">
                             <source src="{{ story.file.url }}" type="video/mp4">
                             Your browser does not support the video tag.

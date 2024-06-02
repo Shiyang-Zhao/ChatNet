@@ -43,7 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.addEventListener('hidden.bs.modal', () => {
                 clearTimeout(storyTimer);
                 resetProgressBars();
-                stories.forEach(story => story.style.display = 'none');
+                stories.forEach(story => {
+                    story.style.display = 'none';
+                    const video = story.querySelector('video');
+                    if (video) {
+                        video.pause();
+                        video.currentTime = 0; // Reset video to start
+                    }
+                });
                 if (currentStoryIndex >= stories.length - 1) {
                     currentStoryIndex = 0;
                     stories[0].style.display = 'block';
@@ -54,6 +61,12 @@ document.addEventListener('DOMContentLoaded', () => {
         function navigateStory(direction) {
             let newIndex = currentStoryIndex + direction;
             if (newIndex >= 0 && newIndex < stories.length) {
+                // Pause the current video if it exists
+                const currentVideo = stories[currentStoryIndex].querySelector('video');
+                if (currentVideo) {
+                    currentVideo.pause();
+                }
+
                 clearTimeout(storyTimer);
                 currentStoryIndex = newIndex;
                 startStory(currentStoryIndex);
@@ -76,22 +89,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function startStory(index) {
             stories.forEach((story, idx) => {
-                story.style.display = idx === currentStoryIndex ? 'block' : 'none';
+                story.style.display = idx === index ? 'block' : 'none';
+                if (idx === index) {
+                    const video = story.querySelector('video');
+                    if (video) {
+                        video.currentTime = 0;
+                        video.play().catch(error => {
+                            console.log("Error auto-playing video:", error);
+                            video.muted = true; // Handle the case where autoplay fails
+                            video.play(); // Try playing again with mute enabled
+                        });
+                    }
+                }
             });
-            stories[index].style.display = 'block';
 
-            let video = stories[index].querySelector('video');
-            if (video) {
-                const videoStoryDuration = video.duration ? video.duration * 1000 : defaultStoryDuration;
-                resetProgressBars();
-                animateProgressBar(index, videoStoryDuration);
-                startStoryTimer(index, videoStoryDuration);
-            } else {
-                resetProgressBars();
-                animateProgressBar(index, defaultStoryDuration);
-                startStoryTimer(index, defaultStoryDuration);
-            }
+            const video = stories[index].querySelector('video');
+            const duration = video && video.duration ? video.duration * 1000 : defaultStoryDuration;
+
+            resetProgressBars();
+            animateProgressBar(index, duration);
+            startStoryTimer(index, duration);
         }
+
 
         function startStoryTimer(index, duration) {
             clearTimeout(storyTimer);
