@@ -1,9 +1,9 @@
 .home-card,
-.sort-toggle-btn {
+.sort-select {
     transition: background-color 0.3s ease;
 }
 
-.sort-toggle-btn:hover,
+.sort-select:hover,
 .home-card:hover {
     background-color: #f0f0f0;
     cursor: pointer;

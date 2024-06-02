@@ -100,7 +100,7 @@
     <form id="message-form" method="post" enctype="multipart/form-data" data-listener-added="0">
       {% csrf_token %}
       <div class="form-group mb-0 position-relative">
-        <textarea id="message-input" class="form-control rounded-0" name="message" rows="3"
+        <textarea id="message-input" class="form-control rounded-0 shadow-none" name="message" rows="3"
           placeholder="Type your message here..." style="resize: none;" required></textarea>
         <button id="send-button" type="submit" class="btn btn-primary" data-bs-toggle="popover"
           style="position: absolute; right: 7px; bottom: 5px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">

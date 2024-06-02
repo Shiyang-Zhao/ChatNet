@@ -1,6 +1,5 @@
 from django.urls import path
 from .views.post import (
-    # PostListView,
     PostDetailView,
     PostCreateView,
     PostUpdateView,
@@ -8,6 +7,8 @@ from .views.post import (
     PostSoftDeleteView,
     LikePostView,
     DislikePostView,
+    SavePostView,
+    UnsavePostView,
 )
 
 from .views.comment import (
@@ -21,7 +22,6 @@ from .views.comment import (
 )
 
 urlpatterns = [
-    # path("", PostListView.as_view(), name="post-list"),
     path("post/create/", PostCreateView.as_view(), name="post-create"),
     path("post/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
     path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
@@ -37,6 +37,8 @@ urlpatterns = [
     ),
     path("post/<int:pk>/like/", LikePostView.as_view(), name="like-post"),
     path("post/<int:pk>/dislike/", DislikePostView.as_view(), name="dislike-post"),
+    path("post/<int:pk>/save/", SavePostView.as_view(), name="save-post"),
+    path("post/<int:pk>/unsave/", UnsavePostView.as_view(), name="unsave-post"),
     path(
         "post/<int:post_pk>/comment/<int:pk>/",
         CommentDetailView.as_view(),

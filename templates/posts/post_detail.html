@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load post_tags %}
+
 {% block title %}{{ post.title }}{% endblock %}
 {% block content %}
 
@@ -23,6 +25,24 @@
       <i id="post-dropdown-{{ post.pk }}" class="fa-solid fa-ellipsis fa-xl" style="color: #000000; cursor: pointer;"
         data-bs-toggle="dropdown" aria-expanded="false"></i>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="post-dropdown-{{ post.pk }}">
+        {% check_post_save_status post user as is_user_saved_post %}
+        {% if is_user_saved_post %}
+        <li>
+          <form method="post" action="{% url 'unsave-post' pk=post.pk %}" class="save-unsave-form"
+            data-save-url="{% url 'save-post' pk=post.pk %}" data-unsave-url="{% url 'unsave-post' pk=post.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-item saved">Saved</button>
+          </form>
+        </li>
+        {% else %}
+        <li>
+          <form method="post" action="{% url 'save-post' pk=post.pk %}" class="save-unsave-form"
+            data-save-url="{% url 'save-post' pk=post.pk %}" data-unsave-url="{% url 'unsave-post' pk=post.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-item save">Save</button>
+          </form>
+        </li>
+        {% endif %}
         {% if user == post.author %}
         <li>
           <a class="dropdown-item" href="{% url 'post-update' pk=post.pk %}">Edit</a>
@@ -32,10 +52,6 @@
             {% csrf_token %}
             <button type="submit" class="dropdown-item">Delete</button>
           </form>
-        </li>
-        {% else %}
-        <li>
-          <a class="dropdown-item" href="#">Save</a>
         </li>
         {% endif %}
       </ul>
@@ -69,8 +85,8 @@
       {% csrf_token %}
       <div id="comment-form-container" style="position: relative; min-height: fit-content;">
         <div class="form-group">
-          <textarea id="id_content" name="content" cols="40" rows="3" class="form-control" style="height: 40px;"
-            placeholder="Add a comment" required></textarea>
+          <textarea id="id_content" name="content" cols="40" rows="3" class="form-control shadow-none"
+            style="height: 40px;" placeholder="Add a comment" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
           style="position: absolute; bottom: 3px; right: 10px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">
@@ -144,7 +160,7 @@
                   {% csrf_token %}
                   <div class="reply-form-container" style="position: relative; min-height: fit-content;">
                     <div class="form-group">
-                      <textarea id="id_content" name="content" cols="40" rows="3" class="form-control"
+                      <textarea id="id_content" name="content" cols="40" rows="3" class="form-control shadow-none"
                         style="height: 40px;" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"

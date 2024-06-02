@@ -119,3 +119,17 @@ class DislikePostView(LoginRequiredMixin, View):
                 "like_status": like_status,
             }
         )
+
+
+class SavePostView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
+        post.save_post(request.user)  # Using the model method to save the post
+        return redirect("post-detail", pk=post.pk)
+
+
+class UnsavePostView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
+        post.unsave_post(request.user)  # Using the model method to unsave the post
+        return redirect("post-detail", pk=post.pk)

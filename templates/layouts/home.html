@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load post_tags %}
 {% block title %}Metasphere{% endblock %}
 
 {% block styles %}
@@ -11,7 +12,7 @@
   <div class="mb-3">
     {% if user.is_authenticated %}
     {% if active_authors %}
-    <div class="d-flex justify-content-start align-items-center ms-5 me-5 p-2">
+    <div class="d-flex justify-content-start align-items-center ms-5 me-5 p-0">
       {% for author in active_authors %}
       <div id="story-container-{{ author.username }}" class="story-container me-2">
         {% if author.profile.active_stories %}
@@ -34,9 +35,10 @@
     {% endif %}
   </div>
 
-  <div class="d-flex align-items-center mb-3">
+  <div class="d-flex align-items-baseline mb-2">
     <span class="text-muted me-2">Sort By:</span>
-    <select id="sortSelect" class="form-select form-select-sm rounded-pill text-dark" style="width: fit-content;">
+    <select id="sortSelect" class="sort-select form-select form-select-sm rounded-pill text-dark border-0 shadow-none"
+      style="width: fit-content;">
       {% for key, name in sort_options.items %}
       {% if request.GET.sort == key %}
       <option value="{% url 'sort-posts' %}?sort={{ key }}" selected>
@@ -66,12 +68,33 @@
             - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
           </div>
           <div class="btn-group dropstart">
-            <button class="post-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
-              id="post-dropdown-{{ post.pk }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="dropdown-btn btn btn-link text-dark rounded-pill pt-0 pb-0" id="post-dropdown-{{ post.pk }}"
+              type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fa-solid fa-ellipsis"></i>
             </button>
             <ul class="dropdown-menu" aria-labelledby="post-dropdown-{{ post.pk }}">
+              {% check_post_save_status post user as is_user_saved_post %}
+              {% if is_user_saved_post %}
+              <li>
+                <form method="post" action="{% url 'unsave-post' pk=post.pk %}" class="save-unsave-form"
+                  data-save-url="{% url 'save-post' pk=post.pk %}" data-unsave-url="{% url 'unsave-post' pk=post.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item saved">Saved</button>
+                </form>
+              </li>
+              {% else %}
+              <li>
+                <form method="post" action="{% url 'save-post' pk=post.pk %}" class="save-unsave-form"
+                  data-save-url="{% url 'save-post' pk=post.pk %}" data-unsave-url="{% url 'unsave-post' pk=post.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="dropdown-item save">Save</button>
+                </form>
+              </li>
+              {% endif %}
               {% if post.author == user %}
+              <li>
+                <a class="dropdown-item" href="{% url 'post-update' pk=post.pk %}">Edit</a>
+              </li>
               <li>
                 <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
                   {% csrf_token %}
@@ -79,9 +102,6 @@
                 </form>
               </li>
               {% endif %}
-              <li>
-                <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
-              </li>
             </ul>
           </div>
         </div>
