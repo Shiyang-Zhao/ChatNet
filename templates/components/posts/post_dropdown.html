@@ -1,0 +1,41 @@
+{% load post_tags %}
+
+<div class="btn-group dropstart">
+    <button class="dropdown-btn btn btn-link text-dark rounded-pill pt-0 pb-0" id="post-dropdown-{{ post.pk }}"
+        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-ellipsis"></i>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="post-dropdown-{{ post.pk }}">
+        {% check_post_save_status post user as is_user_saved_post %}
+        {% if is_user_saved_post %}
+        <li>
+            <form method="post" action="{% url 'unsave-post' pk=post.pk %}" class="save-unsave-form"
+                data-save-url="{% url 'save-post' pk=post.pk %}" data-unsave-url="{% url 'unsave-post' pk=post.pk %}"
+                data-listener-added="0">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item saved">Saved</button>
+            </form>
+        </li>
+        {% else %}
+        <li>
+            <form method="post" action="{% url 'save-post' pk=post.pk %}" class="save-unsave-form"
+                data-save-url="{% url 'save-post' pk=post.pk %}" data-unsave-url="{% url 'unsave-post' pk=post.pk %}"
+                data-listener-added="0">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item save">Save</button>
+            </form>
+        </li>
+        {% endif %}
+        {% if post.author == user %}
+        <li>
+            <a class="dropdown-item" href="{% url 'post-update' pk=post.pk %}">Edit</a>
+        </li>
+        <li>
+            <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item">Delete</button>
+            </form>
+        </li>
+        {% endif %}
+    </ul>
+</div>

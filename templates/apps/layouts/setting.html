@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="mb-4">Settings</h4>
+            <ul class="nav flex-column nav-pills">
+                <li class="nav-item mb-2">
+                    <a class="nav-link active" href="#appearance" data-bs-toggle="pill">Appearance</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#account" data-bs-toggle="pill">Account</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link" href="#profile" data-bs-toggle="pill">Profile</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="tab-content">
+                <!-- Appearance Section -->
+                <div id="appearance" class="tab-pane fade show active">
+                    <h3 class="mb-4">Appearance Settings</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="theme">Theme:</label>
+                            <select class="form-control" id="theme" name="theme">
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Appearance Settings</button>
+                    </form>
+                </div>
+
+                <!-- Account Section -->
+                <div id="account" class="tab-pane fade">
+                    <h3 class="mb-4">Account Settings</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Account Settings</button>
+                    </form>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profile" class="tab-pane fade">
+                    <h3 class="mb-4">Profile Settings</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" name="username">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="bio">Bio:</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Profile Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{% static 'apps/js/layouts/setting.js' %}"></script>
+{% endblock %}

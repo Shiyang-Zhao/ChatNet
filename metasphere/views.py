@@ -7,6 +7,9 @@ from apps.stories.models import Story
 from django.db.models import Q
 from django.utils import timezone
 from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 import re
 
 
@@ -34,12 +37,38 @@ def home(request):
     sort_method = request.GET.get("sort", "new")
     sort_method = sort_method if sort_method in sort_options else "new"
     sort_params = sort_options[sort_method]
+
+    # Initialize the paginator
+    page = request.GET.get("page", 1)
+    per_page = 3  # Adjust the number of posts per page to your needs
+
     if sort_method in ["controversial", "top"]:
         active_posts = base_query.annotate(**{sort_params[1]: sort_params[2]}).order_by(
             sort_params[3], sort_params[4]
         )
     else:
         active_posts = base_query.order_by(sort_params[1])
+
+    paginator = Paginator(active_posts, per_page)
+    try:
+        active_posts = paginator.page(page)
+    except PageNotAnInteger:
+        active_posts = paginator.page(1)
+    except EmptyPage:
+        active_posts = paginator.page(paginator.num_pages)
+        has_more = False  # Indicates there are no more pages
+    else:
+        has_more = active_posts.has_next()  # Check if there is a next page
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        posts_html = "".join(
+            render_to_string(
+                "components/posts/post_item.html", {"post": post}, request=request
+            )
+            for post in active_posts
+        )
+        return JsonResponse({"html": posts_html, "has_more": has_more})
+
     context = {
         "active_posts": active_posts,
         "sort_options": {key: val[0] for key, val in sort_options.items()},
@@ -54,7 +83,7 @@ def home(request):
                 active_authors.add(followed_user.user)
         context["active_authors"] = active_authors
 
-    return render(request, "layouts/home.html", context)
+    return render(request, "apps/layouts/home.html", context)
 
 
 @login_required
@@ -83,7 +112,7 @@ def search(request):
 
     return render(
         request,
-        "layouts/search_results.html",
+        "apps/layouts/search_results.html",
         {
             "result_posts": posts,
             "result_users": users,
@@ -95,7 +124,7 @@ def search(request):
 
 @login_required
 def setting(request):
-    return render(request, "layouts/setting.html")
+    return render(request, "apps/layouts/setting.html")
 
 
 @login_required
@@ -111,4 +140,4 @@ def history(request):
             date_expired__lt=timezone.now(),
         ),
     }
-    return render(request, "layouts/history.html", context)
+    return render(request, "apps/layouts/history.html", context)

@@ -20,7 +20,7 @@
 
 <body data-username="{{ user.username }}">
   <!-- Navigation Bar -->
-  {% include "layouts/header.html" %}
+  {% include "components/layouts/header.html" %}
   <div class="main">
     {% block content %}
     <!-- Child templates can insert their content here -->
@@ -32,7 +32,11 @@
   {% endblock %}
 
   {% if user.is_authenticated %}
-  <script type="module" src="{% static 'js/base/base.js' %}"></script>
+  <script type="module" src="{% static 'apps/js/base/base.js' %}"></script>
+  <script type="module" src="{% static 'apps/js/stories/story_detail.js' %}"></script>
+  <script type="module" src="{% static 'components/js/posts/post_like_and_dislike_button.js' %}"></script>
+  <script type="module" src="{% static 'components/js/posts/post_file_detail.js' %}"></script>
+  <script type="module" src="{% static 'components/js/posts/comment_like_and_dislike_button.js' %}"></script>
   {% endif %}
 
   <script src="https://unpkg.com/@popperjs/core@2"></script>

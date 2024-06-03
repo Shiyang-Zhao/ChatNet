@@ -1,0 +1,92 @@
+{% load static %}
+{% if active_stories %}
+<button type="button" class="btn" style="padding: 0; background: none; border: none; outline: none;"
+    data-bs-toggle="modal" data-bs-target="#storyModal-{{ viewed_user.username }}">
+    <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
+        class="rounded-circle img-thumbnail position-absolute top-0 start-0"
+        style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(252, 29, 29, 0.8);">
+</button>
+{% else %}
+<img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
+    class="rounded-circle img-thumbnail position-absolute top-0 start-0"
+    style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(116, 116, 116, 0.8)">
+{% endif %}
+<div class="profile-modal modal fade" id="storyModal-{{ viewed_user.username }}" tabindex="-1" role="dialog"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body bg-black" style="position: relative;">
+                <div id="progress-container" class="progress"
+                    style="height: 4px; background-color: transparent; overflow: hidden;">
+                    {% for story in active_stories %}
+                    <div class="progress-bar rounded" id="progress-{{ forloop.counter }}" role="progressbar"></div>
+                    {% endfor %}
+                </div>
+                {% for story in active_stories %}
+                <div id="story-{{ story.pk }}" class="story-content mt-3 position-relative">
+                    <div class="overlay-content position-absolute d-flex align-items-center justify-content-between w-100"
+                        style="z-index: 10;">
+                        <a href="{% url 'user-profile-detail' username=user.username %}"
+                            class="text-reset text-decoration-none d-flex align-items-center">
+                            <img src="{{ viewed_user.profile.profile_image.url }}"
+                                alt="{{ user.username }}'s Profile Image" class="rounded-circle img-fluid"
+                                style="width: 35px; height: 35px; object-fit: cover; margin-right: 5px;">
+                            <span class="text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
+                                {{ viewed_user.username }} - {{ story.date_posted|date:"F j, Y, G:i" }}
+                            </span>
+                        </a>
+                        <div class="dropdown">
+                            <i class="fa-solid fa-ellipsis fa-xl fa-rotate-90" style="color: #ffffff; cursor: pointer;"
+                                id="story-dropdown-{{ story.pk }}" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="story-dropdown-{{ story.pk }}">
+                                <li><a class="dropdown-item" href="#">Edit</a></li>
+                                <li><a class="dropdown-item" href="#">Save</a></li>
+                                <li>
+                                    <form method="post" action="{% url 'story-archive' pk=story.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item">Archive</button>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form method="post" action="{% url 'story-delete' pk=story.pk %}"
+                                        style="margin: 0;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item">Delete</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% if story.file %}
+                    {% if story.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
+                    <div class="video-container d-flex flex-column align-items-center justify-content-center">
+                        <video class="img-fluid mb-3" preload="auto" style="max-height: 400px; object-fit: contain;">
+                            <source src="{{ story.file.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {% else %}
+                    <div class="image-container d-flex flex-column align-items-center justify-content-center">
+                        <img src="{{ story.file.url }}" alt="Story image" class="img-fluid mb-3"
+                            style="max-height: 400px; object-fit: contain;">
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                {% empty %}
+                <p>You don't have any story - <a href="{% url 'story-create' %}">Create</a></p>
+                {% endfor %}
+                <div class="left-area"
+                    style="position: absolute; left: 0; top: 0; bottom: 0; width: 50%; cursor: pointer; pointer-events: auto; z-index: 5;">
+                </div>
+                <div class="right-area"
+                    style="position: absolute; right: 0; top: 0; bottom: 0; width: 50%; cursor: pointer; pointer-events: auto; z-index: 5;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- {% block javascripts %}
+<script type="module" src="{% static 'apps/js/stories/story_detail.js' %}"></script>
+{% endblock %} -->

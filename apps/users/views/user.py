@@ -9,7 +9,7 @@ User = get_user_model()
 
 
 class UserRegisterView(FormView):
-    template_name = "users/signup.html"
+    template_name = "apps/users/signup.html"
     form_class = UserRegisterForm
 
     def get_success_url(self):
@@ -24,7 +24,7 @@ class UserRegisterView(FormView):
 
 class UserLoginView(LoginView):
     form_class = UserLoginForm
-    template_name = "users/login.html"
+    template_name = "apps/users/login.html"
     redirect_authenticated_user = True
 
     def get_success_url(self):

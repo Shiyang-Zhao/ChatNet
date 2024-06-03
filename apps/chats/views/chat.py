@@ -17,7 +17,7 @@ User = get_user_model()
 
 
 class ChatListAndDetailView(View):
-    template_name = "chats/chat_detail.html"
+    template_name = "apps/chats/chat_detail.html"
 
     def get(self, request, pk=None):
         context = {

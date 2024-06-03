@@ -16,7 +16,7 @@ from django.utils import timezone
 
 class CommentDetailView(DetailView):
     model = Comment
-    template_name = "posts/post_detail.html"
+    template_name = "apps/posts/post_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -27,7 +27,7 @@ class CommentDetailView(DetailView):
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentCreateForm
-    template_name = "posts/post_detail.html"
+    template_name = "apps/posts/post_detail.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -38,7 +38,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 class ReplyCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = ReplyCreateForm
-    template_name = "posts/post_detail.html"
+    template_name = "apps/posts/post_detail.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user

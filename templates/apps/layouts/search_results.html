@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load profile_tags %}
+
+{% block title %}{{ query }} - Search Results{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'apps/css/layouts/search_results.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Search Results for "{{ query }}"</h2>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs d-flex justify-content-center" id="searchTabs" role="tablist">
+    <li class="nav-item text-center" style="min-width: 200px;">
+      <a class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab"
+        aria-controls="posts" aria-selected="true">Posts</a>
+    </li>
+    <li class="nav-item text-center" style="min-width: 200px;">
+      <a class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab"
+        aria-controls="users" aria-selected="false">Users</a>
+    </li>
+    <li class="nav-item text-center" style="min-width: 200px;">
+      <a class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments" type="button" role="tab"
+        aria-controls="comments" aria-selected="false">Comments</a>
+    </li>
+  </ul>
+
+  <!-- Post Section -->
+  <div class="tab-content p-3 mt-3">
+    <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        {% if result_posts %}
+        {% for post in result_posts %}
+        <div id="post-{{ post.pk }}" class="card mb-4 shadow-sm result-card w-50"
+          data-href="{% url 'post-detail' post.pk %}">
+          <div class="card-body">
+            <div class="card-subtitle d-flex justify-content-between align-items-center text-muted">
+              <div>
+                <a href="{% url 'user-profile-detail' username=post.author.username %}"
+                  class="card-author text-decoration-none text-reset">
+                  <img src="{{ post.author.profile.profile_image.url }}" class="rounded-circle me-1"
+                    style="width: 35px; height: 35px; object-fit: cover;"
+                    alt="{{ post.author.username }}'s profile image">
+                  <span class="text-dark">{{ post.author }}</span>
+                </a>
+                - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
+              </div>
+              <div class="btn-group dropstart">
+                <button class="post-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
+                  id="post-dropdown-{{ post.pk }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fa-solid fa-ellipsis"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="post-dropdown-{{ post.pk }}">
+                  {% if post.author == user %}
+                  <li>
+                    <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="dropdown-item">Delete</button>
+                    </form>
+                  </li>
+                  {% endif %}
+                  <li>
+                    <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <h6 class="card-title">{{ post.title }}</h6>
+              {% if post.file %}
+              {% include 'components/posts/post_file_detail.html' with post=post %}
+              {% else %}
+              <p class="card-text text-muted">{{ post.content|truncatewords:50 }}</p>
+              {% endif %}
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+              {% include 'components/posts/post_like_and_dislike_button.html' with post=post user=user %}
+              <button class="btn btn-outline-secondary">
+                <i class="fa-solid fa-comments me-1"></i>{{ post.comments.count }}
+              </button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No posts found matching your search</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- User Section -->
+    <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        {% if result_users %}
+        {% for result_user in result_users %}
+        <div class="border mb-4 p-3 shadow-sm result-card w-50">
+          <a href="{% url 'user-profile-detail' username=result_user.username %}"
+            class="card-author d-flex align-items-center text-decoration-none text-reset">
+            <img src="{{ result_user.profile.profile_image.url }}" class="rounded-circle me-1"
+              style="width: 35px; height: 35px; object-fit: cover;" alt="{{ result_user.username }}'s profile image">
+            <div class="d-flex flex-column">
+              <span class="text-dark">{{ result_user.username }}</span>
+              {% check_profile_follow_status user result_user as is_following %}
+              {% if is_following %}
+              <small class="text-muted">Following</small>
+              {% endif %}
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No users found matching your search</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        {% if result_comments %}
+        {% for result_comment in result_comments %}
+        <div class="border mb-4 p-3 shadow-sm result-card w-50">
+          <a href="{% url 'comment-detail' post_pk=result_comment.post.pk pk=result_comment.pk %}"
+            class="d-flex flex-column text-primary text-decoration-none text-reset">
+            <span class="text-muted">Title: {{ result_comment.post.title }}</span>
+            <span class="text-muted">
+              <strong class="text-dark">{{ result_comment.author.username }}</strong>
+              commented on {{ result_comment.date_posted|date:"M d, Y H:i" }}
+            </span>
+            <p class="mb-1 text-muted">Comment: {{ result_comment.content }}</p>
+          </a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-muted">No comments found matching your search</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{% static 'apps/js/layouts/search_results.js' %}"></script>
+{% endblock %}

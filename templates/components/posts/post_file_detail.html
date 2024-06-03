@@ -1,0 +1,25 @@
+{% load static %}
+{% if post.file %}
+<div class="my-2 rounded-4">
+    {% if post.file_extension in '.jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp' %}
+    <img src="{{ post.file.url }}" alt="Image" class="img-fluid rounded-3 shadow-sm w-100"
+        style="max-height: 400px; object-fit: contain;">
+    {% elif post.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
+    <video controls playsinline preload="auto" class="file-video rounded-3 shadow-sm w-100"
+        style="max-height: 400px; object-fit: contain;">
+        <source src="{{ post.file.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    {% else %}
+    <p>File type: {{ post.file_extension }}</p>
+    <a href="{{ post.file.url }}" target="_blank"
+        class="file-download file-download-button btn btn-outline-secondary rounded-3 shadow-sm w-100 ">
+        <i class="fa-solid fa-file-circle-question fa-2xl"></i>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- {% block javascripts %}
+<script type="module" src="{% static 'components/js/posts/post_file_detail.js' %}"></script>
+{% endblock %} -->

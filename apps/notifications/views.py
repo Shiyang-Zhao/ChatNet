@@ -8,7 +8,7 @@ from django.urls import reverse
 
 class NotificationListView(LoginRequiredMixin, ListView):
     model = Notification
-    template_name = "notifications/notification_detail.html"
+    template_name = "apps/notifications/notification_detail.html"
     context_object_name = "notifications"
 
     def get_queryset(self):

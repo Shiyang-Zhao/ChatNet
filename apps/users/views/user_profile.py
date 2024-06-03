@@ -15,7 +15,7 @@ User = get_user_model()
 
 class UserAndProfileDetailView(LoginRequiredMixin, DetailView):
     model = User
-    template_name = "users/user_profile_detail.html"
+    template_name = "apps/users/user_profile_detail.html"
     context_object_name = "viewed_user"
 
     def get_object(self):
@@ -30,7 +30,7 @@ class UserAndProfileDetailView(LoginRequiredMixin, DetailView):
 class UserAndProfileUpdateView(LoginRequiredMixin, View):
     first_form_class = UserUpdateForm
     second_form_class = ProfileUpdateForm
-    template_name = "users/user_profile_update_form.html"
+    template_name = "apps/users/user_profile_update_form.html"
 
     def get(self, request, *args, **kwargs):
         user_update_form = self.first_form_class(instance=request.user)

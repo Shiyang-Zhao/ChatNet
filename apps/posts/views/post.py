@@ -18,7 +18,7 @@ from django.utils import timezone
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = "posts/post_detail.html"
+    template_name = "apps/posts/post_detail.html"
 
     def get(self, request, *args, **kwargs):
         self.object = get_object_or_404(Post, pk=kwargs.get("pk"))
@@ -36,7 +36,7 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     form_class = PostCreateForm
-    template_name = "posts/post_create_form.html"
+    template_name = "apps/posts/post_create_form.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -47,7 +47,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostUpdateForm
-    template_name = "posts/post_update_form.html"
+    template_name = "apps/posts/post_update_form.html"
 
     def form_valid(self, form):
         messages.success(self.request, "Post updated successfully.")

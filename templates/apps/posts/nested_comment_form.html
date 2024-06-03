@@ -1,0 +1,12 @@
+{% load static %}
+{% if replies %}
+<ul>
+  {% for reply in replies %}
+  <li id="comment-item-{{ reply.pk }}" class="list-group-item">
+    {% include 'components/posts/comment_item.html' with comment=reply %}
+
+    {% include 'apps/posts/nested_comment_form.html' with replies=reply.children %}
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}

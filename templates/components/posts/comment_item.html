@@ -1,0 +1,74 @@
+{% load static %}
+
+<div class="mt-1">
+    {% if comment.is_deleted %}
+    <div>
+        <img src="{% get_media_prefix %}profile_images/default_profile_image.jpg" class="rounded-circle"
+            style="width: 30px; height: 30px; object-fit: contain;" alt="deleted profile image">
+        <strong class="me-1">[deleted]</strong>
+        <small class="text-muted me-1">-</small>
+        <small class="text-muted me-1">{{ comment.soft_deleted_at|date:"F j, Y, G:i" }}</small>
+        <div class="ms-4">
+            <p class="text-muted ms-2 mb-2">Comment deleted by user</p>
+        </div>
+    </div>
+    {% else %}
+    <div>
+        <a href="{% url 'user-profile-detail' username=comment.author.username %}"
+            class="text-decoration-none text-reset">
+            <img src="{{ comment.author.profile.profile_image.url }}" class="rounded-circle"
+                style="width: 30px; height: 30px; object-fit: cover;"
+                alt="{{ comment.author.username }}'s profile image">
+            <strong class="me-1">{{ comment.author.username }}</strong>
+            <small class="text-muted me-1">-</small>
+            <small class="text-muted me-1">{{ comment.date_posted|date:"F j, Y, G:i" }}</small>
+        </a>
+        <div class="ms-4" style="transform: translateX(3px);">
+            <p class="ms-2 mb-0">{{ comment.content }}</p>
+            <div class="d-flex justify-content-start align-items-center">
+                {% include 'components/posts/comment_like_and_dislike_button.html' with comment=comment user=user %}
+                <a id="reply-link-{{ comment.pk }}"
+                    class="reply-link btn text-primary rounded-pill border-0 pt-0 pb-0 me-1" data-pk="{{ comment.pk }}">
+                    <i class="fa-regular fa-message me-1"></i>{{ comment.children.count}}
+                </a>
+                <div class="btn-group dropup">
+                    <button class="reply-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
+                        id="comment-dropdown-{{ comment.pk }}" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="comment-dropdown-{{ comment.pk }}">
+                        {% if comment.author == user %}
+                        <li>
+                            <form method="post" action="{% url 'comment-soft-delete' pk=comment.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">Delete</button>
+                            </form>
+                        </li>
+                        {% endif %}
+                        <li>
+                            <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="reply-form-wrapper-{{ comment.pk }}" class="reply-form-wrapper"
+                style="display: none; transform: translateX(3px);">
+                <form method="post" action="{% url 'reply-create' pk=comment.pk %}">
+                    {% csrf_token %}
+                    <div class="reply-form-container" style="position: relative; min-height: fit-content;">
+                        <div class="form-group">
+                            <textarea id="id_content" name="content" cols="40" rows="3" class="form-control shadow-none"
+                                style="height: 40px;" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary rounded-pill pt-1 pb-1"
+                            style="position: absolute; bottom: 3px; right: 10px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">
+                            Reply
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>

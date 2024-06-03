@@ -36,7 +36,7 @@ from django.utils import timezone
 class StoryCreateView(LoginRequiredMixin, CreateView):
     model = Story
     form_class = StoryCreateForm
-    template_name = "stories/story_create_form.html"
+    template_name = "apps/stories/story_create_form.html"
 
     def get_success_url(self):
         # return reverse_lazy("story-list", kwargs={"pk": self.object.pk})
@@ -52,7 +52,7 @@ class StoryCreateView(LoginRequiredMixin, CreateView):
 class StoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Story
     form_class = StoryUpdateForm
-    template_name = "stories/story_update_form.html"
+    template_name = "apps/stories/story_update_form.html"
 
     def get_success_url(self):
         return reverse_lazy(

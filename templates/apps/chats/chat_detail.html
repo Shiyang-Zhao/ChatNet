@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My Chats{%endblock%}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'apps/css/chats/chat_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row g-0" style="height: 80vh;">
+    <!-- Left part: List of chats -->
+    <div class="col-md-3 d-flex flex-column border" style="height: 100%; overflow-y: auto;">
+      {% include 'apps/chats/group_chat_create_form.html' %}
+      <!-- <form method="get" action="" class="d-flex align-items-center position-relative ps-0 pe-0 w-100">
+        <input type="text" class="form-control rounded-0" name="query" placeholder="Search users..."
+          style="padding-left: 30px; padding-right: 5px;">
+        <button
+          style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; padding: 0; pointer-events: all;">
+          <i class="fa fa-search"></i>
+        </button>
+      </form> -->
+      {% if chats %}
+      <ul id="chat-list" class="list-group chat-list flex-grow-1 rounded-0" style="overflow-y: auto;">
+        {% for chat in chats %}
+        <li id="chat-item-{{ chat.pk }}" class="list-group-item chat-item d-flex flex-column align-items-start"
+          data-chat-pk="{{ chat.pk }}" data-href="{% url 'chat-detail' pk=chat.pk %}"
+          style="border-right: none; border-left: none;">
+          <div class="w-100">
+            {% if chat.chat_type == 'private' %}
+            {% for participant in chat.participants.all %}
+            {% if participant != user %}
+            <div class="d-flex align-items-center">
+              <img class="img-fluid rounded-circle me-1" src="{{ participant.profile.profile_image.url }}"
+                style="width: 50px; height: 50px; object-fit: cover;">
+              <div class="d-flex flex-column justify-content-start">
+                <span class="h6 mb-0">{{ participant.username }}</span>
+                {% if participant.activity_status == -1 %}
+                <small class="text-muted">Never active</small>
+                {% elif participant.activity_status > 2 %}
+                <small class="text-muted">Active {{ participant.activity_status }} minutes ago</small>
+                {% else %}
+                <small class="text-success">
+                  <i class="fa fa-circle text-success me-1"></i>Online
+                </small>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <div>
+              {% if chat.image %}
+              <img class="img-fluid rounded-3 border border-secondary-subtle me-1" src="{{ chat.image.url }}"
+                style="width: 50px; height: 50px; object-fit: contain;">
+              {% endif %}
+              {{ chat.title }}
+            </div>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-center mt-3">No chats found</p>
+      {% endif %}
+    </div>
+
+    <!-- Right part: Chat details -->
+    <div class="col-md-9">
+      <div id="choose-chat-placeholder">
+        <div class="chat-detail d-flex flex-column border" style="height: 80vh;">
+          <!-- <div class="p-1 border-bottom" style="background-color: #f8f9fa;">
+            <h5>Welcome to My Chats</h5>
+            <small class="text-muted">Please choose a chat room from the list on the left</small>
+          </div> -->
+          <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+            <i class="fa-brands fa-rocketchat fa-2xl fa-bounce"></i>
+            <br>
+            <p class="text-muted">No chat selected</p>
+          </div>
+        </div>
+      </div>
+      {% if chats %}
+      {% for chat in chats %}
+      <div id="chat-detail-placeholder-{{ chat.pk }}" class="chat-detail-placeholder" style="display: none;">
+        {% include 'apps/chats/message_detail.html' with chat=chat %}
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="module" src="{% static 'apps/js/chats/chat_detail.js' %}"></script>
+{% endblock %}
