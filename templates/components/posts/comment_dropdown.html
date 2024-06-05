@@ -1,0 +1,19 @@
+<div class="btn-group dropup">
+    <button class="reply-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
+        id="comment-dropdown-{{ comment.pk }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-ellipsis"></i>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="comment-dropdown-{{ comment.pk }}">
+        <li>
+            <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
+        </li>
+        {% if comment.author == user %}
+        <li>
+            <form method="post" action="{% url 'comment-soft-delete' pk=comment.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item text-danger">Delete</button>
+            </form>
+        </li>
+        {% endif %}
+    </ul>
+</div>

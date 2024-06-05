@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const leftAreas = storyContainer.querySelectorAll('.left-area');
         const rightAreas = storyContainer.querySelectorAll('.right-area');
 
-        // Initialize stories and progress bar styles
         progressBarSegments.forEach(segment => {
             Object.assign(segment.style, {
                 width: '100%',
@@ -48,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const video = story.querySelector('video');
                     if (video) {
                         video.pause();
-                        video.currentTime = 0; // Reset video to start
+                        video.currentTime = 0;
                     }
                 });
                 if (currentStoryIndex >= stories.length - 1) {

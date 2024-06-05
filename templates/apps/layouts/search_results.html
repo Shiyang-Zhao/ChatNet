@@ -33,8 +33,7 @@
       <div class="d-flex flex-column justify-content-center align-items-center">
         {% if result_posts %}
         {% for post in result_posts %}
-        <div id="post-{{ post.pk }}" class="card mb-4 shadow-sm result-card w-50"
-          data-href="{% url 'post-detail' post.pk %}">
+        <div class="card mb-4 shadow-sm result-card w-50" data-href="{% url 'post-detail' post.pk %}">
           <div class="card-body">
             <div class="card-subtitle d-flex justify-content-between align-items-center text-muted">
               <div>
@@ -47,25 +46,7 @@
                 </a>
                 - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
               </div>
-              <div class="btn-group dropstart">
-                <button class="post-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
-                  id="post-dropdown-{{ post.pk }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fa-solid fa-ellipsis"></i>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="post-dropdown-{{ post.pk }}">
-                  {% if post.author == user %}
-                  <li>
-                    <form method="post" action="{% url 'post-soft-delete' pk=post.pk %}">
-                      {% csrf_token %}
-                      <button type="submit" class="dropdown-item">Delete</button>
-                    </form>
-                  </li>
-                  {% endif %}
-                  <li>
-                    <a class="dropdown-item text-decoration-none text-reset" href="#">Save</a>
-                  </li>
-                </ul>
-              </div>
+              {% include 'components/posts/post_dropdown.html' with post=post %}
             </div>
 
             <div>

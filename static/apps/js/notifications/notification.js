@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const countElement = document.querySelector("#notification-count");
 
     const updateUnreadNotificationCount = (direction) => {
@@ -13,12 +12,12 @@ document.addEventListener('DOMContentLoaded', function () {
             countElement.style.display = 'none';
         }
     };
-
-    document.querySelector('#mark-all-as-read-form').addEventListener('submit', function (event) {
+    const markAllAsReadForm = document.querySelector('.mark-all-as-read-form')
+    markAllAsReadForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        const url = this.action;
-
-        axios.post(url, null, {
+        const url = markAllAsReadForm.getAttribute('data-url');
+        const csrfToken = markAllAsReadForm.querySelector('input[name="csrfmiddlewaretoken"]').value;
+        axios.post(url, {}, {
             headers: { 'X-CSRFToken': csrfToken }
         }).then(response => {
             document.querySelectorAll('.card-body').forEach(cardBody => {
@@ -29,12 +28,15 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     });
 
-    document.querySelector('#notification-list').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const form = event.target;
-        const url = form.getAttribute('data-url');
+    const notificationsContainer = document.querySelector('#notifications-container');
 
-        axios.post(url, null, {
+    notificationsContainer.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const form = event.target.closest('.mark-as-read-form, .mark-as-unread-form');
+        const url = form.getAttribute('data-url');
+        const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+        axios.post(url, {}, {
             headers: { 'X-CSRFToken': csrfToken }
         }).then(response => {
             const cardBody = form.closest('.card-body');

@@ -13,13 +13,9 @@
     {% else %}
     <p>File type: {{ post.file_extension }}</p>
     <a href="{{ post.file.url }}" target="_blank"
-        class="file-download file-download-button btn btn-outline-secondary rounded-3 shadow-sm w-100 ">
+        class="file-download btn btn-outline-secondary rounded-3 shadow-sm w-100 ">
         <i class="fa-solid fa-file-circle-question fa-2xl"></i>
     </a>
     {% endif %}
 </div>
 {% endif %}
-
-<!-- {% block javascripts %}
-<script type="module" src="{% static 'components/js/posts/post_file_detail.js' %}"></script>
-{% endblock %} -->

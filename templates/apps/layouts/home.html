@@ -14,8 +14,7 @@
     {% if active_authors %}
     <div class="d-flex justify-content-start align-items-center ms-5 me-5 p-0">
       {% for author in active_authors %}
-      <div id="story-container-{{ author.username }}" class="story-container position-relative me-4"
-        style="width: 70px; height: 70px;">
+      <div class="story-container position-relative me-4" style="width: 70px; height: 70px;">
         {% with active_stories=author.profile.active_stories %}
         {% include 'components/stories/story_item.html' with active_stories=active_stories viewed_user=author %}
         {% endwith %}
@@ -28,7 +27,7 @@
 
   <div class="d-flex align-items-baseline mb-2">
     <span class="text-muted me-2">Sort By:</span>
-    <select id="sortSelect" class="sort-select form-select form-select-sm rounded-pill text-dark border-0 shadow-none"
+    <select id="sort-select" class="form-select form-select-sm rounded-pill text-dark border-0 shadow-none"
       style="width: fit-content;">
       {% for key, name in sort_options.items %}
       {% if request.GET.sort == key %}
@@ -51,9 +50,10 @@
     <p class="text-center text-muted">No posts found</p>
     {% endfor %}
   </div>
+
 </div>
 {% endblock %}
 
 {% block javascripts %}
-<script src="{% static 'apps/js/layouts/home.js' %}"></script>
+<script type="module" src="{% static 'apps/js/layouts/home.js' %}"></script>
 {% endblock %}

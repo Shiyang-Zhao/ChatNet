@@ -4,13 +4,13 @@
 {% block content %}
 <div class="container mt-5">
     <h2 class="mb-4">Your Notifications</h2>
-    <form id="mark-all-as-read-form" method="post" action="{% url 'mark-all-as-read' %}" class="mb-3">
+    <form class="mark-all-as-read-form mb-3" data-url="{% url 'mark-all-as-read' %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Mark All as Read</button>
     </form>
-    <div id="notification-list" class="list-group">
+    <div id="notifications-container" class="list-group">
         {% for notification in notifications %}
-        <div id="notification-{{ notification.pk }}" class="card mb-2">
+        <div class="card mb-2">
             <div class="card-body" {% if not notification.is_read %}style="background-color: #f0f0f0;" {% endif %}>
                 <h5 class="card-title"
                     style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; max-height: 7.5em;">
@@ -21,13 +21,13 @@
                     <form class="mark-as-read-form me-1" data-url="{% url 'mark-as-read' notification.pk %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-primary me-3">
-                            <i class="fas fa-envelope-open-text"></i>
+                            <i class="fa fa-envelope-open-text"></i>
                         </button>
                     </form>
                     <form class="mark-as-unread-form" data-url="{% url 'mark-as-unread' notification.pk %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-warning">
-                            <i class="fas fa-envelope"></i>
+                            <i class="fa fa-envelope"></i>
                         </button>
                     </form>
                 </div>

@@ -61,7 +61,7 @@ const displayUnreadNotificationCount = (count) => {
 };
 
 const displayNotificationMessage = (message) => {
-    const notificationContainer = document.querySelector("#notification-list");
+    const notificationContainer = document.querySelector("#notifications-container");
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const markAsReadUrl = `/notifications/notification/${message.notification_pk}/read/`;
     const markAsUnreadUrl = `/notifications/notification/${message.notification_pk}/unread/`;

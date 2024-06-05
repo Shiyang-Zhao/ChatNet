@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.result-card').forEach(card => {
-        card.addEventListener('click', function () {
-            window.location.href = this.getAttribute('data-href');
-        });
-    });
-
-    document.querySelectorAll('.card-author, .file-download-button, .post-toggle-btn').forEach(element => {
-        element.addEventListener('click', function (event) {
+    document.body.addEventListener('click', function (event) {
+        if (event.target.matches('.dropdown-btn, .dropdown-btn *, .dropdown-item, .dropdown-menu, .card-author, .file-video, .file-download')) {
             event.stopPropagation();
-        });
+            return;
+        }
+
+        const card = event.target.closest('.result-card');
+        if (card) {
+            window.location.href = card.getAttribute('data-href');
+        }
     });
 });

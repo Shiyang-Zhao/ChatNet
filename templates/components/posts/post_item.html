@@ -1,9 +1,9 @@
 {% load static %}
 {% load post_tags %}
 
-<div id="post-{{ post.pk }}" class="card mb-4 shadow-sm home-card w-75" data-href="{% url 'post-detail' post.pk %}">
+<div class="home-card card mb-4 shadow-sm w-75" data-href="{% url 'post-detail' post.pk %}">
     <div class="card-body">
-        <div class="card-subtitle d-flex justify-content-between align-items-center text-muted">
+        <div class="card-subtitle d-flex justify-content-between align-items-center">
             <div>
                 <a href="{% url 'user-profile-detail' username=post.author.username %}"
                     class="card-author text-decoration-none text-reset">
@@ -12,7 +12,7 @@
                         alt="{{ post.author.username }}'s profile image">
                     <span class="text-dark">{{ post.author.username }}</span>
                 </a>
-                - <small>{{ post.date_posted|date:"M d, Y H:i" }}</small>
+                - <small class="text-muted">{{ post.date_posted|date:"M d, Y H:i" }}</small>
             </div>
             {% include 'components/posts/post_dropdown.html' with post=post %}
         </div>

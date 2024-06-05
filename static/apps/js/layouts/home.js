@@ -1,20 +1,27 @@
+import { handlePostSaveAndUnsaveButton } from "../../../components/js/posts/post_dropdown.js";
+import { handlePostLikeAndDislikeButton } from "../../../components/js/posts/post_like_and_dislike_button.js";
+
 document.addEventListener('DOMContentLoaded', () => {
-    let sortSelect = document.querySelector('#sortSelect');
+    const postsContainer = document.querySelector('#posts-container');
+    const sortSelect = document.querySelector('#sort-select');
+    handlePostSaveAndUnsaveButton(postsContainer);
+    handlePostLikeAndDislikeButton(postsContainer);
 
     sortSelect.addEventListener('change', function () {
         window.location.href = this.value;
     });
 
-    document.querySelectorAll('.home-card').forEach(card => {
-        card.addEventListener('click', function () {
-            window.location.href = this.getAttribute('data-href');
-        });
-    });
-
-    document.querySelectorAll('.card-author, .file-download-button, .dropdown-btn, .dropdown-item').forEach(element => {
-        element.addEventListener('click', function (event) {
+    document.body.addEventListener('click', function (event) {
+        if (event.target.matches('.dropdown-btn, .dropdown-btn *, .dropdown-item, .dropdown-menu, .card-author, .file-video, .file-download')) {
             event.stopPropagation();
-        });
+            return;
+        }
+        const card = event.target.closest('.home-card');
+        if (card) {
+            window.location.href = card.getAttribute('data-href');
+        }
+    });
+    document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
@@ -23,13 +30,13 @@ document.addEventListener('DOMContentLoaded', function () {
     let page = 1;
     let hasMorePosts = true;
 
-    const postsContainer = document.getElementById('posts-container');
+    const postsContainer = document.querySelector('#posts-container');
     // Creating a sentinel element to observe
     const sentinel = document.createElement('div');
     postsContainer.appendChild(sentinel);
 
     function fetchPosts() {
-        console.log('Fetching posts:', page);  // Log the current page before fetching
+        console.log('Fetching posts:', page);
         if (isFetchingPosts || !hasMorePosts) {
             console.log('Fetch prevented:', isFetchingPosts, hasMorePosts);
             return;
@@ -47,14 +54,14 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => {
                 const html = response.data.html;
-                hasMorePosts = response.data.has_more;  // Update based on server response
+                hasMorePosts = response.data.has_more;
                 console.log('Posts fetched:', nextPage, 'Has more posts:', hasMorePosts);
                 if (html) {
                     sentinel.insertAdjacentHTML('beforebegin', html);
                     page = nextPage;
                 } else {
                     console.log('No more posts to fetch, disconnecting observer.');
-                    observer.disconnect();  // Stop observing if no more posts
+                    observer.disconnect();
                 }
             })
             .catch(error => {
@@ -73,10 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
             fetchPosts();
         }
     }, {
-        rootMargin: '50px',
+        rootMargin: '0px',
         threshold: 0.1  // Adjust threshold to your needs
     });
 
-    // Start observing the sentinel
     observer.observe(sentinel);
 });

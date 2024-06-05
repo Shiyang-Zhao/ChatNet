@@ -2,32 +2,24 @@
 {% load comment_tags %}
 {% check_comment_like_status comment user as is_user_liked_comment %}
 
-<div class="d-flex align-items-center">
-    <form class="comment-like-form" data-comment-pk="{{ comment.pk }}" data-url="{% url 'like-comment' pk=comment.pk %}"
-        data-listener-added="0">
+<div class="comment-like-dislike-container d-flex align-items-center">
+    <form class="comment-like-form" data-pk="{{ comment.pk }}" data-url="{% url 'like-comment' pk=comment.pk %}">
         {% csrf_token %}
-        <button type="submit" id="comment-like-button-{{ comment.pk }}"
-            class="btn btn-sm comment-dislike-btn rounded-pill pt-0 pb-0">
+        <button type="submit" class="btn btn-sm rounded-pill py-0">
             <i
                 class="{% if is_user_liked_comment == 1 %}fa-solid{% else %}fa-regular{% endif %} fa-thumbs-up text-success">
-                <span id="comment-like-count-{{ comment.pk }}">{{ comment.liked_by.count }}</span>
+                <span>{{ comment.liked_by.count }}</span>
             </i>
         </button>
     </form>
 
-    <form class="comment-dislike-form" data-comment-pk="{{ comment.pk }}"
-        data-url="{% url 'dislike-comment' pk=comment.pk %}" data-listener-added="0">
+    <form class="comment-dislike-form" data-pk="{{ comment.pk }}" data-url="{% url 'dislike-comment' pk=comment.pk %}">
         {% csrf_token %}
-        <button type="submit" id="comment-dislike-button-{{ comment.pk }}"
-            class="btn btn-sm comment-dislike-btn rounded-pill pt-0 pb-0">
+        <button type="submit" class="btn btn-sm rounded-pill py-0">
             <i
                 class="{% if is_user_liked_comment == -1 %}fa-solid{% else %}fa-regular{% endif %} fa-thumbs-down text-danger">
-                <span id="comment-dislike-count-{{ comment.pk }}">{{ comment.disliked_by.count }}</span>
+                <span>{{ comment.disliked_by.count }}</span>
             </i>
         </button>
     </form>
 </div>
-
-<!-- {% block javascripts %}
-<script type="module" src="{% static 'components/js/posts/comment_like_and_dislike_button.js' %}"></script>
-{% endblock %} -->

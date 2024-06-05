@@ -1,7 +1,7 @@
 {% load static %}
 {% if active_stories %}
-<button type="button" class="btn" style="padding: 0; background: none; border: none; outline: none;"
-    data-bs-toggle="modal" data-bs-target="#storyModal-{{ viewed_user.username }}">
+<button type="button" class="btn border-0 p-0 bg-0" data-bs-toggle="modal"
+    data-bs-target="#story-modal-{{ viewed_user.username }}">
     <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
         class="rounded-circle img-thumbnail position-absolute top-0 start-0"
         style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(252, 29, 29, 0.8);">
@@ -11,13 +11,12 @@
     class="rounded-circle img-thumbnail position-absolute top-0 start-0"
     style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(116, 116, 116, 0.8)">
 {% endif %}
-<div class="profile-modal modal fade" id="storyModal-{{ viewed_user.username }}" tabindex="-1" role="dialog"
+<div class="profile-modal modal fade" id="story-modal-{{ viewed_user.username }}" tabindex="-1" role="dialog"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-body bg-black" style="position: relative;">
-                <div id="progress-container" class="progress"
-                    style="height: 4px; background-color: transparent; overflow: hidden;">
+            <div class="modal-body position-relative bg-black">
+                <div id="progress-container" class="progress bg-transparent overflow-hidden" style="height: 4px;">
                     {% for story in active_stories %}
                     <div class="progress-bar rounded" id="progress-{{ forloop.counter }}" role="progressbar"></div>
                     {% endfor %}
@@ -29,15 +28,16 @@
                         <a href="{% url 'user-profile-detail' username=user.username %}"
                             class="text-reset text-decoration-none d-flex align-items-center">
                             <img src="{{ viewed_user.profile.profile_image.url }}"
-                                alt="{{ user.username }}'s Profile Image" class="rounded-circle img-fluid"
-                                style="width: 35px; height: 35px; object-fit: cover; margin-right: 5px;">
+                                alt="{{ user.username }}'s Profile Image" class="rounded-circle img-fluid me-2"
+                                style="width: 35px; height: 35px; object-fit: cover;">
                             <span class="text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
                                 {{ viewed_user.username }} - {{ story.date_posted|date:"F j, Y, G:i" }}
                             </span>
                         </a>
                         <div class="dropdown">
-                            <i class="fa-solid fa-ellipsis fa-xl fa-rotate-90" style="color: #ffffff; cursor: pointer;"
-                                id="story-dropdown-{{ story.pk }}" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                            <i id="story-dropdown-{{ story.pk }}" class="fa-solid fa-ellipsis fa-xl fa-rotate-90"
+                                style="color: #ffffff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); cursor: pointer;"
+                                data-bs-toggle="dropdown" aria-expanded="false"></i>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="story-dropdown-{{ story.pk }}">
                                 <li><a class="dropdown-item" href="#">Edit</a></li>
                                 <li><a class="dropdown-item" href="#">Save</a></li>
@@ -48,10 +48,9 @@
                                     </form>
                                 </li>
                                 <li>
-                                    <form method="post" action="{% url 'story-delete' pk=story.pk %}"
-                                        style="margin: 0;">
+                                    <form method="post" action="{% url 'story-delete' pk=story.pk %}">
                                         {% csrf_token %}
-                                        <button type="submit" class="dropdown-item">Delete</button>
+                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
                                     </form>
                                 </li>
                             </ul>
@@ -86,7 +85,3 @@
         </div>
     </div>
 </div>
-
-<!-- {% block javascripts %}
-<script type="module" src="{% static 'apps/js/stories/story_detail.js' %}"></script>
-{% endblock %} -->

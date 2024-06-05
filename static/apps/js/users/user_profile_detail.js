@@ -1,31 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".follow-unfollow-form").forEach((form) => {
-    form.addEventListener("submit", function (event) {
+  const container = document.querySelector('#user-profile-container');
+  container.addEventListener("submit", function (event) {
+    const form = event.target.closest('.user-follow-form, .user-unfollow-form');
+    if (form) {
       event.preventDefault();
-      const button = this.querySelector("button");
-      const actionUrl = form.action;
+      const button = form.querySelector("button");
+      const isFollowed = form.classList.contains("following");
+      const url = isFollowed ? form.getAttribute('data-unfollow-url') : form.getAttribute('data-follow-url');
+      const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
-      axios.post(actionUrl, {}, {
-        headers: { "X-CSRFToken": this.querySelector('input[name="csrfmiddlewaretoken"]').value }
+      axios.post(url, {}, {
+        headers: { "X-CSRFToken": csrfToken }
       })
         .then((response) => {
-          if (button.classList.contains("following")) {
-            button.classList.remove("btn-secondary", "following");
-            button.classList.add("btn-primary", "follow");
+          if (isFollowed) {
+            form.classList.remove("following");
+            form.classList.add("follow");
+            button.classList.remove("btn-secondary");
+            button.classList.add("btn-primary");
             button.textContent = "Follow";
-            // Update the form action to follow
-            form.action = form.getAttribute("data-follow-url");
           } else {
-            button.classList.remove("btn-primary", "follow");
-            button.classList.add("btn-secondary", "following");
+            form.classList.remove("follow");
+            form.classList.add("following");
+            button.classList.remove("btn-primary");
+            button.classList.add("btn-secondary");
             button.textContent = "Following";
-            form.action = form.getAttribute("data-unfollow-url");
           }
         })
         .catch((error) => {
           console.error("Error:", error);
           alert("Something went wrong! Please try again.");
         });
-    });
+    }
   });
 });

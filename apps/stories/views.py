@@ -11,26 +11,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from .models import Story
 from .forms import StoryCreateForm, StoryUpdateForm
-from django.utils import timezone
-
-
-# class StoryListView(ListView):
-#     model = Story
-#     context_object_name = "stories"
-#     template_name = "stories/story_detail.html"
-#     paginate_by = 10
-
-#     def get_queryset(self):
-#         return Story.objects.filter(is_archived=False).order_by("-date_posted")
-
-
-# class StoryDetailView(DetailView):
-#     model = Story
-#     context_object_name = "story"
-#     template_name = "stories/story_detail.html"
-
-#     def get_queryset(self):
-#         return Story.objects.filter(is_archived=False)
 
 
 class StoryCreateView(LoginRequiredMixin, CreateView):
@@ -39,7 +19,6 @@ class StoryCreateView(LoginRequiredMixin, CreateView):
     template_name = "apps/stories/story_create_form.html"
 
     def get_success_url(self):
-        # return reverse_lazy("story-list", kwargs={"pk": self.object.pk})
         return reverse_lazy(
             "user-profile-detail", kwargs={"username": self.request.user.username}
         )
