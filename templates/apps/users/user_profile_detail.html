@@ -9,7 +9,7 @@
 <div class="container mt-5 ">
   <div id="user-profile-container" class="d-flex flex-column align-items-center">
     <div class="d-flex align-items-ceneter">
-      <div class="story-container position-relative me-4" style="width: 150px; height: 150px;">
+      <div id="story-container" class="story-container position-relative me-4" style="width: 150px; height: 150px;">
         {% include 'components/stories/story_item.html' with active_stories=active_stories viewed_user=viewed_user %}
       </div>
 
@@ -43,8 +43,7 @@
         <button type="submit" class="btn btn-secondary">Following</button>
       </form>
       {% else %}
-      <form class="user-follow-form follow"
-        data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
+      <form class="user-follow-form follow" data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
         data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Follow</button>
@@ -62,5 +61,5 @@
 {% endblock %}
 
 {% block javascripts %}
-<script src="{% static 'apps/js/users/user_profile_detail.js' %}"></script>
+<script type="module" src="{% static 'apps/js/users/user_profile_detail.js' %}"></script>
 {% endblock %}

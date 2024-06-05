@@ -12,7 +12,7 @@
   <div class="mb-3">
     {% if user.is_authenticated %}
     {% if active_authors %}
-    <div class="d-flex justify-content-start align-items-center ms-5 me-5 p-0">
+    <div id="stories-container" class="d-flex justify-content-start align-items-center ms-5 me-5 p-0">
       {% for author in active_authors %}
       <div class="story-container position-relative me-4" style="width: 70px; height: 70px;">
         {% with active_stories=author.profile.active_stories %}

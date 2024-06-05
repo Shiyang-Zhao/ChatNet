@@ -1,9 +1,12 @@
 import { handlePostSaveAndUnsaveButton } from "../../../components/js/posts/post_dropdown.js";
 import { handlePostLikeAndDislikeButton } from "../../../components/js/posts/post_like_and_dislike_button.js";
-
+import { handleStoryShowAndHideButton } from "../stories/story_item.js";
 document.addEventListener('DOMContentLoaded', () => {
-    const postsContainer = document.querySelector('#posts-container');
+    const storiesContainer = document.querySelector('#stories-container');
     const sortSelect = document.querySelector('#sort-select');
+    const postsContainer = document.querySelector('#posts-container');
+
+    handleStoryShowAndHideButton(storiesContainer);
     handlePostSaveAndUnsaveButton(postsContainer);
     handlePostLikeAndDislikeButton(postsContainer);
 

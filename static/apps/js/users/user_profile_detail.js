@@ -1,6 +1,10 @@
+import { handleStoryShowAndHideButton } from "../stories/story_item.js";
+
 document.addEventListener("DOMContentLoaded", () => {
-  const container = document.querySelector('#user-profile-container');
-  container.addEventListener("submit", function (event) {
+  const storyContainer = document.querySelector('#story-container');
+  const userProfileContainer = document.querySelector('#user-profile-container');
+  handleStoryShowAndHideButton(storyContainer);
+  userProfileContainer.addEventListener("submit", function (event) {
     const form = event.target.closest('.user-follow-form, .user-unfollow-form');
     if (form) {
       event.preventDefault();
