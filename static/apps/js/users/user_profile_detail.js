@@ -1,4 +1,4 @@
-import { handleStoryShowAndHideButton } from "../stories/story_item.js";
+import { handleStoryShowAndHideButton } from "../../../components/js/stories/story_item.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const storyContainer = document.querySelector('#story-container');

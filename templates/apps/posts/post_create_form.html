@@ -18,6 +18,11 @@
                 Title<span class="asteriskField">*</span>
               </label>
               <input type="text" name="title" maxlength="100" class="textinput form-control" required="" id="id_title">
+              {% if form.title.errors %}
+              <div class="alert alert-danger">
+                {{ form.title.errors }}
+              </div>
+              {% endif %}
             </div>
             <div id="div_id_file" class="mb-3">
               <div id="preview-container" class="mt-3 w-50" style="position: relative;">

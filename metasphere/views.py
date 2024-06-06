@@ -58,9 +58,9 @@ def home(request):
         active_posts = paginator.page(paginator.num_pages)
         has_more = False  # Indicates there are no more pages
     else:
-        has_more = active_posts.has_next()  # Check if there is a next page
+        has_more = active_posts.has_next()
 
-    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         posts_html = "".join(
             render_to_string(
                 "components/posts/post_item.html", {"post": post}, request=request

@@ -8,24 +8,17 @@
 
 {% block content %}
 <div class="container mt-5">
-  <div class="row g-0" style="height: 80vh;">
+  <div class="d-flex align-items-center" style="height: 80vh;">
     <!-- Left part: List of chats -->
-    <div class="col-md-3 d-flex flex-column border" style="height: 100%; overflow-y: auto;">
+    <div id="chats-container" class="col-md-3 d-flex flex-column border"
+      style="min-width: 200px; height: 100%; overflow-y: auto;">
       {% include 'apps/chats/group_chat_create_form.html' %}
-      <!-- <form method="get" action="" class="d-flex align-items-center position-relative ps-0 pe-0 w-100">
-        <input type="text" class="form-control rounded-0" name="query" placeholder="Search users..."
-          style="padding-left: 30px; padding-right: 5px;">
-        <button
-          style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); border: none; background: none; padding: 0; pointer-events: all;">
-          <i class="fa fa-search"></i>
-        </button>
-      </form> -->
       {% if chats %}
-      <ul id="chat-list" class="list-group chat-list flex-grow-1 rounded-0" style="overflow-y: auto;">
+      <ul class="list-group flex-grow-1 rounded-0">
         {% for chat in chats %}
-        <li id="chat-item-{{ chat.pk }}" class="list-group-item chat-item d-flex flex-column align-items-start"
-          data-chat-pk="{{ chat.pk }}" data-href="{% url 'chat-detail' pk=chat.pk %}"
-          style="border-right: none; border-left: none;">
+        <li id="chat-container-{{ chat.pk }}"
+          class="chat-container list-group-item d-flex flex-column align-items-start border-start-0 border-end-0"
+          data-pk="{{ chat.pk }}" data-url="{% url 'chat-detail' pk=chat.pk %}">
           <div class="w-100">
             {% if chat.chat_type == 'private' %}
             {% for participant in chat.participants.all %}
@@ -69,7 +62,7 @@
     <!-- Right part: Chat details -->
     <div class="col-md-9">
       <div id="choose-chat-placeholder">
-        <div class="chat-detail d-flex flex-column border" style="height: 80vh;">
+        <div class="d-flex flex-column border" style="height: 80vh;">
           <div class="flex-grow-1 d-flex flex-column justify-content-center align-items-center">
             <i class="fa-brands fa-rocketchat fa-2xl fa-bounce"></i>
             <br>

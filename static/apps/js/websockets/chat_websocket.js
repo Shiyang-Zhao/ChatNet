@@ -76,7 +76,7 @@ const displayChatMessage = (chatPk, message) => {
 
     if (isSentByCurrentUser) {
         messageHtml = `
-            <div class="message d-flex justify-content-end">
+            <div class="d-flex justify-content-end">
                 <div class="text-white p-2" style="max-width: 80%;">
                     <div class="d-flex align-items-start flex-row-reverse">
                         <a href="${profileUrl}" class="text-decoration-none text-reset">
@@ -95,7 +95,7 @@ const displayChatMessage = (chatPk, message) => {
         `;
     } else {
         messageHtml = `
-            <div class="message d-flex justify-content-start">
+            <div class="d-flex justify-content-start">
                 <div class="text-dark p-2" style="max-width: 80%;">
                     <div class="d-flex align-items-start">
                         <a href="${profileUrl}" class="text-decoration-none text-reset">

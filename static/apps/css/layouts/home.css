@@ -1,10 +1,10 @@
-.home-card,
+.post-container,
 .sort-select {
     transition: background-color 0.3s ease;
 }
 
 .sort-select:hover,
-.home-card:hover {
+.post-container:hover {
     background-color: #f0f0f0;
     cursor: pointer;
 }

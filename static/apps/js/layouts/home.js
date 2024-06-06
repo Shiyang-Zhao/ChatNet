@@ -1,6 +1,7 @@
 import { handlePostSaveAndUnsaveButton } from "../../../components/js/posts/post_dropdown.js";
 import { handlePostLikeAndDislikeButton } from "../../../components/js/posts/post_like_and_dislike_button.js";
-import { handleStoryShowAndHideButton } from "../stories/story_item.js";
+import { handleStoryShowAndHideButton } from "../../../components/js/stories/story_item.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const storiesContainer = document.querySelector('#stories-container');
     const sortSelect = document.querySelector('#sort-select');
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             event.stopPropagation();
             return;
         }
-        const card = event.target.closest('.home-card');
+        const card = event.target.closest('.post-container');
         if (card) {
             window.location.href = card.getAttribute('data-href');
         }

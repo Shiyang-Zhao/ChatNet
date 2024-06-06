@@ -65,7 +65,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "apps.users.middleware.UpdateLastActivityMiddleware",  # Your custom middleware
+    # Your custom middleware
+    "apps.users.middleware.UpdateUserLastActivityMiddleware",
 ]
 
 ROOT_URLCONF = "metasphere.urls"

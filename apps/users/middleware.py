@@ -4,7 +4,7 @@ from django.utils import timezone
 User = get_user_model()
 
 
-class UpdateLastActivityMiddleware:
+class UpdateUserLastActivityMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 

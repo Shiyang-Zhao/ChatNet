@@ -9,7 +9,8 @@
 <div class="container mt-5 ">
   <div id="user-profile-container" class="d-flex flex-column align-items-center">
     <div class="d-flex align-items-ceneter">
-      <div id="story-container" class="story-container position-relative me-4" style="width: 150px; height: 150px;">
+      <div id="story-container" class="story-container position-relative me-4" data-initialized="0"
+        style="width: 150px; height: 150px;">
         {% include 'components/stories/story_item.html' with active_stories=active_stories viewed_user=viewed_user %}
       </div>
 

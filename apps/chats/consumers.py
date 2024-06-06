@@ -2,6 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models.chat import Chat
+from apps.users.models.user import User
 from .models.message import Message
 from django.utils import timezone
 
@@ -32,8 +33,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             # Save message to the database
             await self.save_message(sender, content, date_sent)
+            await self.update_user_last_active(sender.pk)
+            await self.update_chat_last_active(self.chat_pk)
             sender_profile_image_url = await self.get_profile_image_url(sender)
-
             # Send the chat message to the chat group
             await self.channel_layer.group_send(
                 self.chat_channel_name,
@@ -75,9 +77,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
+    def update_user_last_active(self, user_pk):
+        """Update the user's last active timestamp."""
+        User.objects.filter(pk=user_pk).update(last_active=timezone.now())
+
+    @database_sync_to_async
+    def update_chat_last_active(self, chat_pk):
+        """Update the chat's last active timestamp."""
+        Chat.objects.filter(pk=chat_pk).update(last_active=timezone.now())
+
+    @database_sync_to_async
     def get_chat(self, pk):
         return Chat.objects.get(pk=pk)
 
     @database_sync_to_async
     def get_profile_image_url(self, user):
-        return user.profile.profile_image.url  # Adjust this to match your model
+        return user.profile.profile_image.url

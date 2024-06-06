@@ -45,10 +45,10 @@
 
   <!-- Comment Form with Crispy Forms -->
   <div id="comments-container" class="position-relative">
-    <div class="comment-container mt-3">
+    <div class="comment-form-container mt-3">
       <form method="post" action="{% url 'comment-create' pk=post.pk %}">
         {% csrf_token %}
-        <div class="comment-form-container position-relative" style="min-height: fit-content;">
+        <div class=" position-relative" style="min-height: fit-content;">
           <div class="form-group">
             <textarea id="id_content" name="content" cols="40" rows="3" class="form-control shadow-none"
               style="height: 40px;" placeholder="Add a comment" required></textarea>

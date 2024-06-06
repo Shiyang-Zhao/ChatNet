@@ -11,10 +11,10 @@
 <div class="container mt-2">
   <div class="mb-3">
     {% if user.is_authenticated %}
-    {% if active_authors %}
     <div id="stories-container" class="d-flex justify-content-start align-items-center ms-5 me-5 p-0">
+      {% if active_authors %}
       {% for author in active_authors %}
-      <div class="story-container position-relative me-4" style="width: 70px; height: 70px;">
+      <div class="story-container position-relative me-2" data-initialized="0" style="width: 70px; height: 70px;">
         {% with active_stories=author.profile.active_stories %}
         {% include 'components/stories/story_item.html' with active_stories=active_stories viewed_user=author %}
         {% endwith %}

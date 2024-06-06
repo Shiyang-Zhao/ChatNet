@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
         placement: 'right',
     });
 
-    // Event listener for opening the modal
     modalButton.addEventListener('click', function () {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('group_chat_create_form', 'open');
@@ -20,16 +19,14 @@ document.addEventListener('DOMContentLoaded', function () {
         myModal.show();
     });
 
-    // Check if the modal should be opened based on URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('group_chat_create_form') === 'open') {
         myModal.show();
     }
 
-    // Listen for the hidden event on the modal
     myModalElement.addEventListener('hidden.bs.modal', function () {
         const urlParams = new URLSearchParams(window.location.search);
-        urlParams.delete('group_chat_create_form'); // Remove the query parameter
+        urlParams.delete('group_chat_create_form');
         let newUrl = window.location.pathname;
         if (urlParams.toString()) {
             newUrl += '?' + urlParams.toString();

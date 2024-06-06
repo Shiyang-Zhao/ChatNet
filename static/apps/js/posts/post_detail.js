@@ -14,8 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentPath = window.location.pathname;
     if (commentPattern.test(currentPath)) {
         const pathSegments = currentPath.split('/');
-        const commentPk = pathSegments[pathSegments.length - 2];
-        const targetComment = document.querySelector(`#comment-${commentPk}`);
+        const pk = pathSegments[pathSegments.length - 2];
+        const targetComment = document.querySelector(`#comment-${pk}`);
         if (targetComment) {
             targetComment.scrollIntoView({ behavior: 'smooth' });
             gsap.fromTo(targetComment,

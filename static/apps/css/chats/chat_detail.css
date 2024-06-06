@@ -1,21 +1,18 @@
-.chat-item {
+.chat-container {
     transition: background-color 0.3s ease;
 }
 
-.chat-item:hover {
+.chat-container:hover {
     background-color: #f0f0f0;
     cursor: pointer;
 }
 
-/* For Webkit browsers (Chrome, Safari) */
-.chat-list::-webkit-scrollbar {
+#chats-container::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
 
-.chat-list {
+#chats-container {
     -ms-overflow-style: none;
-    /* Internet Explorer 10+ */
     scrollbar-width: none;
-    /* Firefox */
 }
