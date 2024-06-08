@@ -19,10 +19,13 @@ const sendMessage = (messageInput, sendButtonPopover) => {
 };
 
 const showMessageDetail = (detailPlaceholder) => {
-    const messageForm = detailPlaceholder.querySelector('#message-form');
-    const messageInput = detailPlaceholder.querySelector('#message-input');
-    const sendButton = detailPlaceholder.querySelector('#send-button');
-    const messagesContainer = detailPlaceholder.querySelector('.chat-messages');
+    if (detailPlaceholder.querySelector("#select-chat-placeholder")) {
+        return;
+    }
+    const messagesContainer = detailPlaceholder.querySelector('.messages-container');
+    const messageForm = detailPlaceholder.querySelector('form');
+    const messageInput = messageForm.querySelector('textarea');
+    const sendButton = messageForm.querySelector('button');
     scrollToLatestMessage(messagesContainer);
 
     const sendButtonPopover = new bootstrap.Popover(sendButton, {

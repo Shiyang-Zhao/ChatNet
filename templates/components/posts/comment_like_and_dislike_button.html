@@ -3,7 +3,8 @@
 {% check_comment_like_status comment user as is_user_liked_comment %}
 
 <div class="comment-like-dislike-container d-flex align-items-center">
-    <form class="comment-like-form" data-pk="{{ comment.pk }}" data-url="{% url 'like-comment' pk=comment.pk %}">
+    <form method="post" class="comment-like-form" data-pk="{{ comment.pk }}"
+        action="{% url 'like-comment' pk=comment.pk %}" data-url="{% url 'like-comment' pk=comment.pk %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-sm rounded-pill py-0">
             <i
@@ -13,7 +14,8 @@
         </button>
     </form>
 
-    <form class="comment-dislike-form" data-pk="{{ comment.pk }}" data-url="{% url 'dislike-comment' pk=comment.pk %}">
+    <form method="post" class="comment-dislike-form" action="{% url 'dislike-comment' pk=comment.pk %}"
+        data-pk="{{ comment.pk }}" data-url="{% url 'dislike-comment' pk=comment.pk %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-sm rounded-pill py-0">
             <i

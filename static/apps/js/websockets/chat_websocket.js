@@ -22,7 +22,7 @@ const establishChatWebSocket = (chatPk) => {
 
     socket.onmessage = function (event) {
         var message = JSON.parse(event.data);
-        displayChatMessage(chatPk, message);
+        displayChatMessage(message);
     };
 
     socket.onclose = function (e) {
@@ -57,16 +57,13 @@ const sendChatMessage = (content) => {
     socket.send(JSON.stringify(messageData));
 };
 
-const displayChatMessage = (chatPk, message) => {
+const displayChatMessage = (message) => {
     let messageHtml = '';
     let messagesContainer = document.querySelector(
-        `#chat-detail-placeholder-${chatPk} .chat-messages`
+        "#chat-detail-placeholder .messages-container"
     );
+    console.log(message)
     const profileUrl = `/users/user/${message.sender_username}/profile/detail/`;
-
-    if (!messagesContainer) {
-
-    }
 
     const loggedInUsername = document.body.getAttribute("data-username");
     const isSentByCurrentUser = message.sender_username === loggedInUsername;

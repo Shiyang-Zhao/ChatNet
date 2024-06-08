@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'apps/css/chats/message_detail.css' %}">
 {% endblock %}
 
-<div class="d-flex flex-column border" style="height: 80vh; overflow: hidden;">
+<div class="d-flex flex-column border" style="min-width: 50vw; height: 80vh; overflow: hidden;">
   <div class="d-flex justify-content-between align-items-center p-1 pb-0"
     style="border-bottom: 1px solid #ccc; background-color: #f8f9fa;">
     <div>
@@ -40,7 +40,7 @@
   </div>
 
   <!-- Upper part: Messages display -->
-  <div class="chat-messages flex-grow-1 overflow-auto">
+  <div class="messages-container flex-grow-1 overflow-auto">
     {% if chat.messages.all %}
     {% for message in chat.messages.all %}
     {% if message.sender == user %}
@@ -98,12 +98,12 @@
 
   <!-- Lower part: Message input -->
   <div>
-    <form id="message-form" method="post" enctype="multipart/form-data" data-listener-added="0">
+    <form method="post" enctype="multipart/form-data" data-listener-added="0">
       {% csrf_token %}
       <div class="form-group mb-0 position-relative">
-        <textarea id="message-input" class="form-control rounded-0 shadow-none" name="message" rows="3"
+        <textarea class="form-control rounded-0 shadow-none" name="message" rows="3"
           placeholder="Type your message here..." style="resize: none;" required></textarea>
-        <button id="send-button" type="submit" class="btn btn-primary" data-bs-toggle="popover"
+        <button type="submit" class="btn btn-primary" data-bs-toggle="popover"
           style="position: absolute; right: 7px; bottom: 5px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">
           <i class="fa-regular fa-paper-plane"></i>
         </button>
@@ -111,7 +111,3 @@
     </form>
   </div>
 </div>
-
-{% block javascripts %}
-<script type="module" src="{% static 'apps/js/chats/message_detail.js' %}"></script>
-{% endblock %}

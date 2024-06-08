@@ -55,19 +55,18 @@ document.addEventListener('DOMContentLoaded', function () {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
+        }).then(response => {
+            const html = response.data.html;
+            hasMorePosts = response.data.has_more;
+            console.log('Posts fetched:', nextPage, 'Has more posts:', hasMorePosts);
+            if (html) {
+                sentinel.insertAdjacentHTML('beforebegin', html);
+                page = nextPage;
+            } else {
+                console.log('No more posts to fetch, disconnecting observer.');
+                observer.disconnect();
+            }
         })
-            .then(response => {
-                const html = response.data.html;
-                hasMorePosts = response.data.has_more;
-                console.log('Posts fetched:', nextPage, 'Has more posts:', hasMorePosts);
-                if (html) {
-                    sentinel.insertAdjacentHTML('beforebegin', html);
-                    page = nextPage;
-                } else {
-                    console.log('No more posts to fetch, disconnecting observer.');
-                    observer.disconnect();
-                }
-            })
             .catch(error => {
                 console.error('Error fetching posts:', error);
             })

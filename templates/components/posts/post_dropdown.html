@@ -9,16 +9,16 @@
         {% check_post_save_status post user as is_user_saved_post %}
         {% if is_user_saved_post %}
         <li>
-            <form class="post-unsave-form saved" data-save-url="{% url 'save-post' pk=post.pk %}"
-                data-unsave-url="{% url 'unsave-post' pk=post.pk %}">
+            <form method="post" class="post-unsave-form saved" action="{% url 'unsave-post' pk=post.pk %}"
+                data-save-url="{% url 'save-post' pk=post.pk %}" data-unsave-url="{% url 'unsave-post' pk=post.pk %}">
                 {% csrf_token %}
                 <button type="submit" class="dropdown-item">Saved</button>
             </form>
         </li>
         {% else %}
         <li>
-            <form class="post-save-form save" data-save-url="{% url 'save-post' pk=post.pk %}"
-                data-unsave-url="{% url 'unsave-post' pk=post.pk %}">
+            <form method="post" class="post-save-form save" action="{% url 'save-post' pk=post.pk %}"
+                data-save-url="{% url 'save-post' pk=post.pk %}" data-unsave-url="{% url 'unsave-post' pk=post.pk %}">
                 {% csrf_token %}
                 <button type="submit" class="dropdown-item">Save</button>
             </form>

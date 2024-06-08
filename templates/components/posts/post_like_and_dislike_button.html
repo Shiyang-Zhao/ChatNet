@@ -3,7 +3,8 @@
 {% check_post_like_status post user as is_user_liked_post %}
 
 <div class="post-like-dislike-container d-flex justify-content-between align-items-center">
-    <form class="post-like-form" data-pk="{{ post.pk }}" data-url="{% url 'like-post' pk=post.pk %}">
+    <form method="post" class="post-like-form" action="{% url 'like-post' pk=post.pk %}" data-pk="{{ post.pk }}"
+        data-url="{% url 'like-post' pk=post.pk %}">
         {% csrf_token %}
         <button type="submit"
             class="btn {% if is_user_liked_post == 1 %}btn-success{% else %}btn-outline-success{% endif %}">
@@ -13,7 +14,8 @@
         </button>
     </form>
 
-    <form class="post-dislike-form" data-pk="{{ post.pk }}" data-url="{% url 'dislike-post' pk=post.pk %}">
+    <form method="post" class="post-dislike-form" action="{% url 'dislike-post' pk=post.pk %}" data-pk="{{ post.pk }}"
+        data-url="{% url 'dislike-post' pk=post.pk %}">
         {% csrf_token %}
         <button type="submit"
             class="btn {% if is_user_liked_post == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}">

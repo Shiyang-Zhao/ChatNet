@@ -37,20 +37,26 @@
       <a href="{% url 'story-create' %}" class="btn btn-dark">Create Story</a>
       {% else %}
       {% if is_following %}
-      <form class="user-unfollow-form following"
+      <form method="post" class="user-unfollow-form following"
+        action="{% url 'unfollow-profile' username=viewed_user.username %}"
         data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
         data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-secondary">Following</button>
       </form>
       {% else %}
-      <form class="user-follow-form follow" data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
+      <form method="post" class="user-follow-form follow"
+        action="{% url 'follow-profile' username=viewed_user.username %}"
+        data-follow-url="{% url 'follow-profile' username=viewed_user.username %}"
         data-unfollow-url="{% url 'unfollow-profile' username=viewed_user.username %}">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Follow</button>
       </form>
       {% endif %}
-      <form method="post" action="{% url 'private-chat-create' receiver_username=viewed_user.username %}">
+      <form method="post" class="send-message-form"
+        action="{% url 'private-chat-create' receiver_username=viewed_user.username %}"
+        data-url="{% url 'private-chat-create' receiver_username=viewed_user.username %}"
+        data-receiver-username="{{ viewed_user.username }}">
         {% csrf_token %}
         <button type="submit" class="btn btn-primary">Message</button>
       </form>

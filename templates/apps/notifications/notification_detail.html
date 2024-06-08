@@ -18,13 +18,15 @@
                 </h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ notification.date_sent|date:"F j, Y, G:i" }}</h6>
                 <div class="btn-group">
-                    <form class="mark-as-read-form me-1" data-url="{% url 'mark-as-read' notification.pk %}">
+                    <form method="post" class="mark-as-read-form me-1" action="{% url 'mark-as-read' notification.pk %}"
+                        data-url="{% url 'mark-as-read' notification.pk %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-primary me-3">
                             <i class="fa fa-envelope-open-text"></i>
                         </button>
                     </form>
-                    <form class="mark-as-unread-form" data-url="{% url 'mark-as-unread' notification.pk %}">
+                    <form method="post" class="mark-as-unread-form" action="{% url 'mark-as-unread' notification.pk %}"
+                        data-url="{% url 'mark-as-unread' notification.pk %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-warning">
                             <i class="fa fa-envelope"></i>

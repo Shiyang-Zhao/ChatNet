@@ -11,6 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 import re
+from metasphere.utils import is_ajax
 
 
 def home(request):
@@ -40,7 +41,7 @@ def home(request):
 
     # Initialize the paginator
     page = request.GET.get("page", 1)
-    per_page = 3  # Adjust the number of posts per page to your needs
+    per_page = 10
 
     if sort_method in ["controversial", "top"]:
         active_posts = base_query.annotate(**{sort_params[1]: sort_params[2]}).order_by(
@@ -60,14 +61,14 @@ def home(request):
     else:
         has_more = active_posts.has_next()
 
-    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+    if is_ajax(request):
         posts_html = "".join(
             render_to_string(
                 "components/posts/post_item.html", {"post": post}, request=request
             )
             for post in active_posts
         )
-        return JsonResponse({"html": posts_html, "has_more": has_more})
+        return JsonResponse({"html": posts_html, "has_more": has_more}, status=200)
 
     context = {
         "active_posts": active_posts,

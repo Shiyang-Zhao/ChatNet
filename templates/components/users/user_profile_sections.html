@@ -36,8 +36,8 @@
                         <div class="list-group-item"
                             style="border: 1px solid #e1e1e1; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                             <!-- Assume that post.image_url is the path to the image -->
-                            <img src="{% static post.image_url %}" alt="{{ post.title }}"
-                                style="width: 100%; height: auto; display: block;">
+                            <!-- <img src="{% static post.image_url %}" alt="{{ post.title }}"
+                                style="width: 100%; height: auto; display: block;"> -->
                             <div style="padding: 10px;">
                                 <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
                             </div>
