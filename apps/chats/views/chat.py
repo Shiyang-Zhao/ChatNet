@@ -35,13 +35,8 @@ class ChatListAndDetailView(View):
         }
 
         if is_ajax(request) and viewed_chat:
-            # chat_html = render_to_string(
-            #     "apps/chats/chat_item.html",
-            #     {"chat": viewed_chat},
-            #     request=request,
-            # )
             message_html = render_to_string(
-                "apps/chats/message_detail.html",
+                "components/chats/message_item.html",
                 {"chat": viewed_chat},
                 request=request,
             )

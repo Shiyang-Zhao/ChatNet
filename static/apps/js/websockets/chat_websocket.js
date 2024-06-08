@@ -60,11 +60,23 @@ const sendChatMessage = (content) => {
 const displayChatMessage = (message) => {
     let messageHtml = '';
     let messagesContainer = document.querySelector(
-        "#chat-detail-placeholder .messages-container"
+        "#message-detail-placeholder .messages-container"
     );
+    const chatsList = document.querySelector('#chats-container .chat-list');
     console.log(message)
-    const profileUrl = `/users/user/${message.sender_username}/profile/detail/`;
+    if (message.chat_html) {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = message.chat_html;
+        const chatElement = tempDiv.firstElementChild;
 
+        if (chatsList.firstChild) {
+            chatsList.insertBefore(chatElement, chatsList.firstChild);
+        } else {
+            chatsList.appendChild(chatElement);
+        }
+    }
+
+    const profileUrl = `/users/user/${message.sender_username}/profile/detail/`;
     const loggedInUsername = document.body.getAttribute("data-username");
     const isSentByCurrentUser = message.sender_username === loggedInUsername;
     const formattedDate = new Date(message.date_sent).toLocaleString("en-US", {

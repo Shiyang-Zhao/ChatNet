@@ -1,9 +1,9 @@
 import { establishChatWebSocket } from "../websockets/chat_websocket.js";
-import { showMessageDetail } from "./message_detail.js";
+import { showMessageDetail } from "../../../components/js/chats/message_item.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     const chatsContainer = document.querySelector('#chats-container');
-    const chatDetailPlaceholder = document.querySelector('#chat-detail-placeholder');
+    const chatDetailPlaceholder = document.querySelector('#message-detail-placeholder');
 
     const chatPattern = /^\/chats\/chat\/\d+\/$/;
     const currentPath = window.location.pathname;

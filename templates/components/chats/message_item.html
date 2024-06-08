@@ -1,6 +1,6 @@
 {% load static %}
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'apps/css/chats/message_detail.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'components/css/chats/message_item.css' %}">
 {% endblock %}
 
 <div class="d-flex flex-column border" style="min-width: 50vw; height: 80vh; overflow: hidden;">
@@ -44,7 +44,7 @@
     {% if chat.messages.all %}
     {% for message in chat.messages.all %}
     {% if message.sender == user %}
-    <div>
+    <div class="message-container">
       <div class="d-flex justify-content-end">
         <div class="text-white p-2" style="max-width: 80%;">
           <div class="d-flex align-items-start flex-row-reverse">
@@ -66,7 +66,7 @@
 
     {% else %}
 
-    <div>
+    <div class="message-container">
       <div class="d-flex justify-content-start">
         <div class="text-dark p-2" style="max-width: 80%;">
           <div class="d-flex align-items-start">
@@ -97,8 +97,8 @@
   </div>
 
   <!-- Lower part: Message input -->
-  <div>
-    <form method="post" enctype="multipart/form-data" data-listener-added="0">
+  <div class="message-form-container">
+    <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="form-group mb-0 position-relative">
         <textarea class="form-control rounded-0 shadow-none" name="message" rows="3"

@@ -10,8 +10,8 @@
 {% block content %}
 <div class="container mt-2">
   <div class="mb-3">
-    {% if user.is_authenticated %}
     <div id="stories-container" class="d-flex justify-content-start align-items-center ms-5 me-5 p-0">
+      {% if user.is_authenticated %}
       {% if active_authors %}
       {% for author in active_authors %}
       <div class="story-container position-relative me-2" data-initialized="0" style="width: 70px; height: 70px;">
@@ -20,9 +20,9 @@
         {% endwith %}
       </div>
       {% endfor %}
+      {% endif %}
+      {% endif %}
     </div>
-    {% endif %}
-    {% endif %}
   </div>
 
   <div class="d-flex align-items-baseline mb-2">

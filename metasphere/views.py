@@ -68,7 +68,7 @@ def home(request):
             )
             for post in active_posts
         )
-        return JsonResponse({"html": posts_html, "has_more": has_more}, status=200)
+        return JsonResponse({"posts_html": posts_html, "has_more": has_more}, status=200)
 
     context = {
         "active_posts": active_posts,

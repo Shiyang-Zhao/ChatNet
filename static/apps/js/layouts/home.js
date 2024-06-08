@@ -56,11 +56,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(response => {
-            const html = response.data.html;
+            const posts_html = response.data.posts_html;
             hasMorePosts = response.data.has_more;
             console.log('Posts fetched:', nextPage, 'Has more posts:', hasMorePosts);
-            if (html) {
-                sentinel.insertAdjacentHTML('beforebegin', html);
+            if (posts_html) {
+                sentinel.insertAdjacentHTML('beforebegin', posts_html);
                 page = nextPage;
             } else {
                 console.log('No more posts to fetch, disconnecting observer.');
