@@ -10,24 +10,21 @@
 <div class="container mt-5">
   <div class="d-flex align-items-center" style="height: 80vh;">
     <!-- Left part: List of chats -->
-    <div id="chats-container" class="col-md-3 d-flex flex-column border"
-      style="min-width: 20%; height: 100%; overflow-y: auto;">
+    <div id="chats-container" class="col-md-3 d-flex flex-column border" style="height: 100%; overflow-y: auto;">
       {% include 'apps/chats/group_chat_create_form.html' %}
-      {% if chats %}
       <ul class="chat-list list-group flex-grow-1 rounded-0">
+        {% if chats %}
         {% for chat in chats %}
         <div>
-        {% include 'components/chats/chat_item.html' with chat=chat %}
-      </div>
+          {% include 'components/chats/chat_item.html' with chat=chat %}
+        </div>
         {% endfor %}
+        {% endif %}
       </ul>
-      {% else %}
-      <p class="text-center mt-3">No chats found</p>
-      {% endif %}
     </div>
 
     <!-- Right part: Chat details -->
-    <div class="col-md-9 d-flex flex-column justify-content-center border" style="height: 100%;">
+    <div class="col-md-9 d-flex flex-column justify-content-center border" style="min-width: 50vw; height: 100%;">
       <div id="message-detail-placeholder">
         {% if not selected %}
         <div class="d-flex flex-column align-items-center">

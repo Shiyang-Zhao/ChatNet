@@ -6,7 +6,6 @@ const establishChatWebSocket = (chatPk) => {
     if (socket) {
         socket.close();
     }
-
     const socketProtocol =
         window.location.protocol === "https:" ? "wss://" : "ws://";
     const socketURL =
@@ -21,8 +20,11 @@ const establishChatWebSocket = (chatPk) => {
     };
 
     socket.onmessage = function (event) {
-        var message = JSON.parse(event.data);
-        displayChatMessage(message);
+        let message = JSON.parse(event.data);
+        console.log(message)
+        displayChatItem(message);
+        displayMessageItem(message);
+        console.log(message)
     };
 
     socket.onclose = function (e) {
@@ -35,7 +37,7 @@ const establishChatWebSocket = (chatPk) => {
     };
 };
 
-const reconnect = (chatPk) => {
+function reconnect(chatPk) {
     if (socket && socket.chatPk !== chatPk) {
         console.error("WebSocket won't try to reconnect because chat room changed.");
         return;
@@ -45,7 +47,7 @@ const reconnect = (chatPk) => {
     retryInterval = Math.min(maxRetryInterval, retryInterval * 2);
 };
 
-const sendChatMessage = (content) => {
+function sendChatMessage(content) {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
         console.error("WebSocket is not open or not connected");
         return;
@@ -57,24 +59,29 @@ const sendChatMessage = (content) => {
     socket.send(JSON.stringify(messageData));
 };
 
-const displayChatMessage = (message) => {
-    let messageHtml = '';
-    let messagesContainer = document.querySelector(
-        "#message-detail-placeholder .messages-container"
-    );
+function displayChatItem(message) {
     const chatsList = document.querySelector('#chats-container .chat-list');
-    console.log(message)
     if (message.chat_html) {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = message.chat_html;
         const chatElement = tempDiv.firstElementChild;
-
         if (chatsList.firstChild) {
             chatsList.insertBefore(chatElement, chatsList.firstChild);
         } else {
             chatsList.appendChild(chatElement);
         }
+        gsap.fromTo(chatElement,
+            { opacity: 0, y: -20 },
+            { duration: 0.5, opacity: 1, y: 0, ease: 'power2.out' }
+        );
     }
+}
+
+function displayMessageItem(message) {
+    let messageHtml = '';
+    let messagesContainer = document.querySelector(
+        "#message-detail-placeholder .messages-container"
+    );
 
     const profileUrl = `/users/user/${message.sender_username}/profile/detail/`;
     const loggedInUsername = document.body.getAttribute("data-username");
@@ -86,7 +93,7 @@ const displayChatMessage = (message) => {
     if (isSentByCurrentUser) {
         messageHtml = `
             <div class="d-flex justify-content-end">
-                <div class="text-white p-2" style="max-width: 80%;">
+                <div class="text-white p-1" style="max-width: 80%;">
                     <div class="d-flex align-items-start flex-row-reverse">
                         <a href="${profileUrl}" class="text-decoration-none text-reset">
                             <img class="img-fluid rounded-circle ms-2" src="${message.sender_profile_image_url}"
@@ -94,9 +101,9 @@ const displayChatMessage = (message) => {
                         </a>
                         <div class="d-flex flex-column text-wrap text-break rounded-3 bg-primary ps-2 pe-2" style="max-width: 90%;">
                             <p class="text-start m-1">${message.content}</p>
-                            <span class="date-sent text-muted text-start" style="font-size: 0.9em;">
+                            <small class="text-muted text-start" style="font-size: 0.8em;">
                                 ${formattedDate.replace(' at', ',')}
-                            </span>
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -105,7 +112,7 @@ const displayChatMessage = (message) => {
     } else {
         messageHtml = `
             <div class="d-flex justify-content-start">
-                <div class="text-dark p-2" style="max-width: 80%;">
+                <div class="text-dark p-1" style="max-width: 80%;">
                     <div class="d-flex align-items-start">
                         <a href="${profileUrl}" class="text-decoration-none text-reset">
                             <img class="img-fluid rounded-circle me-2" src="${message.sender_profile_image_url}"
@@ -113,9 +120,9 @@ const displayChatMessage = (message) => {
                         </a>
                         <div class="d-flex flex-column text-wrap text-break rounded-3 bg-secondary-subtle ps-2 pe-2" style="max-width: 90%;">
                             <p class="text-start m-1">${message.content}</p>
-                            <span class="date-sent text-muted text-end" style="font-size: 0.9em;">
+                            <small class="text-muted text-end" style="font-size: 0.8em;">
                                 ${formattedDate.replace(' at', ',')}
-                            </span>
+                            </small>
                         </div>
                     </div>
                     

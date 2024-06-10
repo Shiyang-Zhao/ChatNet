@@ -58,7 +58,7 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
             return redirect(existing_chat.get_absolute_url())
 
         self.object = form.save(commit=False)
-        # self.object.creator = self.request.user
+        self.object.creator = self.request.user
         self.object.title = (
             f"Chat between {self.request.user.username} and {receiver.username}"
         )
@@ -66,37 +66,6 @@ class PrivateChatCreateView(LoginRequiredMixin, CreateView):
         self.object.save()
         self.object.participants.add(self.request.user, receiver)
         return super().form_valid(form)
-
-
-# class PrivateChatCreateView(LoginRequiredMixin, CreateView):
-#     model = Chat
-#     fields = []
-
-#     def form_valid(self, form):
-#         receiver_username = self.kwargs.get("receiver_username")
-#         receiver = get_object_or_404(User, username=receiver_username)
-#         existing_chat = Chat.get_existing_private_chat(self.request.user, receiver)
-
-#         if existing_chat:
-#             if is_ajax(self.request):
-#                 return JsonResponse(
-#                     {"status": "exists", "url": existing_chat.get_absolute_url()},
-#                     status=200,
-#                 )
-#             else:
-#                 return redirect(existing_chat.get_absolute_url())
-
-#         self.object = form.save(commit=False)
-#         self.object.save()
-#         self.object.participants.add(self.request.user, receiver)
-
-#         if is_ajax(self.request):
-#             message_html = render_to_string(
-#                 "apps/chats/message_detail.html", {"chat": self.object}, request=self.request
-#             )
-#             return JsonResponse({"status": "created", "url": self.object.get_absolute_url(), "html": message_html}, status=200)
-
-#         return super().form_valid(form)
 
 
 class GroupChatCreateView(LoginRequiredMixin, CreateView):

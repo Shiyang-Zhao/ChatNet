@@ -18,13 +18,14 @@ const establishNotificationWebSocket = () => {
 
     socket.onmessage = function (event) {
         var message = JSON.parse(event.data);
-        console.log("Message type: " + message.type);
-        console.log("Received message: " + message.content);
-        console.log("Unread count: " + message.unread_count);
+        console.log(message)
         displayUnreadNotificationCount(message.unread_count);
-        if (message.type === "notification_message") {
+        if (message.type === "general_notification_message") {
             soundElement.play();
             displayNotificationMessage(message);
+            if (message.chat_html) {
+                displayChatItem(message);
+            }
         }
     };
 
@@ -44,6 +45,25 @@ const reconnect = () => {
     setTimeout(establishNotificationWebSocket, retryInterval);
     retryInterval = Math.min(maxRetryInterval, retryInterval * 2);
 };
+
+function displayChatItem(message) {
+    const chatsList = document.querySelector('#chats-container .chat-list');
+    if (chatsList && message.chat_html) {
+        console.log(chatsList)
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = message.chat_html;
+        const chatElement = tempDiv.firstElementChild;
+        if (chatsList.firstChild) {
+            chatsList.insertBefore(chatElement, chatsList.firstChild);
+        } else {
+            chatsList.appendChild(chatElement);
+        }
+        gsap.fromTo(chatElement,
+            { opacity: 0, y: -20 },
+            { duration: 0.5, opacity: 1, y: 0, ease: 'power2.out' }
+        );
+    }
+}
 
 const displayUnreadNotificationCount = (count) => {
     const iconElement = document.querySelector("#notification-icon");

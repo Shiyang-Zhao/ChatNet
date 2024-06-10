@@ -29,7 +29,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.chat_channel_name, self.channel_name
         )
 
-    # Consumer receives message
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message_type = text_data_json.get("type")
@@ -39,7 +38,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             content = text_data_json.get("content", "")
             date_sent = timezone.now()
 
-            # Save message to the database
             await self.save_message(sender, content, date_sent)
             sender_profile_image_url = await self.get_profile_image_url(sender)
 
@@ -52,8 +50,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
 
             if self.chat.last_active is None:
-                self.chat.last_active = timezone.now()
-                await self.update_chat_last_active(self.chat_pk)
                 chat_html = await sync_to_async(render_to_string)(
                     "components/chats/chat_item.html",
                     {"user": sender, "chat": self.chat},
@@ -61,6 +57,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 payload["chat_html"] = chat_html
 
             await self.channel_layer.group_send(self.chat_channel_name, payload)
+            self.chat.last_active = timezone.now()
+            await self.update_chat_last_active(self.chat_pk)
             await self.update_user_last_active(sender.pk)
 
     async def chat_message(self, event):
