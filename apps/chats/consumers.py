@@ -43,6 +43,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             payload = {
                 "type": "chat_message",
+                "chat_pk": self.chat_pk,
                 "sender_username": sender.username,
                 "sender_profile_image_url": sender_profile_image_url,
                 "content": content,
@@ -62,6 +63,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.update_user_last_active(sender.pk)
 
     async def chat_message(self, event):
+        chat_pk = event["chat_pk"]
         sender_username = event["sender_username"]
         sender_profile_image_url = event["sender_profile_image_url"]
         content = event["content"]
@@ -69,6 +71,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         response = {
             "type": "chat_message",
+            "chat_pk": chat_pk,
             "sender_username": sender_username,
             "sender_profile_image_url": sender_profile_image_url,
             "content": content,

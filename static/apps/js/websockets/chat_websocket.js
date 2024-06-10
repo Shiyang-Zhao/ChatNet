@@ -3,9 +3,9 @@ let retryInterval = 1000;
 let maxRetryInterval = 60000;
 
 const establishChatWebSocket = (chatPk) => {
-    if (socket) {
-        socket.close();
-    }
+    // if (socket) {
+    //     socket.close();
+    // }
     const socketProtocol =
         window.location.protocol === "https:" ? "wss://" : "ws://";
     const socketURL =
@@ -24,7 +24,6 @@ const establishChatWebSocket = (chatPk) => {
         console.log(message)
         displayChatItem(message);
         displayMessageItem(message);
-        console.log(message)
     };
 
     socket.onclose = function (e) {
@@ -80,8 +79,10 @@ function displayChatItem(message) {
 function displayMessageItem(message) {
     let messageHtml = '';
     let messagesContainer = document.querySelector(
-        "#message-detail-placeholder .messages-container"
+        `#message-detail-placeholder #messages-container-${message.chat_pk}`
     );
+    console.log(messagesContainer)
+    if (!messagesContainer) return;
 
     const profileUrl = `/users/user/${message.sender_username}/profile/detail/`;
     const loggedInUsername = document.body.getAttribute("data-username");

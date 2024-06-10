@@ -10,7 +10,6 @@ const establishNotificationWebSocket = () => {
     socket = new WebSocket(socketURL);
     const soundElement = document.querySelector("#notification-sound");
 
-
     socket.onopen = function () {
         console.log("WebSocket connection to notification successfully established!");
         retryInterval = 1000;
