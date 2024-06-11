@@ -1,8 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
-from django.urls import reverse
-from .chat import Chat  # Make sure this import reflects your project structure
+from .chat import Chat
 
 
 class Message(models.Model):
@@ -20,9 +19,6 @@ class Message(models.Model):
     attachment = models.FileField(
         upload_to="message_attachments/", null=True, blank=True
     )
-
-    # def get_absolute_url(self):
-    #     return reverse("chat-detail", kwargs={"pk": self.chat.pk})
 
     def __str__(self):
         return (

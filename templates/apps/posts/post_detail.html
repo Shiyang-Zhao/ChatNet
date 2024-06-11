@@ -21,11 +21,13 @@
       {% include 'components/posts/post_dropdown.html' with post=post %}
     </div>
     <div>
-      <h2>{{ post.title }}</h2>
+      <h2 style="word-wrap: break-word; overflow-wrap: break-word;">{{ post.title }}</h2>
       {% if post.file %}
       {% include 'components/posts/post_file_detail.html' with post=post %}
       {% else %}
-      <p class="card-text text-muted">{{ post.content|truncatewords:50 }}</p>
+      <p class="card-text text-muted" style="word-wrap: break-word; overflow-wrap: break-word; hyphens: auto;">
+        {{ post.content }}
+      </p>
       {% endif %}
     </div>
     <div class="d-flex justify-content-between align-items-baseline">
@@ -33,11 +35,11 @@
       <div class="d-flex justify-content-between align-items-center mt-3">
         <div class="me-3">
           <a href="#comment-form-container" class="text-decoration-none text-reset">
-            <i class="fa-solid fa-comments fa-xl me-1"></i>{{ post.comments.count }}
+            <span class="icon-gradient"><i class="fa-solid fa-comments fa-xl me-1"></i>{{ post.comments.count }}</span>
           </a>
         </div>
         <div class="me-3">
-          <i class="fa-solid fa-eye fa-xl me-1"></i>{{ post.views }}
+          <span class="icon-gradient"><i class="fa-solid fa-eye fa-xl me-1"></i>{{ post.views }}</span>
         </div>
       </div>
     </div>

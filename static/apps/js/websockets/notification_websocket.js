@@ -65,15 +65,12 @@ function displayChatItem(message) {
 }
 
 const displayUnreadNotificationCount = (count) => {
-    const iconElement = document.querySelector("#notification-icon");
     const countElement = document.querySelector("#notification-count");
 
     if (count > 0) {
-        iconElement.classList.add('fa-shake');
         countElement.textContent = count;
         countElement.style.display = 'inline-block';
     } else {
-        iconElement.classList.remove("fa-shake");
         countElement.textContent = '';
         countElement.style.display = 'none';
     }
@@ -95,7 +92,7 @@ const displayNotificationMessage = (message) => {
         const minutes = date.getUTCMinutes().toString().padStart(2, "0");
 
         if (hours < 10) {
-            hours = hours.toString(); // Convert single-digit hours to string without leading zero
+            hours = hours.toString();
         }
 
         const formattedDate = `${month} ${day}, ${year}, ${hours}:${minutes}`;

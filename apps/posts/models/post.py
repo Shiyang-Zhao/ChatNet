@@ -44,6 +44,14 @@ class Post(models.Model):
     def file_extension(self):
         return Path(self.file.name).suffix
 
+    @classmethod
+    def active_posts(cls, user):
+        return cls.objects.filter(
+            author=user,
+            is_published=True,
+            is_deleted=False,
+        )
+
     def __str__(self):
         return self.title
 

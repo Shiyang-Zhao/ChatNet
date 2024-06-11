@@ -3,7 +3,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light p-0">
     <div class="container-fluid d-flex align-items-center justify-content-between flex-nowrap">
       <a class="navbar-brand flex-shrink-0" href="{% url 'metasphere' %}">
-        <img src="{% static 'images/title.png' %}" width="200" />
+        <img src="{% static 'images/title.svg' %}" width="200" />
       </a>
 
       {% if user.is_authenticated %}
@@ -14,7 +14,7 @@
             aria-label="Search" name="q" style="min-width: 150px;">
           <button class="btn position-absolute top-50 start-0 translate-middle-y border-0 bg-transparent ps-3"
             type="submit">
-            <i class="fa fa-search fa-lg"></i>
+            <span class="icon-gradient"><i class="fa fa-search fa-lg"></i></span>
           </button>
         </form>
       </div>
@@ -30,25 +30,25 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
           <a class="nav-link" href="{% url 'home' %}">
-            <i class="fa-solid fa-house fa-xl"></i>
+            <span class="icon-gradient"><i class="fa-solid fa-house fa-xl"></i></span>
           </a>
         </li>
         {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'post-create' %}">
-            <i class="fa-solid fa-pen fa-xl"></i>
+            <span class="icon-gradient"><i class="fa-solid fa-pen fa-xl"></i></span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'chat-list' %}">
-            <i class="fa-solid fa-comment-dots fa-xl"></i>
+            <span class="icon-gradient"><i class="fa-solid fa-comment-dots fa-xl"></i></span>
           </a>
         </li>
         <li class="nav-item">
           <audio id="notification-sound" src="{% static 'audio/notification_sound.mp3' %}" preload="auto"></audio>
           <a class="nav-link" href="{% url 'notification-list' %}">
             <div class="position-relative d-inline-block">
-              <i id="notification-icon" class="fa-solid fa-bell fa-xl"></i>
+              <span class="icon-gradient"><i id="notification-icon" class="fa-solid fa-bell fa-xl"></i></span>
               <span id="notification-count"
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                 style="display: none; transform: translate(-50%, -50%); font-size: 0.75rem;">
@@ -67,24 +67,30 @@
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar-dropdown">
             <li>
               <a class="dropdown-item" href="{% url 'user-profile-detail' username=user.username %}">
-                <i class="fa-solid fa-user me-2"></i>Profile
+                <span class="icon-gradient">
+                  <i class="fa-solid fa-user me-2"></i>Profile
+                </span>
               </a>
             </li>
             <li>
               <a class="dropdown-item" href="{% url 'history' %}">
-                <i class="fa-solid fa-clock-rotate-left me-2"></i>History
+                <span class="icon-gradient">
+                  <i class="fa-solid fa-clock-rotate-left me-2"></i>History
+                </span>
               </a>
             </li>
             <li>
               <a class="dropdown-item" href="{% url 'setting' %}">
-                <i class="fa-solid fa-gear me-2"></i>Setting
+                <span class="icon-gradient">
+                  <i class="fa-solid fa-gear me-2"></i>Setting
+                </span>
               </a>
             </li>
             <li>
               <form method="post" action="{% url 'user-logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="dropdown-item">
-                  <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+                  <span class="icon-gradient"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</span>
                 </button>
               </form>
             </li>
@@ -92,12 +98,15 @@
         </li>
         {% else %}
         <li class="nav-item">
-          <a class="nav-link text-nowrap" href="{% url 'user-register' %}">Sign Up</a>
+          <a class="nav-link text-nowrap" href="{% url 'user-register' %}">
+            <span class="icon-gradient">
+              Sign Up
+            </span>
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-nowrap" href="{% url 'user-login' %}">Log In</a>
+          <a class="nav-link text-nowrap" href="{% url 'user-login' %}"><span class="icon-gradient">Log In</span></a>
         </li>
-
         {% endif %}
       </ul>
     </div>

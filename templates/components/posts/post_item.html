@@ -18,18 +18,22 @@
         </div>
 
         <div>
-            <h6 class="card-title">{{ post.title }}</h6>
+            <h6 class="card-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                {{ post.title }}
+            </h6>
             {% if post.file %}
             {% include 'components/posts/post_file_detail.html' with post=post %}
             {% else %}
-            <p class="card-text text-muted">{{ post.content|truncatewords:50 }}</p>
+            <p class="card-text text-muted" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                {{ post.content|truncatewords:50 }}
+            </p>
             {% endif %}
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
             {% include 'components/posts/post_like_and_dislike_button.html' with post=post user=user %}
             <button class="btn btn-outline-secondary">
-                <i class="fa-solid fa-comments me-1"></i>{{ post.comments.count }}
+                <span class="icon-gradient"><i class="fa-solid fa-comments me-1"></i>{{ post.comments.count }}</span>
             </button>
         </div>
     </div>

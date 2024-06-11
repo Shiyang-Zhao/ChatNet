@@ -3,7 +3,7 @@
 <div class="btn-group dropstart">
     <button class="dropdown-btn btn btn-link text-dark rounded-pill pt-0 pb-0" id="post-dropdown-{{ post.pk }}"
         type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-ellipsis"></i>
+        <span class="icon-gradient"><i class="fa-solid fa-ellipsis"></i></span>
     </button>
     <ul class="dropdown-menu" aria-labelledby="post-dropdown-{{ post.pk }}">
         {% check_post_save_status post user as is_user_saved_post %}

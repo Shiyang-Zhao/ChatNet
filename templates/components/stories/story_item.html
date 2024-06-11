@@ -4,12 +4,12 @@
     data-bs-target="#story-modal-{{ viewed_user.username }}">
     <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
         class="rounded-circle img-thumbnail position-absolute top-0 start-0"
-        style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(252, 29, 29, 0.8);">
+        style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 2px solid rgba(252, 29, 29, 0.8);">
 </button>
 {% else %}
 <img src="{{ viewed_user.profile.profile_image.url }}" alt="{{ viewed_user.username }}'s Profile Image"
     class="rounded-circle img-thumbnail position-absolute top-0 start-0"
-    style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(116, 116, 116, 0.8)">
+    style="object-fit: cover; width: 100%; height: 100%; border-radius: 50%; border: 2px solid rgba(116, 116, 116, 0.8)">
 {% endif %}
 <div id="story-modal-{{ viewed_user.username }}" class="story-modal modal fade" tabindex="-1" role="dialog"
     aria-hidden="true">

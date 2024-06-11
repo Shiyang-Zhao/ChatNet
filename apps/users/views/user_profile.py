@@ -9,6 +9,9 @@ from django.views.generic import DetailView
 from django.urls import reverse_lazy
 from django.views.generic.base import View
 from apps.stories.models import Story
+from apps.posts.models.post import Post
+from apps.posts.models.comment import Comment
+
 
 User = get_user_model()
 
@@ -24,6 +27,9 @@ class UserAndProfileDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["active_stories"] = Story.active_stories(self.object)
+        context["active_posts"] = Post.active_posts(self.object)
+        context["active_comments"] = Comment.active_comments(self.object)
+
         return context
 
 

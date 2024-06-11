@@ -41,6 +41,14 @@ class Comment(models.Model):
     def children(self):
         return Comment.objects.filter(parent_comment=self)
 
+    @classmethod
+    def active_comments(cls, user):
+        return cls.objects.filter(
+            author=user,
+            visibility=True,
+            is_deleted=False,
+        )
+
     def __str__(self):
         return f'Comment by {self.author.username} on {self.date_posted.strftime("%Y-%m-%d %H:%M")}'
 

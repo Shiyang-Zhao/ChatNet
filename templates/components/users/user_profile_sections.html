@@ -16,14 +16,6 @@
                 <a class="nav-link" id="liked-tab" data-bs-toggle="tab" href="#liked" role="tab" aria-controls="liked"
                     aria-selected="false">Liked</a>
             </li>
-            <li class="nav-item text-center" style="min-width: 150px;">
-                <a class="nav-link" id="disliked-tab" data-bs-toggle="tab" href="#disliked" role="tab"
-                    aria-controls="disliked" aria-selected="false">Disliked</a>
-            </li>
-            <li class="nav-item text-center" style="min-width: 150px;">
-                <a class="nav-link" id="commented-tab" data-bs-toggle="tab" href="#commented" role="tab"
-                    aria-controls="commented" aria-selected="false">Commented</a>
-            </li>
         </ul>
     </div>
     <div class="col-lg-10">
@@ -31,42 +23,124 @@
             <!-- Posts Section -->
             <div id="posts" class="tab-pane fade show active" role="tabpanel" aria-labelledby="posts-tab">
                 <div class="row">
-                    {% for post in viewed_user.posts.all %}
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
-                        <div class="list-group-item"
-                            style="border: 1px solid #e1e1e1; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                            <!-- Assume that post.image_url is the path to the image -->
-                            <!-- <img src="{% static post.image_url %}" alt="{{ post.title }}"
-                                style="width: 100%; height: auto; display: block;"> -->
-                            <div style="padding: 10px;">
-                                <a href="{% url 'post-detail' pk=post.pk %}">{{ post.title }}</a>
+                    {% for post in active_posts %}
+                    <div class="col-lg-4 col-md-6 col-sm-4 col-4 mb-4">
+                        <a href="{% url 'post-detail' pk=post.pk %}" class="text-decoration-none text-reset">
+                            <div class="rounded overflow-hidden">
+                                {% if post.file %}
+                                {% if post.file_extension in '.jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp' %}
+                                <img src="{{ post.file.url }}" alt="Image" class="img-fluid rounded-3 shadow-sm w-100"
+                                    style="height: 400px; object-fit: cover;">
+                                {% elif post.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
+                                <video autoplay muted preload="auto" class="rounded-3 shadow-sm w-100"
+                                    style="height: 400px; object-fit: cover;">
+                                    <source src="{{ post.file.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                {% else %}
+                                <div class="d-flex align-items-center justify-content-center shadow-sm"
+                                    style="height: 400px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    <p class="text-center mb-0">
+                                        {{ post.file_extension }}
+                                    </p>
+                                </div>
+                                {% endif %}
+                                {% else %}
+                                <div class="d-flex flex-column justify-content-center align-items-center shadow-sm p-3"
+                                    style="height: 400px; background: linear-gradient(135deg, #e0f7fa 40%, #ffecb3 100%); border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    <h4 class="w-100 text-center text-dark mb-3"
+                                        style="word-wrap: break-word; overflow-wrap: break-word; font-weight: bold; hyphens: auto;">
+                                        {{ post.title|truncatechars:50 }}
+                                    </h4>
+                                    <p class="text-muted text-start"
+                                        style="max-width: 95%; word-wrap: break-word; overflow-wrap: break-word; hyphens: auto;">
+                                        {{ post.content|truncatechars:100 }}
+                                    </p>
+                                </div>
+                                {% endif %}
                             </div>
-                        </div>
+                        </a>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <p>No posts available.</p>
                     </div>
                     {% endfor %}
                 </div>
             </div>
 
             <!-- Comments Section -->
-            <!-- Similar setup, ensure images are involved if you want an Instagram-like feel -->
             <div id="comments" class="tab-pane fade" role="tabpanel" aria-labelledby="comments-tab">
                 <div class="row">
-                    {% for comment in viewed_user.comments.all %}
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                        <div class="list-group-item"
-                            style="border: 1px solid #e1e1e1; padding: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                            <a href="{% url 'post-detail' pk=comment.post.pk %}">
+                    {% for comment in active_comments %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-2 d-flex align-items-stretch">
+                        <div class="list-group-item border p-0 rounded shadow-sm w-100 d-flex flex-column"
+                            style="height: 250px;">
+                            <a href="{% url 'post-detail' pk=comment.post.pk %}" class="d-block p-3">
                                 <strong>Comment on {{ comment.post.title }}:</strong>
-                                "{{ comment.content|truncatewords:20 }}"
+                                <span class="d-block">{{ comment.content|truncatewords:20 }}</span>
                             </a>
-                            <small style="display: block; padding: 10px;">— posted on {{ comment.date_posted|date:"F
-                                j, Y, G:i" }}</small>
+                            <small class="p-3 mt-auto">
+                                — posted on {{ comment.date_posted|date:"F j, Y, G:i" }}
+                            </small>
                         </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <p>No comments available.</p>
                     </div>
                     {% endfor %}
                 </div>
             </div>
 
+            <!-- Liked Section -->
+            <div id="liked" class="tab-pane fade" role="tabpanel" aria-labelledby="liked-tab">
+                <div class="row">
+                    {% for post in liked_posts %}
+                    <div class="col-lg-4 col-md-6 col-sm-4 col-4 mb-4">
+                        <a href="{% url 'post-detail' pk=post.pk %}" class="text-decoration-none text-reset">
+                            <div class="rounded overflow-hidden">
+                                {% if post.file %}
+                                {% if post.file_extension in '.jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp' %}
+                                <img src="{{ post.file.url }}" alt="Image" class="img-fluid rounded-3 shadow-sm w-100"
+                                    style="height: 400px; object-fit: cover;">
+                                {% elif post.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
+                                <video autoplay muted preload="auto" class="rounded-3 shadow-sm w-100"
+                                    style="height: 400px; object-fit: cover;">
+                                    <source src="{{ post.file.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                {% else %}
+                                <div class="d-flex align-items-center justify-content-center shadow-sm"
+                                    style="height: 400px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    <p class="text-center mb-0">
+                                        {{ post.file_extension }}
+                                    </p>
+                                </div>
+                                {% endif %}
+                                {% else %}
+                                <div class="d-flex flex-column justify-content-center align-items-center shadow-sm p-3"
+                                    style="height: 400px; background: linear-gradient(135deg, #e0f7fa 40%, #ffecb3 100%); border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    <h4 class="w-100 text-center text-dark mb-3"
+                                        style="word-wrap: break-word; overflow-wrap: break-word; font-weight: bold; hyphens: auto;">
+                                        {{ post.title|truncatechars:50 }}
+                                    </h4>
+                                    <p class="text-muted text-start"
+                                        style="max-width: 95%; word-wrap: break-word; overflow-wrap: break-word; hyphens: auto;">
+                                        {{ post.content|truncatechars:100 }}
+                                    </p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <p>No liked posts available.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </div>

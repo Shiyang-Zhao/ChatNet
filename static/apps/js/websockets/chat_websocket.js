@@ -60,7 +60,7 @@ function sendChatMessage(content) {
 
 function displayChatItem(message) {
     const chatsList = document.querySelector('#chats-container .chat-list');
-    if (message.chat_html) {
+    if (chatsList && message.chat_html) {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = message.chat_html;
         const chatElement = tempDiv.firstElementChild;

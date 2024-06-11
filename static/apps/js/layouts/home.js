@@ -25,8 +25,16 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = card.getAttribute('data-href');
         }
     });
-    document.addEventListener("DOMContentLoaded", () => {
+
+    document.body.addEventListener('mousedown', function (event) {
+        if (event.button === 1) {
+            const card = event.target.closest('.post-container');
+            if (card) {
+                window.open(card.getAttribute('data-href'), '_blank');
+            }
+        }
     });
+
 });
 
 document.addEventListener('DOMContentLoaded', function () {
