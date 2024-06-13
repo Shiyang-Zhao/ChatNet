@@ -1,0 +1,9 @@
+{% if user.online_status == -1 %}
+<small class="text-muted">Never online</small>
+{% elif user.online_status == 1 %}
+<small class="text-success">
+    <i class="fa fa-circle text-success me-1"></i>Online
+</small>
+{% else %}
+<small class="text-muted">Online {{ user.online_status }}</small>
+{% endif %}

@@ -14,7 +14,6 @@ class Message(models.Model):
     content = models.TextField()
     date_sent = models.DateTimeField(default=timezone.now)
     date_last_edited = models.DateTimeField(null=True, blank=True)
-    is_read = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
     attachment = models.FileField(
         upload_to="message_attachments/", null=True, blank=True

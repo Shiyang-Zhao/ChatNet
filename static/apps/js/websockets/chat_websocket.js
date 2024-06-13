@@ -3,9 +3,10 @@ let retryInterval = 1000;
 let maxRetryInterval = 60000;
 
 const establishChatWebSocket = (chatPk) => {
-    // if (socket) {
-    //     socket.close();
-    // }
+    if (socket && socket.readyState === WebSocket.OPEN && socket.chatPk === chatPk) {
+        console.log("WebSocket connection already established for this chat.");
+        return;
+    }
     const socketProtocol =
         window.location.protocol === "https:" ? "wss://" : "ws://";
     const socketURL =
