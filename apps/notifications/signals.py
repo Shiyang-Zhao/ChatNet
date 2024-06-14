@@ -12,6 +12,22 @@ from django.template.loader import render_to_string
 User = get_user_model()
 
 
+async def get_notification_html(notification):
+    notification_html = await sync_to_async(render_to_string)(
+        "components/notifications/notification_item.html",
+        {"notification": notification},
+    )
+    return notification_html
+
+
+async def get_chat_html(receiver, chat):
+    chat_html = await sync_to_async(render_to_string)(
+        "components/chats/chat_item.html",
+        {"user": receiver, "chat": chat},
+    )
+    return chat_html
+
+
 @receiver(post_save, sender=Message)
 def new_message_notification(sender, instance, created, **kwargs):
     if created:
@@ -29,24 +45,15 @@ def new_message_notification(sender, instance, created, **kwargs):
             unread_count = Notification.objects.filter(
                 receiver=receiver, is_read=False
             ).count()
+            notification_html = async_to_sync(get_notification_html)(notification)
             payload = {
                 "type": "general_notification_message",
-                "notification_pk": notification.pk,
-                "sender_username": instance.sender.username,
-                "content": content,
-                "date_sent": notification.date_sent.isoformat(),
+                "notification_html": notification_html,
                 "unread_count": unread_count,
             }
 
-            async def get_chat_html():
-                chat_html = await sync_to_async(render_to_string)(
-                    "components/chats/chat_item.html",
-                    {"user": receiver, "chat": chat},
-                )
-                return chat_html
-
             if chat.last_active is None:
-                chat_html = async_to_sync(get_chat_html)()
+                chat_html = async_to_sync(get_chat_html)(receiver, chat)
                 payload["chat_html"] = chat_html
 
             async_to_sync(channel_layer.group_send)(

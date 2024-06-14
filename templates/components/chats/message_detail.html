@@ -19,15 +19,7 @@
           </a>
           <div class="d-flex flex-column justify-content-start">
             <span class="h6 mb-0">{{ participant.username }}</span>
-            {% if participant.activity_status == -1 %}
-            <small class="text-muted">Never active</small>
-            {% elif participant.activity_status > 2 %}
-            <small class="text-muted">Active {{ participant.activity_status }} minutes ago</small>
-            {% else %}
-            <small class="text-success" style="font-size: 0.75em;">
-              <i class="fa fa-circle text-success me-1"></i>Online
-            </small>
-            {% endif %}
+            {% include 'components/users/user_online_status.html' with user=participant %}
           </div>
         </div>
         {% endif %}
@@ -40,16 +32,25 @@
   </div>
 
   <!-- Upper part: Messages display -->
-  <div id="messages-container-{{ chat.pk }}" class="messages-container flex-grow-1 overflow-auto">
+  <div class="messages-container flex-grow-1 overflow-auto">
     <div class="d-flex justify-content-center my-1">
       <p class="text-muted">Start the conversation!</p>
     </div>
     {% if chat.messages.all %}
     {% for message in chat.messages.all %}
-    {% include 'components/chats/message_item.html' with message=message %}
+    {% if message.sender == user %}
+    <div class="message-container d-flex flex-row-reverse p-1">
+      {% include 'components/chats/message_item.html' with user=user message=message %}
+    </div>
+    {% else %}
+    <div class="message-container d-flex p-1">
+      {% include 'components/chats/message_item.html' with user=user message=message %}
+    </div>
+    {% endif %}
     {% endfor %}
     {% endif %}
   </div>
+
 
   <!-- Lower part: Message input -->
   <div class="message-form-container">

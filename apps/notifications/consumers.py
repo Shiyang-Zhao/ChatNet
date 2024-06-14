@@ -40,18 +40,12 @@ class NotificationConsumer(AsyncWebsocketConsumer):
     async def general_notification_message(self, event):
         if not self.user.is_authenticated:
             return
-        notification_pk = event["notification_pk"]
-        content = event["content"]
-        date_sent = event["date_sent"]
-        sender_username = event["sender_username"]
+        notification_html = event["notification_html"]
         unread_count = await self.get_unread_notification_count()
         chat_html = event.get("chat_html", None)
         payload = {
             "type": "general_notification_message",
-            "notification_pk": notification_pk,
-            "sender_username": sender_username,
-            "content": content,
-            "date_sent": date_sent,
+            "notification_html": notification_html,
             "unread_count": unread_count,
         }
         if chat_html:

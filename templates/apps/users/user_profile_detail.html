@@ -17,15 +17,7 @@
       <div>
         <h2>{{ viewed_user.username }}</h2>
         <p>Bio: {{ viewed_user.profile.bio }}</p>
-        {% if participant.activity_status == -1 %}
-        <small class="text-muted">Never online</small>
-        {% elif participant.activity_status > 2 %}
-        <small class="text-muted">Online {{ participant.activity_status }} minutes ago</small>
-        {% else %}
-        <small class="text-success">
-          <i class="fa fa-circle text-success me-1"></i>Online
-        </small>
-        {% endif %}
+        {% include 'components/users/user_online_status.html' with user=viewed_user %}
         {% include 'components/users/follower_and_following_detail.html' with viewed_user=viewed_user %}
       </div>
     </div>

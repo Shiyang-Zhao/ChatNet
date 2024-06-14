@@ -1,0 +1,25 @@
+<div class="card mb-2">
+    <div class="card-body" {% if not notification.is_read %}style="background-color: #f0f0f0;" {% endif %}>
+        <h5 class="card-title"
+            style="display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; max-height: 7.5em;">
+            {{ notification.content|truncatewords:50 }}
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ notification.date_sent|date:"F j, Y, G:i" }}</h6>
+        <div class="btn-group">
+            <form method="post" class="mark-as-read-form me-1" action="{% url 'mark-as-read' notification.pk %}"
+                data-url="{% url 'mark-as-read' notification.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary me-3">
+                    <i class="fa fa-envelope-open-text"></i>
+                </button>
+            </form>
+            <form method="post" class="mark-as-unread-form" action="{% url 'mark-as-unread' notification.pk %}"
+                data-url="{% url 'mark-as-unread' notification.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning">
+                    <i class="fa fa-envelope"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

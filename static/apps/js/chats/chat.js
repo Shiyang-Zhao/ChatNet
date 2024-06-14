@@ -1,4 +1,4 @@
-import { handleChatSelection, setupChatsContainerEventListener } from "../../../components/js/chats/chat_item.js";
+import { handleChatSelection, handleChatsContainerEventListener } from "../../../components/js/chats/chat_item.js";
 document.addEventListener("DOMContentLoaded", function () {
     const chatsContainer = document.querySelector('#chats-container');
     const chatDetailPlaceholder = document.querySelector('#message-detail-placeholder');
@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (chatsContainer) {
-        setupChatsContainerEventListener(chatsContainer, chatDetailPlaceholder);
+        handleChatsContainerEventListener(chatsContainer, chatDetailPlaceholder);
     }
 });
 

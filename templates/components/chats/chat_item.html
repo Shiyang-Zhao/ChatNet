@@ -10,15 +10,7 @@
                 style="width: 50px; height: 50px; object-fit: cover;">
             <div class="d-flex flex-column justify-content-start">
                 <span class="h6 mb-0">{{ participant.username }}</span>
-                {% if participant.activity_status == -1 %}
-                <small class="text-muted">Never active</small>
-                {% elif participant.activity_status > 2 %}
-                <small class="text-muted">Active {{ participant.activity_status }} minutes ago</small>
-                {% else %}
-                <small class="text-success">
-                    <i class="fa fa-circle text-success me-1"></i>Online
-                </small>
-                {% endif %}
+                {% include 'components/users/user_online_status.html' with user=participant %}
             </div>
         </div>
         {% endif %}

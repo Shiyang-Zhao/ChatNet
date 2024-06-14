@@ -36,18 +36,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         if message_type == "chat_message":
             content = text_data_json.get("content", "")
-            date_sent = timezone.now()
 
-            await self.save_message(sender, content, date_sent)
-            sender_profile_image_url = await self.get_profile_image_url(sender)
-
+            message = await self.save_message(sender, content, timezone.now())
+            message_html = await sync_to_async(render_to_string)(
+                "components/chats/message_item.html",
+                {"message": message},
+            )
             payload = {
                 "type": "chat_message",
-                "chat_pk": self.chat_pk,
-                "sender_username": sender.username,
-                "sender_profile_image_url": sender_profile_image_url,
-                "content": content,
-                "date_sent": date_sent.isoformat(),
+                "sender_pk": sender.pk,
+                "message_html": message_html,
             }
 
             if self.chat.last_active is None:
@@ -63,19 +61,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.update_user_last_active(sender.pk)
 
     async def chat_message(self, event):
-        chat_pk = event["chat_pk"]
-        sender_username = event["sender_username"]
-        sender_profile_image_url = event["sender_profile_image_url"]
-        content = event["content"]
-        date_sent = event["date_sent"]
+        sender_pk = event["sender_pk"]
+        message_html = event["message_html"]
 
         response = {
             "type": "chat_message",
-            "chat_pk": chat_pk,
-            "sender_username": sender_username,
-            "sender_profile_image_url": sender_profile_image_url,
-            "content": content,
-            "date_sent": date_sent,
+            "sender_pk": sender_pk,
+            "message_html": message_html,
         }
 
         if "chat_html" in event:

@@ -1,43 +1,10 @@
-{% if message.sender == user %}
-<div class="message-container">
-    <div class="d-flex justify-content-end">
-        <div class="text-white p-1" style="max-width: 80%;">
-            <div class="d-flex align-items-start flex-row-reverse">
-                <a class="text-decoration-none text-reset"
-                    href="{% url 'user-profile-detail' username=message.sender.username %}">
-                    <img class="img-fluid rounded-circle ms-2" src="{{ message.sender.profile.profile_image.url }}"
-                        style="width: 35px; height: 35px; object-fit: cover;">
-                </a>
-                <div class="d-flex flex-column text-wrap text-break rounded-3 bg-primary ps-2 pe-2"
-                    style="max-width: 90%;">
-                    <p class="text-start m-1">{{ message.content }}</p>
-                    <small class="text-muted text-start" style="font-size: 0.8em;">
-                        {{ message.date_sent|date:"F j, Y, G:i" }}
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
+<a class="text-decoration-none text-reset" href="{% url 'user-profile-detail' username=message.sender.username %}">
+    <img class="img-fluid rounded-circle ms-2" src="{{ message.sender.profile.profile_image.url }}"
+        style="width: 35px; height: 35px; object-fit: cover;">
+</a>
+<div class="d-flex flex-column text-wrap text-break rounded-3 ps-2 pe-2" style="max-width: 90%;">
+    <p class="text-start m-1">{{ message.content }}</p>
+    <small class="text-muted text-start" style="font-size: 0.8em;">
+        {{ message.date_sent|date:"F j, Y, G:i" }}
+    </small>
 </div>
-{% else %}
-<div class="message-container">
-    <div class="d-flex justify-content-start">
-        <div class="text-dark p-1" style="max-width: 80%;">
-            <div class="d-flex align-items-start">
-                <a class="text-decoration-none text-reset"
-                    href="{% url 'user-profile-detail' username=message.sender.username %}">
-                    <img class="img-fluid rounded-circle me-2" src="{{ message.sender.profile.profile_image.url }}"
-                        style="width: 35px; height: 35px; object-fit: cover;">
-                </a>
-                <div class="d-flex flex-column text-wrap text-break rounded-3 bg-secondary-subtle ps-2 pe-2"
-                    style="max-width: 90%;">
-                    <p class="text-start m-1" style="flex: 1;">{{ message.content }}</p>
-                    <small class="text-muted text-end" style="font-size: 0.8em;">
-                        {{ message.date_sent|date:"F j, Y, G:i" }}
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}

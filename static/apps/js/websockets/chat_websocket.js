@@ -26,7 +26,6 @@ const establishChatWebSocket = (chatPk) => {
 
     socket.onmessage = function (event) {
         let message = JSON.parse(event.data);
-        console.log(message)
         displayChatItem(message);
         displayMessageItem(message);
     };
@@ -68,13 +67,12 @@ function displayChatItem(message) {
     if (chatsList && message.chat_html) {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = message.chat_html;
-        const chatElement = tempDiv.firstElementChild;
         if (chatsList.firstChild) {
-            chatsList.insertBefore(chatElement, chatsList.firstChild);
+            chatsList.insertBefore(tempDiv, chatsList.firstChild);
         } else {
-            chatsList.appendChild(chatElement);
+            chatsList.appendChild(tempDiv);
         }
-        gsap.fromTo(chatElement,
+        gsap.fromTo(tempDiv,
             { opacity: 0, y: -20 },
             { duration: 0.5, opacity: 1, y: 0, ease: 'power2.out' }
         );
@@ -82,69 +80,22 @@ function displayChatItem(message) {
 }
 
 function displayMessageItem(message) {
-    let messageHtml = '';
-    let messagesContainer = document.querySelector(
-        `#message-detail-placeholder #messages-container-${message.chat_pk}`
+    console.log(message)
+    const messagesContainer = document.querySelector(
+        "#message-detail-placeholder .messages-container"
     );
-    console.log(messagesContainer)
     if (!messagesContainer) return;
-
-    const profileUrl = `/users/user/${message.sender_username}/profile/detail/`;
-    const loggedInUsername = document.body.getAttribute("data-username");
-    const isSentByCurrentUser = message.sender_username === loggedInUsername;
-    const formattedDate = new Date(message.date_sent).toLocaleString("en-US", {
-        year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: false
-    });
-
-    if (isSentByCurrentUser) {
-        messageHtml = `
-            <div class="d-flex justify-content-end">
-                <div class="text-white p-1" style="max-width: 80%;">
-                    <div class="d-flex align-items-start flex-row-reverse">
-                        <a href="${profileUrl}" class="text-decoration-none text-reset">
-                            <img class="img-fluid rounded-circle ms-2" src="${message.sender_profile_image_url}"
-                                style="width: 35px; height: 35px; object-fit: cover;">
-                        </a>
-                        <div class="d-flex flex-column text-wrap text-break rounded-3 bg-primary ps-2 pe-2" style="max-width: 90%;">
-                            <p class="text-start m-1">${message.content}</p>
-                            <small class="text-muted text-start" style="font-size: 0.8em;">
-                                ${formattedDate.replace(' at', ',')}
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    } else {
-        messageHtml = `
-            <div class="d-flex justify-content-start">
-                <div class="text-dark p-1" style="max-width: 80%;">
-                    <div class="d-flex align-items-start">
-                        <a href="${profileUrl}" class="text-decoration-none text-reset">
-                            <img class="img-fluid rounded-circle me-2" src="${message.sender_profile_image_url}"
-                                style="width: 35px; height: 35px; object-fit: cover;">
-                        </a>
-                        <div class="d-flex flex-column text-wrap text-break rounded-3 bg-secondary-subtle ps-2 pe-2" style="max-width: 90%;">
-                            <p class="text-start m-1">${message.content}</p>
-                            <small class="text-muted text-end" style="font-size: 0.8em;">
-                                ${formattedDate.replace(' at', ',')}
-                            </small>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        `;
-    }
-
+    const messageHtml = message.message_html;
+    const isSentByCurrentUser = message.sender_pk == document.body.getAttribute("data-pk");
+    console.log(isSentByCurrentUser)
     const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = messageHtml.trim();
-    const messageElement = tempDiv.firstChild;
-    messagesContainer.appendChild(messageElement);
-
+    tempDiv.classList.add("message-container", "d-flex", "p-1");
     if (isSentByCurrentUser) {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        tempDiv.classList.add("flex-row-reverse");
     }
+    tempDiv.innerHTML = messageHtml.trim();
+    messagesContainer.appendChild(tempDiv);
 };
 
 export { establishChatWebSocket, sendChatMessage }

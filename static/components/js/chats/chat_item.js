@@ -26,7 +26,7 @@ function handleChatSelection(url, pk, placeholder) {
     });
 }
 
-function setupChatsContainerEventListener(container, detailPlaceholder) {
+function handleChatsContainerEventListener(container, detailPlaceholder) {
     container.addEventListener("click", (event) => {
         const chatContainer = event.target.closest(".chat-container");
         if (chatContainer) {
@@ -38,4 +38,4 @@ function setupChatsContainerEventListener(container, detailPlaceholder) {
     });
 }
 
-export { handleChatSelection, setupChatsContainerEventListener }
+export { handleChatSelection, handleChatsContainerEventListener }
