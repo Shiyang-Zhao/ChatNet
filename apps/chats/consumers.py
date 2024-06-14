@@ -58,9 +58,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 payload["chat_html"] = chat_html
 
             await self.channel_layer.group_send(self.chat_channel_name, payload)
-            self.chat.last_active = timezone.now()
-            await self.update_chat_last_active(self.chat_pk)
-            await self.update_user_last_active(sender.pk)
+        self.chat.last_active = timezone.now()
+        await self.update_chat_last_active(self.chat_pk)
+        await self.update_user_last_active(sender.pk)
 
     async def chat_message(self, event):
         chat_pk = event["chat_pk"]

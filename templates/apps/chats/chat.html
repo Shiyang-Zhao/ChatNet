@@ -3,24 +3,16 @@
 {% block title %}My Chats{%endblock%}
 
 {% block styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'apps/css/chats/chat_detail.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'apps/css/chats/chat.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
   <div class="d-flex align-items-center" style="height: 80vh;">
     <!-- Left part: List of chats -->
-    <div id="chats-container" class="col-md-3 d-flex flex-column border" style="min-width: fit-content; height: 100%; overflow-y: auto;">
-      {% include 'apps/chats/group_chat_create_form.html' %}
-      <ul class="chat-list list-group flex-grow-1 rounded-0">
-        {% if chats %}
-        {% for chat in chats %}
-        <div>
-          {% include 'components/chats/chat_item.html' with chat=chat %}
-        </div>
-        {% endfor %}
-        {% endif %}
-      </ul>
+    <div id="chats-container" class="col-md-3 d-flex flex-column border"
+      style="min-width: fit-content; height: 100%; overflow-y: auto;">
+      {% include 'components/chats/chat_detail.html' %}
     </div>
 
     <!-- Right part: Chat details -->
@@ -31,6 +23,8 @@
           <i class="fa-brands fa-rocketchat fa-2xl fa-bounce mb-3"></i>
           <p class="text-muted">No chat selected</p>
         </div>
+        {% else %}
+
         {% endif %}
       </div>
     </div>
@@ -38,6 +32,5 @@
   {% endblock %}
 
   {% block javascripts %}
-  <script type="module" src="{% static 'apps/js/chats/chat_detail.js' %}"></script>
-  <script type="module" src="{% static 'components/js/chats/message_item.js' %}"></script>
+  <script type="module" src="{% static 'apps/js/chats/chat.js' %}"></script>
   {% endblock %}

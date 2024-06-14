@@ -7,6 +7,10 @@ const establishChatWebSocket = (chatPk) => {
         console.log("WebSocket connection already established for this chat.");
         return;
     }
+
+    if (socket) {
+        socket.close();
+    }
     const socketProtocol =
         window.location.protocol === "https:" ? "wss://" : "ws://";
     const socketURL =

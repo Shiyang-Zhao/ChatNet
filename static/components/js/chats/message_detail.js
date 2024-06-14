@@ -33,7 +33,6 @@ const showMessageDetail = (detailPlaceholder) => {
         placement: 'right',
     });
 
-    // if (messageForm.getAttribute('data-listener-added') === "0") {
     messageForm.addEventListener('submit', (event) => {
         event.preventDefault();
         sendMessage(messageInput, sendButtonPopover);
@@ -57,9 +56,6 @@ const showMessageDetail = (detailPlaceholder) => {
     messageInput.addEventListener('focus', () => {
         scrollToLatestMessage(messagesContainer);
     });
-
-    //     messageForm.setAttribute('data-listener-added', "1");
-    // }
 };
 
 export { showMessageDetail };

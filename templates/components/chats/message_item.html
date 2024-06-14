@@ -1,110 +1,43 @@
-{% load static %}
-{% block styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'components/css/chats/message_item.css' %}">
-{% endblock %}
-
-<div class="d-flex flex-column border" style="height: 80vh; overflow: hidden;">
-  <div class="d-flex justify-content-between align-items-center p-1 pb-0"
-    style="border-bottom: 1px solid #ccc; background-color: #f8f9fa;">
-    <div>
-      <h5 class="my-1">
-        {% if chat.chat_type == 'private' %}
-        {% for participant in chat.participants.all %}
-        {% if participant != user %}
-        <div class="d-flex align-items-center">
-          <a class="text-decoration-none text-reset"
-            href="{% url 'user-profile-detail' username=participant.username %}">
-            <img class="img-fluid rounded-circle me-1" src="{{ participant.profile.profile_image.url }}"
-              style="width: 40px; height: 40px; object-fit: cover;">
-          </a>
-          <div class="d-flex flex-column justify-content-start">
-            <span class="h6 mb-0">{{ participant.username }}</span>
-            {% if participant.activity_status == -1 %}
-            <small class="text-muted">Never active</small>
-            {% elif participant.activity_status > 2 %}
-            <small class="text-muted">Active {{ participant.activity_status }} minutes ago</small>
-            {% else %}
-            <small class="text-success" style="font-size: 0.75em;">
-              <i class="fa fa-circle text-success me-1"></i>Online
-            </small>
-            {% endif %}
-          </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% else %}
-        {{ chat.title }}
-        {% endif %}
-      </h5>
-    </div>
-  </div>
-
-  <!-- Upper part: Messages display -->
-  <div id="messages-container-{{ chat.pk }}" class="messages-container flex-grow-1 overflow-auto">
-    <div class="d-flex justify-content-center my-1">
-      <p class="text-muted">Start the conversation!</p>
-    </div>
-    {% if chat.messages.all %}
-    {% for message in chat.messages.all %}
-    {% if message.sender == user %}
-    <div class="message-container">
-      <div class="d-flex justify-content-end">
+{% if message.sender == user %}
+<div class="message-container">
+    <div class="d-flex justify-content-end">
         <div class="text-white p-1" style="max-width: 80%;">
-          <div class="d-flex align-items-start flex-row-reverse">
-            <a class="text-decoration-none text-reset"
-              href="{% url 'user-profile-detail' username=message.sender.username %}">
-              <img class="img-fluid rounded-circle ms-2" src="{{ message.sender.profile.profile_image.url }}"
-                style="width: 35px; height: 35px; object-fit: cover;">
-            </a>
-            <div class="d-flex flex-column text-wrap text-break rounded-3 bg-primary ps-2 pe-2" style="max-width: 90%;">
-              <p class="text-start m-1">{{ message.content }}</p>
-              <small class="text-muted text-start" style="font-size: 0.8em;">
-                {{ message.date_sent|date:"F j, Y, G:i" }}
-              </small>
+            <div class="d-flex align-items-start flex-row-reverse">
+                <a class="text-decoration-none text-reset"
+                    href="{% url 'user-profile-detail' username=message.sender.username %}">
+                    <img class="img-fluid rounded-circle ms-2" src="{{ message.sender.profile.profile_image.url }}"
+                        style="width: 35px; height: 35px; object-fit: cover;">
+                </a>
+                <div class="d-flex flex-column text-wrap text-break rounded-3 bg-primary ps-2 pe-2"
+                    style="max-width: 90%;">
+                    <p class="text-start m-1">{{ message.content }}</p>
+                    <small class="text-muted text-start" style="font-size: 0.8em;">
+                        {{ message.date_sent|date:"F j, Y, G:i" }}
+                    </small>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-    {% else %}
-    <div class="message-container">
-      <div class="d-flex justify-content-start">
-        <div class="text-dark p-1" style="max-width: 80%;">
-          <div class="d-flex align-items-start">
-            <a class="text-decoration-none text-reset"
-              href="{% url 'user-profile-detail' username=message.sender.username %}">
-              <img class="img-fluid rounded-circle me-2" src="{{ message.sender.profile.profile_image.url }}"
-                style="width: 35px; height: 35px; object-fit: cover;">
-            </a>
-            <div class="d-flex flex-column text-wrap text-break rounded-3 bg-secondary-subtle ps-2 pe-2"
-              style="max-width: 90%;">
-              <p class="text-start m-1" style="flex: 1;">{{ message.content }}</p>
-              <small class="text-muted text-end" style="font-size: 0.8em;">
-                {{ message.date_sent|date:"F j, Y, G:i" }}
-              </small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %}
-    {% endfor %}
-
-    {% endif %}
-  </div>
-
-  <!-- Lower part: Message input -->
-  <div class="message-form-container">
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="form-group mb-0 position-relative">
-        <textarea class="form-control rounded-0 shadow-none" name="message" rows="3"
-          placeholder="Type your message here..." style="resize: none;" required></textarea>
-        <button type="submit" class="btn btn-primary" data-bs-toggle="popover"
-          style="position: absolute; right: 7px; bottom: 5px; visibility: hidden; opacity: 0; width: 0px; transform: translateX(7px); overflow: hidden;">
-          <i class="fa-regular fa-paper-plane"></i>
-        </button>
-      </div>
-    </form>
-  </div>
 </div>
+{% else %}
+<div class="message-container">
+    <div class="d-flex justify-content-start">
+        <div class="text-dark p-1" style="max-width: 80%;">
+            <div class="d-flex align-items-start">
+                <a class="text-decoration-none text-reset"
+                    href="{% url 'user-profile-detail' username=message.sender.username %}">
+                    <img class="img-fluid rounded-circle me-2" src="{{ message.sender.profile.profile_image.url }}"
+                        style="width: 35px; height: 35px; object-fit: cover;">
+                </a>
+                <div class="d-flex flex-column text-wrap text-break rounded-3 bg-secondary-subtle ps-2 pe-2"
+                    style="max-width: 90%;">
+                    <p class="text-start m-1" style="flex: 1;">{{ message.content }}</p>
+                    <small class="text-muted text-end" style="font-size: 0.8em;">
+                        {{ message.date_sent|date:"F j, Y, G:i" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

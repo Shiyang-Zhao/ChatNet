@@ -1,0 +1,10 @@
+{% include 'components/chats/group_chat_create_form.html' %}
+<ul class="chat-list list-group flex-grow-1 rounded-0">
+    {% if chats %}
+    {% for chat in chats %}
+    <div>
+        {% include 'components/chats/chat_item.html' with chat=chat %}
+    </div>
+    {% endfor %}
+    {% endif %}
+</ul>

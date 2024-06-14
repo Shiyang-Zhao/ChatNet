@@ -17,7 +17,7 @@ User = get_user_model()
 
 
 class ChatListAndDetailView(View):
-    template_name = "apps/chats/chat_detail.html"
+    template_name = "apps/chats/chat.html"
 
     def get(self, request, pk=None):
         viewed_chat = None
@@ -36,7 +36,7 @@ class ChatListAndDetailView(View):
 
         if is_ajax(request) and viewed_chat:
             message_html = render_to_string(
-                "components/chats/message_item.html",
+                "components/chats/message_detail.html",
                 {"chat": viewed_chat},
                 request=request,
             )
