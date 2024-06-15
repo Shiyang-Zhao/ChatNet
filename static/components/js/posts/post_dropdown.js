@@ -1,4 +1,8 @@
+import { getCookie } from "../../../apps/js/base/base.js";
+
 const handlePostSaveAndUnsaveButton = (container) => {
+    const csrfToken = getCookie('csrftoken');
+
     container.addEventListener('click', function (event) {
         if (event.target.closest('.post-save-form button') || event.target.closest('.post-unsave-form button')) {
             event.stopPropagation();
@@ -12,7 +16,6 @@ const handlePostSaveAndUnsaveButton = (container) => {
             const button = form.querySelector("button");
             const isSaved = form.classList.contains("saved");
             const url = isSaved ? form.getAttribute('data-unsave-url') : form.getAttribute('data-save-url');
-            const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
             axios.post(url, {}, {
                 headers: { "X-CSRFToken": csrfToken }

@@ -16,15 +16,14 @@
     </div>
 
     <!-- Right part: Chat details -->
-    <div class="col-md-9 d-flex flex-column justify-content-center border" style="min-width: 50vw; height: 100%;">
-      <div id="message-detail-placeholder">
-        {% if not selected %}
-        <div class="d-flex flex-column align-items-center">
-          <i class="fa-brands fa-rocketchat fa-2xl fa-bounce mb-3"></i>
-          <p class="text-muted">No chat selected</p>
-        </div>
-        {% endif %}
+    <div id="messages-container" class="col-md-9 d-flex flex-column justify-content-center border"
+      style="min-width: 50vw; height: 100%;">
+      {% if not selected %}
+      <div class="d-flex flex-column align-items-center">
+        <i class="fa-brands fa-rocketchat fa-2xl fa-bounce mb-3"></i>
+        <p class="text-muted">No chat selected</p>
       </div>
+      {% endif %}
     </div>
   </div>
   {% endblock %}

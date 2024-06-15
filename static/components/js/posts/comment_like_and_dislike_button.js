@@ -1,4 +1,8 @@
+import { getCookie } from "../../../apps/js/base/base.js";
+
 const handleCommentLikeAndDislikeButton = (container) => {
+    const csrfToken = getCookie('csrftoken');
+
     container.addEventListener('click', function (event) {
         if (event.target.closest('.comment-like-form button') || event.target.closest('.comment-dislike-form button')) {
             event.stopPropagation();
@@ -11,7 +15,6 @@ const handleCommentLikeAndDislikeButton = (container) => {
             event.preventDefault();
             const pk = form.getAttribute('data-pk');
             const url = form.getAttribute('data-url');
-            const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
             axios.post(url, { pk: pk }, { headers: { "X-CSRFToken": csrfToken } })
                 .then((response) => {

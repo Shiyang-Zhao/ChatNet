@@ -1,10 +1,9 @@
-/* For Webkit browsers (Chrome, Safari) */
-.messages-container::-webkit-scrollbar {
+.message-list::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
 
-.messages-container {
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+.message-list {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }

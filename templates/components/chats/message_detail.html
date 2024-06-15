@@ -32,18 +32,18 @@
   </div>
 
   <!-- Upper part: Messages display -->
-  <div class="messages-container flex-grow-1 overflow-auto">
+  <div class="message-list flex-grow-1 overflow-auto">
     <div class="d-flex justify-content-center my-1">
       <p class="text-muted">Start the conversation!</p>
     </div>
     {% if chat.messages.all %}
     {% for message in chat.messages.all %}
     {% if message.sender == user %}
-    <div class="message-container d-flex flex-row-reverse p-1">
+    <div class="d-flex flex-row-reverse p-1">
       {% include 'components/chats/message_item.html' with user=user message=message %}
     </div>
     {% else %}
-    <div class="message-container d-flex p-1">
+    <div class="d-flex p-1">
       {% include 'components/chats/message_item.html' with user=user message=message %}
     </div>
     {% endif %}

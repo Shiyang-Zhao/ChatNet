@@ -1,41 +1,37 @@
 import { showMessageDetail } from "./message_detail.js";
-import { establishChatWebSocket } from "../../../apps/js/websockets/chat_websocket.js";
 
-function highlightChat(chatContainer) {
-    if (!chatContainer) return;
+function highlightChat(targetContainer) {
+    if (!targetContainer) return;
     document.querySelectorAll(".chat-container").forEach(container => {
         container.classList.remove("bg-secondary-subtle");
     });
-    if (chatContainer) {
-        chatContainer.classList.add("bg-secondary-subtle");
-    }
+    targetContainer.classList.add("bg-secondary-subtle");
 }
 
-function handleChatSelection(url, pk, placeholder) {
+function handleChatSelection(url, pk, container) {
     highlightChat(document.querySelector(`#chat-container-${pk}`));
-    establishChatWebSocket(pk);
     axios.get(url, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
         }
     }).then(response => {
-        if (placeholder && response.data.message_html) {
-            placeholder.innerHTML = response.data.message_html;
-            showMessageDetail(placeholder);
+        if (container && response.data.message_html) {
+            container.innerHTML = response.data.message_html;
+            showMessageDetail(pk, container);
         }
     });
 }
 
-function handleChatsContainerEventListener(container, detailPlaceholder) {
-    container.addEventListener("click", (event) => {
+function setChatsContainerEventListener(chatsContainer, messagesContainer) {
+    chatsContainer.addEventListener("click", (event) => {
         const chatContainer = event.target.closest(".chat-container");
         if (chatContainer) {
             const pk = chatContainer.getAttribute("data-pk");
             const url = chatContainer.getAttribute("data-url");
-            handleChatSelection(url, pk, detailPlaceholder);
+            handleChatSelection(url, pk, messagesContainer);
             window.history.pushState(null, "", url);
         }
     });
 }
 
-export { handleChatSelection, handleChatsContainerEventListener }
+export { handleChatSelection, setChatsContainerEventListener }

@@ -1,6 +1,8 @@
+import { getCookie } from "../base/base.js";
+
 document.addEventListener('DOMContentLoaded', function () {
     const countElement = document.querySelector("#notification-count");
-
+    const csrfToken = getCookie('csrftoken');
     const updateUnreadNotificationCount = (direction) => {
         let unreadCount = parseInt(countElement.textContent) || 0;
         unreadCount += direction;
@@ -16,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
     markAllAsReadForm.addEventListener('submit', function (event) {
         event.preventDefault();
         const url = markAllAsReadForm.getAttribute('data-url');
-        const csrfToken = markAllAsReadForm.querySelector('input[name="csrfmiddlewaretoken"]').value;
         axios.post(url, {}, {
             headers: { 'X-CSRFToken': csrfToken }
         }).then(response => {
@@ -34,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         const form = event.target.closest('.mark-as-read-form, .mark-as-unread-form');
         const url = form.getAttribute('data-url');
-        const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
         axios.post(url, {}, {
             headers: { 'X-CSRFToken': csrfToken }

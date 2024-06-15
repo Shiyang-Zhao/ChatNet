@@ -1,15 +1,10 @@
 import { sendChatMessage } from '../../../apps/js/websockets/chat_websocket.js';
+import { scrollToLatestMessage } from '../../../apps/js/base/base.js';
 
-const scrollToLatestMessage = (container) => {
-    container.scrollTo({
-        top: container.scrollHeight,
-    });
-};
-
-const sendMessage = (messageInput, sendButtonPopover) => {
+const sendMessage = (pk, messageInput, sendButtonPopover) => {
     const messageContent = messageInput.value.trim();
     if (messageContent !== '') {
-        sendChatMessage(messageContent);
+        sendChatMessage(pk, messageContent);
         messageInput.value = '';
         sendButtonPopover.hide();
     } else {
@@ -18,13 +13,13 @@ const sendMessage = (messageInput, sendButtonPopover) => {
     }
 };
 
-const showMessageDetail = (detailPlaceholder) => {
-    const messagesContainer = detailPlaceholder.querySelector('.messages-container');
-    const messageFormContainer = detailPlaceholder.querySelector('.message-form-container');
+const showMessageDetail = (pk, container) => {
+    const messageList = container.querySelector('.message-list');
+    const messageFormContainer = container.querySelector('.message-form-container');
     const messageForm = messageFormContainer.querySelector('form');
     const messageInput = messageFormContainer.querySelector('textarea');
     const sendButton = messageFormContainer.querySelector('button');
-    scrollToLatestMessage(messagesContainer);
+    scrollToLatestMessage(messageList);
 
     const sendButtonPopover = new bootstrap.Popover(sendButton, {
         trigger: 'manual',
@@ -35,7 +30,7 @@ const showMessageDetail = (detailPlaceholder) => {
 
     messageForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        sendMessage(messageInput, sendButtonPopover);
+        sendMessage(pk, messageInput, sendButtonPopover);
     });
 
     messageInput.addEventListener('input', () => {
@@ -49,12 +44,12 @@ const showMessageDetail = (detailPlaceholder) => {
     messageInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
-            sendMessage(messageInput, sendButtonPopover);
+            sendMessage(pk, messageInput, sendButtonPopover);
         }
     });
 
     messageInput.addEventListener('focus', () => {
-        scrollToLatestMessage(messagesContainer);
+        scrollToLatestMessage(messageList);
     });
 };
 

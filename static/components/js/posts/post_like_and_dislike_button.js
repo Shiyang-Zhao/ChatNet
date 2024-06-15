@@ -1,18 +1,20 @@
+import { getCookie } from "../../../apps/js/base/base.js";
+
 const handlePostLikeAndDislikeButton = (container) => {
+    const csrfToken = getCookie('csrftoken');
+
     container.addEventListener('click', function (event) {
         if (event.target.closest('.post-like-form button') || event.target.closest('.post-dislike-form button')) {
             event.stopPropagation();
         }
     });
 
-    // Delegate submit events to handle likes and dislikes
     container.addEventListener('submit', function (event) {
         const form = event.target.closest('.post-like-form, .post-dislike-form');
         if (form) {
             event.preventDefault();
             const pk = form.getAttribute('data-pk');
             const url = form.getAttribute('data-url');
-            const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
             axios.post(url, { pk: pk }, { headers: { "X-CSRFToken": csrfToken } })
                 .then((response) => {

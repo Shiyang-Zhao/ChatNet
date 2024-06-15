@@ -41,7 +41,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         if not self.user.is_authenticated:
             return
         notification_html = event["notification_html"]
-        unread_count = await self.get_unread_notification_count()
+        unread_count = event["unread_count"]
         chat_html = event.get("chat_html", None)
         payload = {
             "type": "general_notification_message",
@@ -53,11 +53,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
         await self.send(text_data=json.dumps(payload))
 
-    async def get_unread_notification_count(self):
-        @database_sync_to_async
-        def get_count():
-            return Notification.objects.filter(
-                receiver=self.user, is_read=False
-            ).count()
-
-        return await get_count()
+    @database_sync_to_async
+    def get_unread_notification_count(self):
+        return Notification.objects.filter(receiver=self.user, is_read=False).count()
