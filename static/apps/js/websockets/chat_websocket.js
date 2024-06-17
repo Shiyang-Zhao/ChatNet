@@ -22,7 +22,7 @@ const establishChatWebSocket = () => {
 
     socket.onmessage = function (event) {
         const message = JSON.parse(event.data);
-        handleIncomingMessage(message);
+        displayMessageItem(message);
         console.log(message);
     };
 
@@ -68,28 +68,6 @@ function sendChatMessage(chatPk, content) {
         cid: connectionId
     };
     socket.send(JSON.stringify(payload));
-}
-
-function handleIncomingMessage(message) {
-    displayChatItem(message);
-    displayMessageItem(message);
-}
-
-function displayChatItem(message) {
-    const chatsList = document.querySelector('#chats-container .chat-list');
-    if (chatsList && message.chat_html) {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = message.chat_html;
-        if (chatsList.firstChild) {
-            chatsList.insertBefore(tempDiv, chatsList.firstChild);
-        } else {
-            chatsList.appendChild(tempDiv);
-        }
-        gsap.fromTo(tempDiv,
-            { opacity: 0, y: -20 },
-            { duration: 0.5, opacity: 1, y: 0, ease: 'power2.out' }
-        );
-    }
 }
 
 function displayMessageItem(message) {

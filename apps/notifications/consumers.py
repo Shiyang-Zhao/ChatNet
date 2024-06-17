@@ -14,7 +14,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                 self.notification_channel_name, self.channel_name
             )
             await self.accept()
-            await self.initial_notification_message()
+            await self.initial_notification()
         else:
             await self.close()
 
@@ -23,7 +23,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             self.notification_channel_name, self.channel_name
         )
 
-    async def initial_notification_message(self):
+    async def initial_notification(self):
         if not self.user.is_authenticated:
             return
 
@@ -31,26 +31,32 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         await self.send(
             text_data=json.dumps(
                 {
-                    "type": "initial_notification_message",
+                    "type": "initial_notification",
                     "unread_count": unread_count,
                 }
             )
         )
 
-    async def general_notification_message(self, event):
+    async def general_notification(self, event):
         if not self.user.is_authenticated:
             return
         notification_html = event["notification_html"]
         unread_count = event["unread_count"]
-        chat_html = event.get("chat_html", None)
         payload = {
-            "type": "general_notification_message",
+            "type": "general_notification",
             "notification_html": notification_html,
             "unread_count": unread_count,
         }
-        if chat_html:
-            payload["chat_html"] = chat_html
+        await self.send(text_data=json.dumps(payload))
 
+    async def chat_html_notification(self, event):
+        if not self.user.is_authenticated:
+            return
+        chat_html = event["chat_html"]
+        payload = {
+            "type": "chat_html_notification",
+            "chat_html": chat_html,
+        }
         await self.send(text_data=json.dumps(payload))
 
     @database_sync_to_async

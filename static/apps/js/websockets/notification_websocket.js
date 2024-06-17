@@ -8,7 +8,7 @@ const establishNotificationWebSocket = () => {
     const socketURL =
         socketProtocol + window.location.host + '/ws/notifications/';
     socket = new WebSocket(socketURL);
-    const soundElement = document.querySelector("#notification-sound");
+    const notificationSound = document.querySelector("#notification-sound");
 
     socket.onopen = function () {
         console.log("WebSocket connection to notification successfully established!");
@@ -19,12 +19,11 @@ const establishNotificationWebSocket = () => {
         var message = JSON.parse(event.data);
         console.log(message)
         displayUnreadNotificationCount(message.unread_count);
-        if (message.type === "general_notification_message") {
-            soundElement.play();
+        if (message.type === "general_notification") {
+            notificationSound.play();
             displayNotificationMessage(message);
-            if (message.chat_html) {
-                displayChatItem(message);
-            }
+        } else if (message.type === "chat_html_notification") {
+            displayChatItem(message);
         }
     };
 
@@ -48,7 +47,6 @@ const reconnect = () => {
 function displayChatItem(message) {
     const chatsList = document.querySelector('#chats-container .chat-list');
     if (chatsList && message.chat_html) {
-        console.log(chatsList)
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = message.chat_html;
         const chatElement = tempDiv.firstElementChild;
@@ -66,7 +64,6 @@ function displayChatItem(message) {
 
 const displayUnreadNotificationCount = (count) => {
     const countElement = document.querySelector("#notification-count");
-
     if (count > 0) {
         countElement.textContent = count;
         countElement.style.display = 'inline-block';

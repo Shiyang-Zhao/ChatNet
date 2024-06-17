@@ -1,6 +1,7 @@
 import { handlePostSaveAndUnsaveButton } from "../../../components/js/posts/post_dropdown.js";
 import { handlePostLikeAndDislikeButton } from "../../../components/js/posts/post_like_and_dislike_button.js";
 import { handleCommentLikeAndDislikeButton } from "../../../components/js/posts/comment_like_and_dislike_button.js";
+import { handleCommentSaveAndUnsaveButton } from "../../../components/js/posts/comment_dropdown.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     const postContainer = document.querySelector('#post-container');
@@ -9,13 +10,14 @@ document.addEventListener("DOMContentLoaded", function () {
     handlePostSaveAndUnsaveButton(postContainer);
     handlePostLikeAndDislikeButton(postContainer);
     handleCommentLikeAndDislikeButton(commentsContainer);
+    handleCommentSaveAndUnsaveButton(commentsContainer);
 
     const commentPattern = /^\/posts\/post\/\d+\/comment\/\d+\/$/;
     const currentPath = window.location.pathname;
     if (commentPattern.test(currentPath)) {
         const pathSegments = currentPath.split('/');
         const pk = pathSegments[pathSegments.length - 2];
-        const targetComment = document.querySelector(`#comment-${pk}`);
+        const targetComment = document.querySelector(`#comment-${pk} .comment-item`);
         if (targetComment) {
             targetComment.scrollIntoView({ behavior: 'smooth' });
             gsap.fromTo(targetComment,
@@ -77,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const button = textarea.closest('.comment-form-container').querySelector('button[type="submit"]');
         const newFocusInsideForm = event.relatedTarget && textarea.closest('.comment-form-container').contains(event.relatedTarget);
         if (textarea.value.trim() === "") {
-            gsap.to(textarea, { height: "40px", duration: 0.3 });  // Reduce height only if empty
+            gsap.to(textarea, { height: "40px", duration: 0.3 });
             if (!newFocusInsideForm) {
                 gsap.to(button, {
                     opacity: 0, duration: 0.3, onComplete: function () {

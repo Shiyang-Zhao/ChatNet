@@ -3,6 +3,10 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'apps/css/users/login.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-5">
   <div class="row justify-content-center">
@@ -10,8 +14,6 @@
       <div class="card shadow">
         <div class="card-body">
           <h2 class="card-title text-center">Log In</h2>
-          <p class="text-center">Welcome back! Please log in to continue.</p>
-
           <form method="post" action="{% url 'user-login' %}" class="mt-4">
             {% csrf_token %}
             {{ form|crispy }}
@@ -19,7 +21,6 @@
               <button type="submit" class="btn btn-primary btn-block">Log In</button>
             </div>
           </form>
-
           <p class="mt-3 text-center">
             Don't have an account?
             <a href="{% url 'user-register' %}" class="text-primary">Sign Up</a>

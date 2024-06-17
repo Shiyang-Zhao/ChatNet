@@ -12,22 +12,6 @@ from django.template.loader import render_to_string
 User = get_user_model()
 
 
-async def get_notification_html(notification):
-    notification_html = await sync_to_async(render_to_string)(
-        "components/notifications/notification_item.html",
-        {"notification": notification},
-    )
-    return notification_html
-
-
-async def get_chat_html(receiver, chat):
-    chat_html = await sync_to_async(render_to_string)(
-        "components/chats/chat_item.html",
-        {"user": receiver, "chat": chat},
-    )
-    return chat_html
-
-
 @receiver(post_save, sender=Message)
 def new_message_notification(sender, instance, created, **kwargs):
     if created:
@@ -47,15 +31,37 @@ def new_message_notification(sender, instance, created, **kwargs):
             ).count()
             notification_html = async_to_sync(get_notification_html)(notification)
             payload = {
-                "type": "general_notification_message",
+                "type": "general_notification",
                 "notification_html": notification_html,
                 "unread_count": unread_count,
             }
 
-            if chat.last_active is None:
-                chat_html = async_to_sync(get_chat_html)(receiver, chat)
-                payload["chat_html"] = chat_html
-
             async_to_sync(channel_layer.group_send)(
                 f"notification_{receiver.pk}", payload
             )
+
+            if chat.last_active is None:
+                for participant in chat.participants.all():
+                    chat_html = async_to_sync(get_chat_html)(participant, chat)
+                    payload = {
+                        "type": "chat_html_notification",
+                        "chat_html": chat_html,
+                    }
+                    async_to_sync(channel_layer.group_send)(
+                        f"notification_{participant.pk}", payload
+                    )
+
+
+async def get_notification_html(notification):
+    notification_html = await sync_to_async(render_to_string)(
+        "components/notifications/notification_item.html",
+        {"notification": notification},
+    )
+    return notification_html
+
+
+async def get_chat_html(receiver, chat):
+    return await sync_to_async(render_to_string)(
+        "components/chats/chat_item.html",
+        {"user": receiver, "chat": chat},
+    )

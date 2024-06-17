@@ -23,6 +23,9 @@ class Comment(models.Model):
     disliked_by = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="disliked_comments", blank=True
     )
+    saved_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="saved_comments", blank=True
+    )
     edited = models.BooleanField(default=False)
     edited_at = models.DateTimeField(null=True, blank=True)
     attachments = models.FileField(
@@ -57,12 +60,28 @@ class Comment(models.Model):
             "comment-detail", kwargs={"post_pk": self.post.pk, "pk": self.pk}
         )
 
-    def like(self, user_pk):
+    def like_comment(self, user_pk):
         if not self.liked_by.filter(pk=user_pk).exists():
             self.liked_by.add(user_pk)
             self.disliked_by.remove(user_pk)
 
-    def dislike(self, user_pk):
+    def dislike_comment(self, user_pk):
         if not self.disliked_by.filter(pk=user_pk).exists():
             self.disliked_by.add(user_pk)
             self.liked_by.remove(user_pk)
+
+    def is_saved_by(self, user):
+        return self.saved_by.filter(pk=user.pk).exists()
+
+    def save_comment(self, user):
+        if not self.is_saved_by(user):
+            self.saved_by.add(user)
+
+    def unsave_comment(self, user):
+        if self.is_saved_by(user):
+            self.saved_by.remove(user)
+
+    def soft_delete(self):
+        self.is_deleted = True
+        self.soft_deleted_at = timezone.now()
+        self.save()

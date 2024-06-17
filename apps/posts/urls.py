@@ -15,10 +15,13 @@ from .views.comment import (
     CommentDetailView,
     CommentCreateView,
     ReplyCreateView,
+    CommentUpdateView,
     CommentSoftDeleteView,
     CommentHardDeleteView,
     LikeCommentView,
     DislikeCommentView,
+    SaveCommentView,
+    UnsaveCommentView,
 )
 
 urlpatterns = [
@@ -55,6 +58,9 @@ urlpatterns = [
         name="reply-create",
     ),
     path(
+        "comment/<int:pk>/update/", CommentUpdateView.as_view(), name="comment-update"
+    ),
+    path(
         "comment/<int:pk>/soft/delete/",
         CommentSoftDeleteView.as_view(),
         name="comment-soft-delete",
@@ -69,5 +75,9 @@ urlpatterns = [
         "comment/<int:pk>/dislike/",
         DislikeCommentView.as_view(),
         name="dislike-comment",
+    ),
+    path("comment/<int:pk>/save/", SaveCommentView.as_view(), name="save-comment"),
+    path(
+        "comment/<int:pk>/unsave/", UnsaveCommentView.as_view(), name="unsave-comment"
     ),
 ]

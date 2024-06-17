@@ -8,7 +8,6 @@ from ..forms.comment import (
     CommentCreateForm,
     ReplyCreateForm,
     CommentUpdateForm,
-    ReplyUpdateForm,
 )
 from django.http import JsonResponse
 from django.utils import timezone
@@ -48,30 +47,18 @@ class ReplyCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-#     model = Comment
-#     form_class = CommentUpdateForm
-#     template_name = "comments/comment_update.html"
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentUpdateForm
 
-#     def get_success_url(self):
-#         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
+    def form_valid(self, form):
+        form.instance.edited = True
+        form.instance.edited_at = timezone.now()
+        return super().form_valid(form)
 
-#     def test_func(self):
-#         comment = self.get_object()
-#         return self.request.user == comment.author
-
-
-# class ReplyUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-#     model = Comment
-#     form_class = ReplyUpdateForm
-#     template_name = "comments/reply_update.html"
-
-#     def get_success_url(self):
-#         return reverse_lazy("post-detail", kwargs={"pk": self.object.post.pk})
-
-#     def test_func(self):
-#         comment = self.get_object()
-#         return self.request.user == comment.author
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
 
 
 class CommentSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
@@ -80,9 +67,7 @@ class CommentSoftDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
     def post(self, request, *args, **kwargs):
         comment = get_object_or_404(Comment, pk=kwargs.get("pk"))
         if self.request.user == comment.author:
-            comment.is_deleted = True
-            comment.soft_deleted_at = timezone.now()
-            comment.save()
+            comment.soft_delete()
         return redirect(reverse_lazy("post-detail", kwargs={"pk": comment.post.pk}))
 
     def test_func(self):
@@ -109,7 +94,7 @@ class LikeCommentView(LoginRequiredMixin, View):
         if user in comment.liked_by.all():
             comment.liked_by.remove(user)
         else:
-            comment.like(user.pk)
+            comment.like_comment(user.pk)
             like_status = 1
         return JsonResponse(
             {
@@ -129,7 +114,7 @@ class DislikeCommentView(LoginRequiredMixin, View):
         if user in comment.disliked_by.all():
             comment.disliked_by.remove(user)
         else:
-            comment.dislike(user.pk)
+            comment.dislike_comment(user.pk)
             like_status = -1
         return JsonResponse(
             {
@@ -139,3 +124,17 @@ class DislikeCommentView(LoginRequiredMixin, View):
                 "like_status": like_status,
             }
         )
+
+
+class SaveCommentView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
+        comment.save_comment(request.user)
+        return redirect("comment-detail", post_pk=comment.post.pk, pk=comment.pk)
+
+
+class UnsaveCommentView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        comment = get_object_or_404(Comment, pk=self.kwargs.get("pk"))
+        comment.unsave_comment(request.user)
+        return redirect("comment-detail", post_pk=comment.post.pk, pk=comment.pk)

@@ -2,11 +2,11 @@
 {% load static %}
 {% block title %}{{ post.title }}{% endblock %}
 
-{% block content %}
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'apps/css/posts/post_detail.css' %}">
 {% endblock %}
 
+{% block content %}
 <div class="container mt-5">
   <div id="post-container">
     <div class="d-flex justify-content-between align-items-center">

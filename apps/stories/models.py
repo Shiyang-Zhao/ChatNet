@@ -35,7 +35,6 @@ class Story(models.Model):
 
     @property
     def is_expired(self):
-        """Check if the story has expired (either by reaching its expiration date or being archived)."""
         return timezone.now() >= self.date_expired or self.is_archived
 
     @property
@@ -44,7 +43,6 @@ class Story(models.Model):
 
     @classmethod
     def active_stories(cls, user):
-        """Return active stories for a given user."""
         return cls.objects.filter(
             author=user,
             is_archived=False,
@@ -54,12 +52,11 @@ class Story(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Story at {self.created_at.strftime('%Y-%m-%d %H:%M')}"
 
-    def archive(self):
-        """Archive the story. This function will change its archival status."""
+    def archive_story(self):
         self.is_archived = True
         self.date_expired = timezone.now()
         self.save()
 
-    def like(self, user_pk):
+    def like_story(self, user_pk):
         if not self.liked_by.filter(pk=user_pk).exists():
             self.liked_by.add(user_pk)

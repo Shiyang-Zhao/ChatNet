@@ -11,3 +11,8 @@ def check_comment_like_status(comment, user):
         return -1
     else:
         return 0
+
+
+@register.simple_tag
+def check_comment_save_status(comment, user):
+    return comment.is_saved_by(user)

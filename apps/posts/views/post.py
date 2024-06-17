@@ -91,7 +91,7 @@ class LikePostView(LoginRequiredMixin, View):
         if user in post.liked_by.all():
             post.liked_by.remove(user)
         else:
-            post.like(user.pk)
+            post.like_post(user.pk)
             like_status = 1
         return JsonResponse(
             {
@@ -111,7 +111,7 @@ class DislikePostView(LoginRequiredMixin, View):
         if user in post.disliked_by.all():
             post.disliked_by.remove(user)
         else:
-            post.dislike(user.pk)
+            post.dislike_post(user.pk)
             like_status = -1
         return JsonResponse(
             {
@@ -126,12 +126,12 @@ class DislikePostView(LoginRequiredMixin, View):
 class SavePostView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
-        post.save_post(request.user)  # Using the model method to save the post
+        post.save_post(request.user)
         return redirect("post-detail", pk=post.pk)
 
 
 class UnsavePostView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         post = get_object_or_404(Post, pk=self.kwargs.get("pk"))
-        post.unsave_post(request.user)  # Using the model method to unsave the post
+        post.unsave_post(request.user)
         return redirect("post-detail", pk=post.pk)

@@ -35,7 +35,6 @@ class UserLoginView(LoginView):
         if remember_me:
             self.request.session.set_expiry(2592000)  # 30 days
         else:
-            # Session expires when the browser is closed
             self.request.session.set_expiry(0)
         return super().form_valid(form)
 

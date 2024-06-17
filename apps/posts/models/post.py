@@ -58,15 +58,18 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("post-detail", kwargs={"pk": self.pk})
 
-    def like(self, user_pk):
+    def like_post(self, user_pk):
         if not self.liked_by.filter(pk=user_pk).exists():
             self.liked_by.add(user_pk)
             self.disliked_by.remove(user_pk)
 
-    def dislike(self, user_pk):
+    def dislike_post(self, user_pk):
         if not self.disliked_by.filter(pk=user_pk).exists():
             self.disliked_by.add(user_pk)
             self.liked_by.remove(user_pk)
+
+    def is_saved_by(self, user):
+        return self.saved_by.filter(pk=user.pk).exists()
 
     def save_post(self, user):
         if not self.is_saved_by(user):
@@ -75,9 +78,6 @@ class Post(models.Model):
     def unsave_post(self, user):
         if self.is_saved_by(user):
             self.saved_by.remove(user)
-
-    def is_saved_by(self, user):
-        return self.saved_by.filter(pk=user.pk).exists()
 
     def soft_delete(self):
         self.is_deleted = True

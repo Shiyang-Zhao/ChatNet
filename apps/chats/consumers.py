@@ -32,6 +32,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_type = text_data_json.get("type")
         chat_pk = text_data_json.get("chat_pk")
         sender = self.scope["user"]
+        session_id = text_data_json.get("sid")
+        connection_id = text_data_json.get("cid")
+
+        # if session_id != self.session_id or connection_id != self.connection_id:
+        #     await self.close(code=4001)
+        #     return
 
         if message_type == "chat_message":
             new_chat_channel_name = f"chat_{chat_pk}"
@@ -45,7 +51,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     self.chat_channel_name, self.channel_name
                 )
             content = text_data_json.get("content", "")
-            
+
             try:
                 chat = await self.get_chat(chat_pk)
             except ObjectDoesNotExist:
@@ -56,6 +62,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "components/chats/message_item.html",
                 {"message": message},
             )
+            
             payload = {
                 "type": "chat_message",
                 "sender_pk": sender.pk,
@@ -64,14 +71,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "sid": self.session_id,
                 "cid": self.connection_id,
             }
-
-            if chat.last_active is None:
-                chat_html = await sync_to_async(render_to_string)(
-                    "components/chats/chat_item.html",
-                    {"user": sender, "chat": chat},
-                )
-                payload["chat_html"] = chat_html
-
             await self.channel_layer.group_send(self.chat_channel_name, payload)
 
             chat.last_active = timezone.now()
@@ -93,10 +92,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "sid": session_id,
             "cid": connection_id,
         }
-
-        if "chat_html" in event:
-            payload["chat_html"] = event["chat_html"]
-
         await self.send(text_data=json.dumps(payload))
 
     @database_sync_to_async
@@ -120,6 +115,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def get_chat(self, pk):
         return Chat.objects.get(pk=pk)
 
-    @database_sync_to_async
-    def get_profile_image_url(self, user):
-        return user.profile.profile_image.url
+    # @database_sync_to_async
+    # def get_profile_image_url(self, user):
+    #     return user.profile.profile_image.url

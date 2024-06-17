@@ -10,7 +10,6 @@ document.querySelector('#file-input').addEventListener('change', function (event
 
     if (file) {
         const fileURL = URL.createObjectURL(file);
-
         if (file.type.startsWith('image/')) {
             imagePreview.src = fileURL;
             imagePreview.style.display = 'block';
