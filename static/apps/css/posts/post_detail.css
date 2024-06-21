@@ -1,13 +1,11 @@
-/* .comment-item,
-.reply-item {
+.comment-item {
     transition: background-color 0.3s ease;
 }
 
-.comment-item:hover,
-.reply-item:hover {
+.comment-item:hover {
     background-color: #f0f0f0;
     cursor: pointer;
-} */
+}
 
 .reply-link:hover,
 .reply-toggle-btn:hover,

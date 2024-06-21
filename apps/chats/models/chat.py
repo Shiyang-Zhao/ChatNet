@@ -38,7 +38,6 @@ class Chat(models.Model):
     image = models.ImageField(
         upload_to=chat_image_directory_path, null=True, blank=True
     )
-    # is_active
     last_active = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

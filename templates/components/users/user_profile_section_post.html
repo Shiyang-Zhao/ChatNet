@@ -1,0 +1,20 @@
+<div class="col-12 mb-2 d-flex align-items-stretch">
+    <a href="{% url 'post-detail' pk=post.pk %}" class="text-decoration-none text-reset w-100">
+        <div class="list-group-item border p-0 rounded shadow-sm w-100 d-flex flex-column">
+            <div class="d-flex flex-column justify-content-center align-items-center shadow-sm p-3"
+                style="background: linear-gradient(135deg, #e0f7fa 40%, #ffecb3 100%);">
+                <h4 class="w-100 text-center text-dark mb-3"
+                    style="word-wrap: break-word; overflow-wrap: break-word; font-weight: bold; hyphens: auto;">
+                    {{ post.title|truncatechars:20 }}
+                </h4>
+                <div>
+                    {% if post.file %}
+                    {% include 'components/posts/post_file_detail.html' with post=post %}
+                    {% else %}
+                    <p class="card-text text-muted">{{ post.content|truncatechars:50 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </a>
+</div>

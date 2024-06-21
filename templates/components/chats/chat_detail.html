@@ -1,10 +1,23 @@
-{% include 'components/chats/group_chat_create_form.html' %}
-<ul class="chat-list list-group flex-grow-1 rounded-0">
-    {% if chats %}
-    {% for chat in chats %}
-    <div>
-        {% include 'components/chats/chat_item.html' with chat=chat %}
+<div class="d-flex justify-content-between align-items-baseline mx-2">
+    <div class="d-flex align-items-baseline">
+        <h5>{{ user.username }}</h5>
+        <i class="fa-solid fa-circle-chevron-down"></i>
     </div>
-    {% endfor %}
-    {% endif %}
-</ul>
+
+    {% include 'components/chats/group_chat_create_form.html' %}
+</div>
+<div class="mx-4 my-1">
+    <img src="{{ user.profile.profile_image.url }}" alt="{{ user.username }}'s Profile Image" class="rounded-circle"
+        style="width: 60px; height: 60px; object-fit: cover;">
+</div>
+<div>
+    <ul class="chat-list list-group flex-grow-1 rounded-0">
+        {% if chats %}
+        {% for chat in chats %}
+        <div>
+            {% include 'components/chats/chat_item.html' with chat=chat %}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </ul>
+</div>

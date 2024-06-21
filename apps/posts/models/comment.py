@@ -26,14 +26,14 @@ class Comment(models.Model):
     saved_by = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="saved_comments", blank=True
     )
-    edited = models.BooleanField(default=False)
+    is_edited = models.BooleanField(default=False)
     edited_at = models.DateTimeField(null=True, blank=True)
     attachments = models.FileField(
         upload_to="comment_attachments/", null=True, blank=True
     )
     visibility = models.BooleanField(default=True)
     report_count = models.IntegerField(default=0)
-    is_deleted = models.BooleanField(default=False)  # Soft delete field
+    is_deleted = models.BooleanField(default=False)
     soft_deleted_at = models.DateTimeField(null=True, blank=True)
 
     @property

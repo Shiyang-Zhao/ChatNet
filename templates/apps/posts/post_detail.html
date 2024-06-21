@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 w-75">
   <div id="post-container">
     <div class="d-flex justify-content-between align-items-center">
       <div>
@@ -34,7 +34,7 @@
       {% include 'components/posts/post_like_and_dislike_button.html' with post=post user=user %}
       <div class="d-flex justify-content-between align-items-center mt-3">
         <div class="me-3">
-          <a href="#comment-form-container" class="text-decoration-none text-reset">
+          <a href="#comment-create-form-container" class="text-decoration-none text-reset">
             <span class="icon-gradient"><i class="fa-solid fa-comments fa-xl me-1"></i>{{ post.comments.count }}</span>
           </a>
         </div>
@@ -47,7 +47,7 @@
 
   <!-- Comment Form with Crispy Forms -->
   <div id="comments-container" class="position-relative">
-    <div class="comment-form-container mt-3">
+    <div class="comment-create-form-container mt-3">
       <form method="post" action="{% url 'comment-create' pk=post.pk %}">
         {% csrf_token %}
         <div class=" position-relative" style="min-height: fit-content;">

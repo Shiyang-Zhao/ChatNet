@@ -52,7 +52,7 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = CommentUpdateForm
 
     def form_valid(self, form):
-        form.instance.edited = True
+        form.instance.is_edited = True
         form.instance.edited_at = timezone.now()
         return super().form_valid(form)
 

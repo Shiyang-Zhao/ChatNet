@@ -37,12 +37,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     commentsContainer.addEventListener('click', function (event) {
-        const actionElement = event.target.closest('.comment-form-container, .reply-link');
+        const actionElement = event.target.closest('.comment-create-form-container, .reply-link, .comment-edit-link');
         if (!actionElement) return;
 
         if (actionElement.classList.contains('reply-link')) {
-            const container = actionElement.closest('.comment-container').querySelector('.comment-form-container');
-
+            const container = actionElement.closest('.comment-container').querySelector('.comment-create-form-container');
             if (!container.style.display || container.style.display === 'none') {
                 gsap.fromTo(container, { display: 'block', height: 0, opacity: 0 }, {
                     height: 'auto', opacity: 1, duration: 0.3, onComplete: () => {
@@ -56,7 +55,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 });
             }
-        } else if (actionElement.classList.contains('comment-form-container')) {
+        } else if (actionElement.classList.contains('comment-edit-link')) {
+            const commentContainer = actionElement.closest('.comment-container');
+            const content = commentContainer.querySelector('p').textContent;
+            const container = commentContainer.querySelector('.comment-edit-form-container');
+            if (!container.style.display || container.style.display === 'none') {
+                gsap.fromTo(container, { display: 'block', height: 0, opacity: 0 }, {
+                    height: 'auto', opacity: 1, duration: 0.3, onComplete: () => {
+                        container.querySelector('textarea').value = content;
+                        container.querySelector('textarea').focus();
+                    }
+                });
+            } else {
+                gsap.to(container, {
+                    opacity: 0, height: 0, duration: 0.3, onComplete: function () {
+                        container.style.display = 'none';
+                    }
+                });
+            }
+        } else if (actionElement.classList.contains('comment-create-form-container')) {
             const textarea = actionElement.querySelector('textarea');
             const button = actionElement.querySelector('button[type="submit"]');
             if (textarea && textarea.value.trim() !== '') {
@@ -76,8 +93,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const textarea = event.target.closest('textarea');
         if (!textarea) return;
 
-        const button = textarea.closest('.comment-form-container').querySelector('button[type="submit"]');
-        const newFocusInsideForm = event.relatedTarget && textarea.closest('.comment-form-container').contains(event.relatedTarget);
+        const button = textarea.closest('.comment-create-form-container, .comment-edit-form-container').querySelector('button[type="submit"]');
+        const newFocusInsideForm = event.relatedTarget && textarea.closest('.comment-create-form-container, .comment-edit-form-container').contains(event.relatedTarget);
         if (textarea.value.trim() === "") {
             gsap.to(textarea, { height: "40px", duration: 0.3 });
             if (!newFocusInsideForm) {
@@ -94,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
     commentsContainer.addEventListener('input', function (event) {
         const textarea = event.target.closest('textarea');
         if (textarea) {
-            const button = textarea.closest('.comment-form-container').querySelector('button[type="submit"]');
+            const button = textarea.closest('.comment-create-form-container, .comment-edit-form-container').querySelector('button[type="submit"]');
             if (textarea.value.trim() !== '') {
                 gsap.to(button, { visibility: 'visible', width: 'auto', opacity: 1, duration: 0.2 });
             } else {

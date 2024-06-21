@@ -2,16 +2,16 @@
 {% load static %}
 <div>
   <div class="d-flex justify-content-center align-items-center">
-    <button type="button" id="openModalButton" class="btn btn-outline-secondary w-100 rounded-0 border-0" data-bs-toggle="modal"
-      data-bs-target="#myModal">
-      <i class="fa-solid fa-plus fa-lg"></i> Group Chat
+    <button type="button" id="openModalButton" class="btn rounded-0 border-0"
+      data-bs-toggle="modal" data-bs-target="#myModal">
+      <span class="icon-gradient"><i class="fa-solid fa-user-group"></i></span>
     </button>
   </div>
   <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title mb-0" id="myModalLabel">Modal Title</h5>
+          <h5 class="modal-title mb-0" id="myModalLabel">Group Chat</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

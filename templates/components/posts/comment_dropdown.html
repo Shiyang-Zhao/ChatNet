@@ -28,7 +28,7 @@
         {% endif %}
         {% if comment.author == user %}
         <li>
-            <a class="comment-edit-link dropdown-item text-decoration-none text-reset" href="#">Edit</a>
+            <button class="comment-edit-link dropdown-item text-decoration-none text-reset">Edit</button>
         </li>
         <li>
             <form method="post" action="{% url 'comment-soft-delete' pk=comment.pk %}">

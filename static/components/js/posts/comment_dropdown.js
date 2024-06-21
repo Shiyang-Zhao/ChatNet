@@ -31,11 +31,10 @@ const handleCommentSaveAndUnsaveButton = (container) => {
                     button.textContent = "Saved";
                     form.action = form.getAttribute("data-unsave-url");
                 }
-            })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    alert("Something went wrong! Please try again.");
-                });
+            }).catch((error) => {
+                console.error("Error:", error);
+                alert("Something went wrong! Please try again.");
+            });
         }
     });
 }

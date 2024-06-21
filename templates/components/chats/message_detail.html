@@ -6,28 +6,25 @@
 <div class="d-flex flex-column border" style="height: 80vh; overflow: hidden;">
   <div class="d-flex justify-content-between align-items-center p-1 pb-0"
     style="border-bottom: 1px solid #ccc; background-color: #f8f9fa;">
-    <div>
-      <h5 class="my-1">
-        {% if chat.chat_type == 'private' %}
-        {% for participant in chat.participants.all %}
-        {% if participant != user %}
-        <div class="d-flex align-items-center">
-          <a class="text-decoration-none text-reset"
-            href="{% url 'user-profile-detail' username=participant.username %}">
-            <img class="img-fluid rounded-circle me-1" src="{{ participant.profile.profile_image.url }}"
-              style="width: 40px; height: 40px; object-fit: cover;">
-          </a>
-          <div class="d-flex flex-column justify-content-start">
-            <span class="h6 mb-0">{{ participant.username }}</span>
-            {% include 'components/users/user_online_status.html' with user=participant %}
-          </div>
+    <div class="my-1">
+      {% if chat.chat_type == 'private' %}
+      {% for participant in chat.participants.all %}
+      {% if participant != user %}
+      <div class="d-flex align-items-center">
+        <a class="text-decoration-none text-reset" href="{% url 'user-profile-detail' username=participant.username %}">
+          <img class="img-fluid rounded-circle me-1" src="{{ participant.profile.profile_image.url }}"
+            style="width: 40px; height: 40px; object-fit: cover;">
+        </a>
+        <div class="d-flex flex-column justify-content-start">
+          <span class="h6 mb-0">{{ participant.username }}</span>
+          {% include 'components/users/user_online_status.html' with user=participant %}
         </div>
-        {% endif %}
-        {% endfor %}
-        {% else %}
-        {{ chat.title }}
-        {% endif %}
-      </h5>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% else %}
+      {{ chat.title }}
+      {% endif %}
     </div>
   </div>
 

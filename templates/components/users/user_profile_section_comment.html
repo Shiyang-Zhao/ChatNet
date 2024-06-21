@@ -1,0 +1,13 @@
+<div class="col-12 mb-2 d-flex align-items-stretch">
+    <div
+        class="list-group-item d-flex flex-row align-items-center border rounded shadow-sm p-3 w-100">
+        <a href="{% url 'comment-detail' post_pk=comment.post.pk pk=comment.pk %}"
+            class="d-flex align-items-center flex-grow-1 text-decoration-none text-dark">
+            <span>Comment on <strong>{{ comment.post.title|truncatechars:20 }}:</strong></span>
+            <span class="flex-grow-1">{{ comment.content|truncatechars:20 }}</span>
+        </a>
+        <small>
+            — {{ comment.date_posted|date:"F j, Y, G:i" }}
+        </small>
+    </div>
+</div>
