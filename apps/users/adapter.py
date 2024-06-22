@@ -1,15 +1,21 @@
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from .models import User
+from django.contrib.auth import get_user_model
 import random
 import string
+
+User = get_user_model()
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def pre_social_login(self, request, sociallogin):
         user = sociallogin.user
-        base_username = user.username or user.email.split("@")[0]
-        user.username = self.generate_unique_username(base_username)
-        user.save()
+        try:
+            existing_user = User.objects.get(email=user.email)
+            sociallogin.connect(request, existing_user)
+        except User.DoesNotExist:
+            base_username = user.username or user.email.split("@")[0]
+            user.username = self.generate_unique_username(base_username)
+            user.save()
 
     def generate_unique_username(self, base_username, length=4):
         username = base_username

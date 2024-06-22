@@ -74,18 +74,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('No more posts to fetch, disconnecting observer.');
                 observer.disconnect();
             }
-        })
-            .catch(error => {
-                console.error('Error fetching posts:', error);
-            })
-            .finally(() => {
-                isFetchingPosts = false;
-                console.log('Fetch complete, isFetching reset.');
-            });
+        }).catch(error => {
+            console.error('Error fetching posts:', error);
+        }).finally(() => {
+            isFetchingPosts = false;
+            console.log('Fetch complete, isFetching reset.');
+        });
     }
 
     const observer = new IntersectionObserver(entries => {
-        // Check if the sentinel is currently visible in the viewport
         if (entries[0].isIntersecting) {
             console.log('Sentinel visible, triggering fetch');
             fetchPosts();

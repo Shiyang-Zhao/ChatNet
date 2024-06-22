@@ -13,12 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 from decouple import config
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
@@ -35,6 +30,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.github",
     # Third-party apps
     "daphne",
@@ -61,6 +57,8 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 # Custom user model
 AUTH_USER_MODEL = "users.User"
 
@@ -74,24 +72,34 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SITE_ID = 1
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"
 ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
 
+SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_ADAPTER = "apps.users.adapter.SocialAccountAdapter"
+
 SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"},
+        "APP": {
+            "client_id": config("GOOGLE_CLIENT_ID"),
+            "secret": config("GOOGLE_CLIENT_SECRET"),
+        },
+    },
     "github": {
-        "SCOPE": ["user", "repo", "read:org"],
+        "SCOPE": ["user", "user:email"],
         "AUTH_PARAMS": {"access_type": "online"},
         "APP": {
             "client_id": config("GITHUB_CLIENT_ID"),
             "secret": config("GITHUB_CLIENT_SECRET"),
         },
-    }
+    },
 }
 
 MIDDLEWARE = [

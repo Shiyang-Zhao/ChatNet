@@ -32,13 +32,18 @@
             <hr />
           </div>
           <div class="d-flex justify-content-evenly align-items-center">
-            <a href="{% provider_login_url 'github' %}" class="text-reset">
-              <img src="{% static 'images/OAuth/Github.svg' %}" alt="Github logo" style="width: 35px; height: 35px;">
-            </a>
-            <a href="{% provider_login_url 'github' %}" class="text-reset">
-              <img src="{% static 'images/OAuth/Google.svg' %}" alt="Google logo" style="width: 35px; height: 35px;">
-            </a>
-
+            <form method="post" action="{% provider_login_url 'google' %}" class="m-0 p-0">
+              {% csrf_token %}
+              <button type="submit" class="btn p-0" style="background: none; border: none;">
+                <img src="{% static 'images/OAuth/Google.svg' %}" alt="Google logo" style="width: 35px; height: 35px;">
+              </button>
+            </form>
+            <form method="post" action="{% provider_login_url 'github' %}" class="m-0 p-0">
+              {% csrf_token %}
+              <button type="submit" class="btn p-0" style="background: none; border: none;">
+                <img src="{% static 'images/OAuth/Github.svg' %}" alt="Github logo" style="width: 35px; height: 35px;">
+              </button>
+            </form>
           </div>
         </div>
       </div>

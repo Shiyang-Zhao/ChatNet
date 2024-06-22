@@ -34,12 +34,11 @@ def home(request):
             "-date_posted",
         ),
     }
-    base_query = Post.objects.filter(is_published=True, is_deleted=False)
+    base_query = Post.objects.filter(is_published=True, is_deleted=False).distinct()
     sort_method = request.GET.get("sort", "new")
     sort_method = sort_method if sort_method in sort_options else "new"
     sort_params = sort_options[sort_method]
 
-    # Initialize the paginator
     page = request.GET.get("page", 1)
     per_page = 10
 
@@ -57,7 +56,7 @@ def home(request):
         active_posts = paginator.page(1)
     except EmptyPage:
         active_posts = paginator.page(paginator.num_pages)
-        has_more = False  # Indicates there are no more pages
+        has_more = False 
     else:
         has_more = active_posts.has_next()
 
@@ -68,7 +67,9 @@ def home(request):
             )
             for post in active_posts
         )
-        return JsonResponse({"posts_html": posts_html, "has_more": has_more}, status=200)
+        return JsonResponse(
+            {"posts_html": posts_html, "has_more": has_more}, status=200
+        )
 
     context = {
         "active_posts": active_posts,
