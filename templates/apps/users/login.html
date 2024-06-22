@@ -2,6 +2,7 @@
 
 {% load crispy_forms_tags %}
 {% load static %}
+{% load socialaccount %}
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'apps/css/users/login.css' %}">
@@ -25,9 +26,45 @@
             Don't have an account?
             <a href="{% url 'user-register' %}" class="text-primary">Sign Up</a>
           </p>
+          <div class="or-divider">
+            <hr />
+            <span>OR</span>
+            <hr />
+          </div>
+          <div class="d-flex justify-content-evenly align-items-center">
+            <a href="{% provider_login_url 'github' %}" class="text-reset">
+              <img src="{% static 'images/OAuth/Github.svg' %}" alt="Github logo" style="width: 35px; height: 35px;">
+            </a>
+            <a href="{% provider_login_url 'github' %}" class="text-reset">
+              <img src="{% static 'images/OAuth/Google.svg' %}" alt="Google logo" style="width: 35px; height: 35px;">
+            </a>
+
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  .or-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .or-divider hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid #000000;
+    margin: 0;
+  }
+
+  .or-divider span {
+    padding: 0 10px;
+    color: #888;
+    font-weight: bold;
+  }
+</style>
 {% endblock %}

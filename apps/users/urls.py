@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views.user import UserRegisterView, UserLoginView, UserLogoutView
 from .views.profile import FollowProfileView, UnfollowProfileView
 from .views.user_profile import UserAndProfileDetailView, UserAndProfileUpdateView
