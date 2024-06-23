@@ -1,5 +1,6 @@
 from django.views.generic import FormView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
+from allauth.account.views import LogoutView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -40,7 +41,4 @@ class UserLoginView(LoginView):
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy("metasphere")
-
-
-# class PasswordResetView(PasswordResetView):
+    next_page = reverse_lazy("users/login")

@@ -20,6 +20,7 @@ crispy-bootstrap5==2024.2
 cryptography==42.0.5
 daphne==4.1.2
 Django==5.0.4
+django-allauth==0.63.3
 django-crispy-forms==2.1
 hyperlink==21.0.0
 idna==3.7
@@ -32,8 +33,10 @@ psycopg2==2.9.9
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
 pycparser==2.22
+PyJWT==2.8.0
 pyOpenSSL==24.1.0
 python-dateutil==2.9.0.post0
+python-decouple==3.8
 redis==5.0.4
 requests==2.31.0
 requests-oauthlib==2.0.0

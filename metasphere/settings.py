@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.microsoft",
     "allauth.socialaccount.providers.github",
     # Third-party apps
     "daphne",
@@ -78,7 +79,9 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"
 ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
+ACCOUNT_SIGNUP_REDIRECT_URL = LOGIN_REDIRECT_URL
 
+SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_QUERY_EMAIL = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_ADAPTER = "apps.users.adapter.SocialAccountAdapter"
@@ -86,15 +89,23 @@ SOCIALACCOUNT_ADAPTER = "apps.users.adapter.SocialAccountAdapter"
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email"],
-        "AUTH_PARAMS": {"access_type": "online"},
+        "AUTH_PARAMS": {"access_type": "online", "prompt": "select_account"},
         "APP": {
             "client_id": config("GOOGLE_CLIENT_ID"),
             "secret": config("GOOGLE_CLIENT_SECRET"),
         },
     },
+    "microsoft": {
+        "SCOPE": ["User.Read"],
+        "AUTH_PARAMS": {"response_type": "code", "prompt": "select_account"},
+        "APP": {
+            "client_id": config("MICROSOFT_CLIENT_ID"),
+            "secret": config("MICROSOFT_CLIENT_SECRET"),
+        },
+    },
     "github": {
-        "SCOPE": ["user", "user:email"],
-        "AUTH_PARAMS": {"access_type": "online"},
+        "SCOPE": ["user", "repo", "user:email"],
+        "AUTH_PARAMS": {"access_type": "online", "prompt": "select_account"},
         "APP": {
             "client_id": config("GITHUB_CLIENT_ID"),
             "secret": config("GITHUB_CLIENT_SECRET"),
