@@ -8,7 +8,7 @@
 
       {% if user.is_authenticated %}
       <div class="d-flex flex-grow-1 justify-content-center align-items-center mx-3">
-        <form class="d-flex" method="get" action="{% url 'search-posts' %}"
+        <form class="d-flex" method="get" action="{% url 'search' %}"
           style="position: relative; max-width: 600px; width: 100%;">
           <input class="form-control rounded-pill ps-5 flex-grow-1 shadow-none" type="search" placeholder="Search"
             aria-label="Search" name="q" style="min-width: 150px;">
@@ -19,7 +19,6 @@
         </form>
       </div>
       {% endif %}
-
       <button class="navbar-toggler flex-shrink-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fa-solid fa-bars"></i>
@@ -98,14 +97,9 @@
         </li>
         {% else %}
         <li class="nav-item">
-          <a class="nav-link text-nowrap" href="{% url 'user-register' %}">
-            <span class="icon-gradient">
-              Sign Up
-            </span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-nowrap" href="{% url 'user-login' %}"><span class="icon-gradient">Log In</span></a>
+          <button class="btn nav-link text-nowrap" data-bs-toggle="modal" data-bs-target="#authModal">
+            <span class="icon-gradient">Log In</span>
+          </button>
         </li>
         {% endif %}
       </ul>

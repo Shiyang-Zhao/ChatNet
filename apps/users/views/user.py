@@ -1,35 +1,33 @@
-from django.views.generic import FormView
+from django.views.generic import CreateView
 from django.contrib.auth.views import LoginView
 from allauth.account.views import LogoutView
 from django.urls import reverse_lazy
-from django.contrib import messages
 from django.contrib.auth import get_user_model
-from ..forms.user import UserRegisterForm, UserLoginForm
+from ..forms.user import UserSignUpForm, UserLoginForm
+from django.http import HttpResponseRedirect
 
 User = get_user_model()
 
 
-class UserRegisterView(FormView):
-    template_name = "apps/users/signup.html"
-    form_class = UserRegisterForm
+class UserSignUpView(CreateView):
+    form_class = UserSignUpForm
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect("/?auth=login")
 
     def get_success_url(self):
-        return reverse_lazy("user-login")
-
-    def form_valid(self, form):
-        form.save()
-        username = form.cleaned_data.get("username")
-        messages.success(self.request, f"Account created for {username}!")
-        return super().form_valid(form)
+        return "/?auth=login"
 
 
 class UserLoginView(LoginView):
     form_class = UserLoginForm
-    template_name = "apps/users/login.html"
+    success_url = reverse_lazy("metasphere")
     redirect_authenticated_user = True
 
-    def get_success_url(self):
-        return reverse_lazy("metasphere")
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect("/?auth=login")
 
     def form_valid(self, form):
         remember_me = form.cleaned_data.get("remember_me")
@@ -41,4 +39,4 @@ class UserLoginView(LoginView):
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy("users/login")
+    pass

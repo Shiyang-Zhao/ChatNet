@@ -29,12 +29,12 @@ const establishNotificationWebSocket = () => {
 
     socket.onclose = function (e) {
         console.error(`Chat socket closed unexpectedly: ${e.code} ${e.reason}`);
-        reconnect();
+        // reconnect();
     };
 
     socket.onerror = function (e) {
         console.error(`WebSocket encountered an error: ${e.code} ${e.reason}`);
-        reconnect();
+        // reconnect();
     };
 };
 

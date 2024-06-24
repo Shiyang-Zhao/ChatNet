@@ -25,7 +25,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home, name="metasphere"),
     path("home/", home, name="home"),
-    path("search/", search, name="search-posts"),
+    path("search/", search, name="search"),
     path("sort/", home, name="sort-posts"),
     path("setting/", setting, name="setting"),
     path("history/", history, name="history"),

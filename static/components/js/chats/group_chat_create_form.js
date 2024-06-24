@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const modalButton = document.querySelector('#openModalButton');
     const myModalElement = document.querySelector('#myModal');
     const myModal = new bootstrap.Modal(myModalElement, {
         keyboard: false
@@ -12,26 +11,15 @@ document.addEventListener('DOMContentLoaded', function () {
         placement: 'right',
     });
 
-    modalButton.addEventListener('click', function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.set('group_chat_create_form', 'open');
-        window.history.pushState({}, '', window.location.pathname + '?' + urlParams.toString());
-        myModal.show();
-    });
-
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('group_chat_create_form') === 'open') {
+    if (urlParams.get('group_chat_create_form') === 'true') {
         myModal.show();
     }
 
-    myModalElement.addEventListener('hidden.bs.modal', function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        urlParams.delete('group_chat_create_form');
-        let newUrl = window.location.pathname;
-        if (urlParams.toString()) {
-            newUrl += '?' + urlParams.toString();
-        }
-        window.history.pushState({}, '', newUrl);
+    myModalElement.addEventListener('shown.bs.modal', function () {
+        let url = new URL(window.location);
+        url.searchParams.set('group_chat_create_form', 'true');
+        window.history.pushState({}, '', url);
     });
 
     document.querySelector('#group-chat-create-form').addEventListener('submit', function (event) {

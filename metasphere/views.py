@@ -36,11 +36,10 @@ def home(request):
     }
     base_query = Post.objects.filter(is_published=True, is_deleted=False).distinct()
     sort_method = request.GET.get("sort", "new")
-    sort_method = sort_method if sort_method in sort_options else "new"
     sort_params = sort_options[sort_method]
 
     page = request.GET.get("page", 1)
-    per_page = 10
+    per_page = 5
 
     if sort_method in ["controversial", "top"]:
         active_posts = base_query.annotate(**{sort_params[1]: sort_params[2]}).order_by(
@@ -55,8 +54,8 @@ def home(request):
     except PageNotAnInteger:
         active_posts = paginator.page(1)
     except EmptyPage:
-        active_posts = paginator.page(paginator.num_pages)
-        has_more = False 
+        active_posts = paginator.object_list.none()
+        has_more = False
     else:
         has_more = active_posts.has_next()
 
@@ -99,18 +98,31 @@ def search(request):
     if not query:
         return redirect("home")
 
-    posts = Post.objects.filter(
-        Q(title__icontains=query)
-        | Q(content__icontains=query)
-        | Q(author__username__icontains=query),
-        is_published=True,
-    ).distinct()
+    posts = (
+        Post.objects.filter(
+            Q(title__icontains=query)
+            | Q(content__icontains=query)
+            | Q(author__username__icontains=query),
+            is_published=True,
+        )
+        .distinct()
+        .order_by("-date_posted")
+    )
 
-    users = User.objects.filter(username__icontains=query).distinct()
+    users = (
+        User.objects.filter(username__icontains=query)
+        .distinct()
+        .annotate(num_followers=Count("profile__followers"))
+        .order_by("-num_followers")
+    )
 
-    comments = Comment.objects.filter(
-        Q(content__icontains=query) | Q(author__username__icontains=query)
-    ).distinct()
+    comments = (
+        Comment.objects.filter(
+            Q(content__icontains=query) | Q(author__username__icontains=query)
+        )
+        .distinct()
+        .order_by("-date_posted")
+    )
 
     return render(
         request,

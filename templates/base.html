@@ -26,11 +26,13 @@
     <!-- Child templates can insert their content here -->
     {% endblock %}
   </div>
+  {% include 'apps/users/auth.html' %}
 
   {% block javascripts %}
   <!-- Child javascripts can insert their content here -->
   {% endblock %}
 
+  <script type="module" src="{% static 'apps/js/users/auth.js' %}"></script>
   {% if user.is_authenticated %}
   <script type="module" src="{% static 'apps/js/base/base.js' %}"></script>
   {% endif %}

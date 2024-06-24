@@ -1,0 +1,53 @@
+{% load crispy_forms_tags %}
+
+<div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+
+        <!-- Tab navigation -->
+        <ul class="nav nav-tabs" id="authTab" role="tablist">
+          <li class="nav-item text-center w-50" role="presentation">
+            <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login" role="tab"
+              aria-controls="login" aria-selected="true">Log In</a>
+          </li>
+          <li class="nav-item text-center w-50" role="presentation">
+            <a class="nav-link" id="signup-tab" data-bs-toggle="tab" href="#signup" role="tab" aria-controls="signup"
+              aria-selected="false">Sign Up</a>
+          </li>
+        </ul>
+
+        <div class="tab-content mt-3" id="authTabContent">
+          <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+            <form method="post" action="{% url 'user-login' %}">
+              {% csrf_token %}
+              {{ user_login_form|crispy }}
+              <div class="form-group d-flex justify-content-center align-items-center">
+                <button type="submit" class="btn btn-primary btn-block w-50 py-1">Log In</button>
+              </div>
+            </form>
+            <div class="or-divider d-flex align-items-center my-3">
+              <hr class="flex-grow-1 border-secondary m-0">
+              <span class="px-2 text-muted">OR</span>
+              <hr class="flex-grow-1 border-secondary">
+            </div>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              {% include 'apps/users/oauth.html' %}
+            </div>
+            </form>
+          </div>
+
+          <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+            <form method="post" action="{% url 'user-signup' %}">
+              {% csrf_token %}
+              {{ user_signup_form|crispy }}
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

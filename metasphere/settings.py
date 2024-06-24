@@ -64,9 +64,9 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 AUTH_USER_MODEL = "users.User"
 
 # Authentication settings
-LOGIN_URL = "/users/login/"
+LOGIN_URL = "/?auth=login"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/users/login/"
+LOGOUT_REDIRECT_URL = "/?auth=login"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # django-allauth settings
@@ -139,6 +139,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # custom context processors
+                "metasphere.context_processors.user_auth_forms",
             ],
         },
     },

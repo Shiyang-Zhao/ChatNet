@@ -28,12 +28,12 @@ const establishChatWebSocket = () => {
 
     socket.onclose = function (e) {
         console.error(`WebSocket closed: ${e.code} ${e.reason}`);
-        reconnect();
+        // reconnect();
     };
 
     socket.onerror = function (e) {
         console.error(`WebSocket encountered an error: ${e.message}`);
-        reconnect();
+        // reconnect();
     };
 };
 

@@ -103,7 +103,7 @@ class GroupChatCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        return redirect(f"{reverse('chat-list')}?group_chat_create_form=open")
+        return redirect(f"{reverse('chat-list')}?group_chat_create_form=true")
 
     def generate_chat_title(self, participant_usernames):
         if len(participant_usernames) > 2:

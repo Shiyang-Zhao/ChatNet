@@ -23,14 +23,12 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         try:
             existing_user = User.objects.get(email=user.email)
             sociallogin.connect(request, existing_user)
-            # Automatically log in the user
             perform_login(request, existing_user, email_verification="optional")
         except User.DoesNotExist:
             base_username = user.username or user.email.split("@")[0]
             user.username = self.generate_unique_username(base_username)
             user.save()
             sociallogin.connect(request, user)
-            # Automatically log in the user
             perform_login(request, user, email_verification="optional")
 
     def get_email_from_github(self, sociallogin):
