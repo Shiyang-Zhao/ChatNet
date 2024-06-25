@@ -1,0 +1,21 @@
+<div class="dropdown">
+    <i id="story-dropdown-{{ story.pk }}" class="fa-solid fa-ellipsis fa-xl fa-rotate-90"
+        style="color: #ffffff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); cursor: pointer;"
+        data-bs-toggle="dropdown" aria-expanded="false"></i>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="story-dropdown-{{ story.pk }}">
+        <li><a class="dropdown-item" href="#">Edit</a></li>
+        <li><a class="dropdown-item" href="#">Save</a></li>
+        <li>
+            <form method="post" action="{% url 'story-archive' pk=story.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item">Archive</button>
+            </form>
+        </li>
+        <li>
+            <form method="post" action="{% url 'story-delete' pk=story.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item text-danger">Delete</button>
+            </form>
+        </li>
+    </ul>
+</div>

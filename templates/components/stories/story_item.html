@@ -1,4 +1,5 @@
 {% load static %}
+
 {% if active_stories %}
 <button type="button" class="btn border-0 p-0 bg-0" data-bs-toggle="modal"
     data-bs-target="#story-modal-{{ viewed_user.username }}">
@@ -13,16 +14,16 @@
 {% endif %}
 <div id="story-modal-{{ viewed_user.username }}" class="story-modal modal fade" tabindex="-1" role="dialog"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-body position-relative bg-black">
+    <div class="modal-dialog modal-sm mt-3" role="document">
+        <div class="modal-content rounded-5">
+            <div class="modal-body position-relative bg-black rounded-5">
                 <div class="progress bg-transparent overflow-hidden" style="height: 4px;">
                     {% for story in active_stories %}
                     <div class="progress-bar rounded" role="progressbar"></div>
                     {% endfor %}
                 </div>
                 {% for story in active_stories %}
-                <div class="story-content mt-3 position-relative">
+                <div class="story-content position-relative mt-3">
                     <div class="position-absolute d-flex align-items-center justify-content-between w-100"
                         style="z-index: 10;">
                         <a href="{% url 'user-profile-detail' username=user.username %}"
@@ -34,52 +35,42 @@
                                 {{ viewed_user.username }} - {{ story.date_posted|date:"F j, Y, G:i" }}
                             </span>
                         </a>
-                        <div class="dropdown">
-                            <i id="story-dropdown-{{ story.pk }}" class="fa-solid fa-ellipsis fa-xl fa-rotate-90"
-                                style="color: #ffffff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); cursor: pointer;"
-                                data-bs-toggle="dropdown" aria-expanded="false"></i>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="story-dropdown-{{ story.pk }}">
-                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                <li><a class="dropdown-item" href="#">Save</a></li>
-                                <li>
-                                    <form method="post" action="{% url 'story-archive' pk=story.pk %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="dropdown-item">Archive</button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <form method="post" action="{% url 'story-delete' pk=story.pk %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                    </form>
-                                </li>
-                            </ul>
+                        {% include 'components/stories/story_dropdown.html' with story=story %}
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 100%;">
+                        {% if story.file %}
+                        {% if story.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
+                        <div class="d-flex justify-content-center align-items-center"
+                            style="width: 400px; height: 500px;">
+                            <video class="object-fit-contain w-100 m-0" preload="auto">
+                                <source src="{{ story.file.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
+                        {% else %}
+                        <div class="d-flex justify-content-center align-items-center"
+                            style="width: 400px; height: 500px;">
+                            <img src="{{ story.file.url }}" alt="Story image" class="object-fit-contain w-100 m-0">
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <div class="d-flex justify-content-center align-items-center"
+                            style="width: 400px; height: 500px;">
+                            <p class="text-white" style="width: 80%; height: 70%; overflow: auto;">
+                                {{ story.content }}
+                            </p>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% if story.file %}
-                    {% if story.file_extension in '.mp4, .avi, .mov, .mkv, .flv, .wmv, .webm' %}
-                    <div class="d-flex flex-column align-items-center justify-content-center">
-                        <video class="img-fluid mb-3" preload="auto" style="max-height: 400px; object-fit: contain;">
-                            <source src="{{ story.file.url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                    {% else %}
-                    <div class="d-flex flex-column align-items-center justify-content-center">
-                        <img src="{{ story.file.url }}" alt="Story image" class="img-fluid mb-3"
-                            style="max-height: 400px; object-fit: contain;">
-                    </div>
-                    {% endif %}
-                    {% endif %}
                 </div>
                 {% empty %}
                 <p>You don't have any story - <a href="{% url 'story-create' %}">Create</a></p>
                 {% endfor %}
                 <div class="left-area"
-                    style="position: absolute; left: 0; top: 0; bottom: 0; width: 50%; cursor: pointer; pointer-events: auto; z-index: 5;">
+                    style="position: absolute; left: 0; top: 0; bottom: 0; width: 15%; cursor: pointer; pointer-events: auto; z-index: 5;">
                 </div>
                 <div class="right-area"
-                    style="position: absolute; right: 0; top: 0; bottom: 0; width: 50%; cursor: pointer; pointer-events: auto; z-index: 5;">
+                    style="position: absolute; right: 0; top: 0; bottom: 0; width: 15%; cursor: pointer; pointer-events: auto; z-index: 5;">
                 </div>
             </div>
         </div>

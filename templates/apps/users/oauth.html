@@ -4,7 +4,7 @@
 <!-- Google OAuth Button -->
 <form method="post" action="{% provider_login_url 'google' %}" class="m-0 p-0 w-100">
     {% csrf_token %}
-    <button type="submit" class="btn w-100 p-2 shadow-none" style="background-color: #DB4437;">
+    <button type="submit" class="btn w-100 mb-1 p-1" style="background-color: #DB4437;">
         <div class="d-flex justify-content-between align-items-center w-100 text-white">
             <img class="bg-white" src="{% static 'images/OAuth/Google.svg' %}" alt="Google logo" class="ms-2"
                 style="width: 30px; height: 30px;">
@@ -16,7 +16,7 @@
 <!-- Microsoft OAuth Button -->
 <form method="post" action="{% provider_login_url 'microsoft' %}" class="m-0 p-0 w-100">
     {% csrf_token %}
-    <button type="submit" class="btn w-100 p-2 shadow-none" style="background-color: #0078D4;">
+    <button type="submit" class="btn w-100 mb-1 p-1" style="background-color: #0078D4;">
         <div class="d-flex justify-content-between align-items-center w-100 text-white">
             <img class="bg-white" src="{% static 'images/OAuth/Microsoft.svg' %}" alt="Microsoft logo" class="ms-2"
                 style="width: 30px; height: 30px;">
@@ -28,7 +28,7 @@
 <!-- GitHub OAuth Button -->
 <form method="post" action="{% provider_login_url 'github' %}" class="m-0 p-0 w-100">
     {% csrf_token %}
-    <button type="submit" class="btn w-100 p-2 shadow-none" style="background-color: #24292E;">
+    <button type="submit" class="btn w-100 mb-1 p-1" style="background-color: #24292E;">
         <div class="d-flex justify-content-between align-items-center w-100 text-white">
             <img class="bg-white" src="{% static 'images/OAuth/Github.svg' %}" alt="Github logo" class="ms-2"
                 style="width: 30px; height: 30px;">

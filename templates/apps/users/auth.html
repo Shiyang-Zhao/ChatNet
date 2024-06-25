@@ -19,6 +19,16 @@
 
         <div class="tab-content mt-3" id="authTabContent">
           <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              {% include 'apps/users/oauth.html' %}
+            </div>
+
+            <div class="or-divider d-flex align-items-center">
+              <hr class="flex-grow-1 border-secondary m-0">
+              <span class="px-2 text-muted">OR</span>
+              <hr class="flex-grow-1 border-secondary">
+            </div>
+            
             <form method="post" action="{% url 'user-login' %}">
               {% csrf_token %}
               {{ user_login_form|crispy }}
@@ -26,23 +36,14 @@
                 <button type="submit" class="btn btn-primary btn-block w-50 py-1">Log In</button>
               </div>
             </form>
-            <div class="or-divider d-flex align-items-center my-3">
-              <hr class="flex-grow-1 border-secondary m-0">
-              <span class="px-2 text-muted">OR</span>
-              <hr class="flex-grow-1 border-secondary">
-            </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
-              {% include 'apps/users/oauth.html' %}
-            </div>
-            </form>
           </div>
 
           <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
             <form method="post" action="{% url 'user-signup' %}">
               {% csrf_token %}
               {{ user_signup_form|crispy }}
-              <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+              <div class="d-flex form-group justify-content-center align-items-center">
+                <button type="submit" class="btn btn-primary btn-block w-50 py-1">Sign Up</button>
               </div>
             </form>
           </div>
