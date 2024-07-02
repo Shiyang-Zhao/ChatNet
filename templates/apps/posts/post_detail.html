@@ -46,7 +46,7 @@
   </div>
 
   <!-- Comment Form with Crispy Forms -->
-  <div id="comments-container" class="position-relative">
+  <div id="comments-container">
     <div class="comment-create-form-container mt-3">
       <form method="post" action="{% url 'comment-create' pk=post.pk %}">
         {% csrf_token %}

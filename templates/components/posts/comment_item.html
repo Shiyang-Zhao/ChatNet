@@ -34,8 +34,16 @@
                 <a class="reply-link btn text-primary rounded-pill border-0 pt-0 pb-0 me-1">
                     <i class="fa-regular fa-message me-1"></i>{{ comment.children.count}}
                 </a>
-                {% include 'components/posts/comment_dropdown.html' with comment=comment %}
+                <a class="comment-edit-link btn text-primary rounded-pill border-0 pt-0 pb-0 me-1">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+                <button class="reply-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
+                    id="comment-modal-{{ comment.pk }}" type="button" data-bs-toggle="modal"
+                    data-bs-target="#commentModal-{{ comment.pk }}">
+                    <span class="icon-gradient"><i class="fa-solid fa-ellipsis"></i></span>
+                </button>
             </div>
+
             <div class="comment-create-form-container" style="display: none;">
                 <form method="post" action="{% url 'reply-create' pk=comment.pk %}">
                     {% csrf_token %}
@@ -69,5 +77,6 @@
             </div>
         </div>
     </div>
+    {% include 'components/posts/comment_dropdown.html' with comment=comment %}
     {% endif %}
 </div>

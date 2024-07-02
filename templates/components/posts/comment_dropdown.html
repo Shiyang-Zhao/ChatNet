@@ -1,41 +1,33 @@
 {% load comment_tags %}
 
-<div class="btn-group dropup">
-    <button class="reply-toggle-btn btn btn-link text-dark rounded-pill pt-0 pb-0"
-        id="comment-dropdown-{{ comment.pk }}" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="icon-gradient"><i class="fa-solid fa-ellipsis"></i></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="comment-dropdown-{{ comment.pk }}">
-        {% check_comment_save_status comment user as is_user_saved_comment %}
-        {% if is_user_saved_comment %}
-        <li>
-            <form method="post" class="comment-unsave-form saved" action="{% url 'unsave-comment' pk=comment.pk %}"
-                data-save-url="{% url 'save-comment' pk=comment.pk %}"
-                data-unsave-url="{% url 'unsave-comment' pk=comment.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="dropdown-item">Saved</button>
-            </form>
-        </li>
-        {% else %}
-        <li>
-            <form method="post" class="comment-save-form save" action="{% url 'save-comment' pk=comment.pk %}"
-                data-save-url="{% url 'save-comment' pk=comment.pk %}"
-                data-unsave-url="{% url 'unsave-comment' pk=comment.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="dropdown-item">Save</button>
-            </form>
-        </li>
-        {% endif %}
-        {% if comment.author == user %}
-        <li>
-            <button class="comment-edit-link dropdown-item text-decoration-none text-reset">Edit</button>
-        </li>
-        <li>
-            <form method="post" action="{% url 'comment-soft-delete' pk=comment.pk %}">
-                {% csrf_token %}
-                <button type="submit" class="dropdown-item text-danger">Delete</button>
-            </form>
-        </li>
-        {% endif %}
-    </ul>
+<div class="modal fade" id="commentModal-{{ comment.pk }}" tabindex="-1"
+    aria-labelledby="commentModalLabel-{{ comment.pk }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                {% check_comment_save_status comment user as is_user_saved_comment %}
+                {% if is_user_saved_comment %}
+                <form method="post" class="comment-unsave-form saved" action="{% url 'unsave-comment' pk=comment.pk %}"
+                    data-save-url="{% url 'save-comment' pk=comment.pk %}"
+                    data-unsave-url="{% url 'unsave-comment' pk=comment.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary w-100 mb-2">Saved</button>
+                </form>
+                {% else %}
+                <form method="post" class="comment-save-form save" action="{% url 'save-comment' pk=comment.pk %}"
+                    data-save-url="{% url 'save-comment' pk=comment.pk %}"
+                    data-unsave-url="{% url 'unsave-comment' pk=comment.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary w-100 mb-2">Save</button>
+                </form>
+                {% endif %}
+                {% if comment.author == user %}
+                <form method="post" action="{% url 'comment-soft-delete' pk=comment.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger w-100">Delete</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
