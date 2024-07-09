@@ -64,9 +64,9 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 AUTH_USER_MODEL = "users.User"
 
 # Authentication settings
-LOGIN_URL = "/?auth=login"
+LOGIN_URL = "/?modal=auth"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/?auth=login"
+LOGOUT_REDIRECT_URL = "/?modal=auth"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # django-allauth settings

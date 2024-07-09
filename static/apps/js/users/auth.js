@@ -4,19 +4,19 @@ document.addEventListener('DOMContentLoaded', function () {
         keyboard: false
     });
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('auth') === 'login') {
+    if (urlParams.get('modal') === 'auth') {
         myModal.show();
     }
 
     authModal.addEventListener('shown.bs.modal', function () {
         let url = new URL(window.location);
-        url.searchParams.set('auth', 'login');
+        url.searchParams.set('modal', 'auth');
         window.history.pushState({}, '', url);
     });
 
     authModal.addEventListener('hidden.bs.modal', function () {
         let url = new URL(window.location);
-        url.searchParams.delete('auth');
+        url.searchParams.delete('modal');
         window.history.pushState({}, '', url);
     });
 });

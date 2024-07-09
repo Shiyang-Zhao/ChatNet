@@ -42,7 +42,7 @@ class UserLoginForm(AuthenticationForm):
         super(UserLoginForm, self).__init__(*args, **kwargs)
         self.fields["username"].label = ""
         self.fields["username"].widget.attrs.update(
-            {"placeholder": "Username", "autocomplete": "username"}
+            {"placeholder": "Email", "autocomplete": "email"}
         )
         self.fields["password"].label = ""
         self.fields["password"].widget.attrs.update(

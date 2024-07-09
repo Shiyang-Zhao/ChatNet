@@ -13,21 +13,16 @@ class UserSignUpView(CreateView):
     form_class = UserSignUpForm
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect("/?auth=login")
+        return HttpResponseRedirect("/?modal=auth")
 
     def get_success_url(self):
-        return "/?auth=login"
+        return "/?modal=auth"
 
 
 class UserLoginView(LoginView):
     form_class = UserLoginForm
     success_url = reverse_lazy("metasphere")
     redirect_authenticated_user = True
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return HttpResponseRedirect(self.get_success_url())
-        return HttpResponseRedirect("/?auth=login")
 
     def form_valid(self, form):
         remember_me = form.cleaned_data.get("remember_me")
@@ -36,6 +31,9 @@ class UserLoginView(LoginView):
         else:
             self.request.session.set_expiry(0)
         return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return HttpResponseRedirect("/?modal=auth")
 
 
 class UserLogoutView(LogoutView):
