@@ -31,6 +31,15 @@ class PostDetailView(DetailView):
             self.object.save(update_fields=["views"])
             request.session[session_key] = True
 
+        recent_posts = request.session.get("recent_posts", [])
+        post_id = self.object.pk
+        if post_id in recent_posts:
+            recent_posts.remove(post_id)
+        recent_posts.insert(0, post_id)
+        if len(recent_posts) > 10:
+            recent_posts = recent_posts[:10]
+        request.session["recent_posts"] = recent_posts
+
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 

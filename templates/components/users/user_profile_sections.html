@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="row justify-content-center align-items-center mt-4">
+<div class="d-flex flex-column justify-content-center align-items-center mt-4">
     <div class="col-md-8">
         <ul class="nav nav-tabs d-flex justify-content-center" id="profileTab" role="tablist"
             style="flex-wrap: nowrap;">
@@ -22,11 +22,10 @@
             </li>
         </ul>
     </div>
-    <div class="col-lg-10">
+    <div class="col-lg-12">
         <div class="tab-content mt-4" id="profileTabContent">
             <!-- Posts Section -->
-            <div id="posts" class="tab-pane fade show active" role="tabpanel" aria-labelledby="posts-tab"
-                style="min-width: 70vw;">
+            <div id="posts" class="tab-pane fade show active" role="tabpanel" aria-labelledby="posts-tab">
                 <div class="row">
                     {% for post in active_posts %}
                     <div class="col-lg-4 col-md-4 col-sm-4 col-4 mb-4">

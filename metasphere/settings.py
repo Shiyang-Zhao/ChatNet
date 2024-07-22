@@ -141,6 +141,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 # custom context processors
                 "metasphere.context_processors.user_auth_forms",
+                "metasphere.context_processors.recent_posts",
             ],
         },
     },

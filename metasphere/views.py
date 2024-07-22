@@ -38,15 +38,15 @@ def home(request):
     sort_method = request.GET.get("sort", "new")
     sort_params = sort_options[sort_method]
 
-    page = request.GET.get("page", 1)
-    per_page = 5
-
     if sort_method in ["controversial", "top"]:
         active_posts = base_query.annotate(**{sort_params[1]: sort_params[2]}).order_by(
             sort_params[3], sort_params[4]
         )
     else:
         active_posts = base_query.order_by(sort_params[1])
+
+    page = request.GET.get("page", 1)
+    per_page = 5
 
     paginator = Paginator(active_posts, per_page)
     try:
@@ -76,13 +76,13 @@ def home(request):
     }
 
     if user.is_authenticated:
-        active_authors = set()
+        active_story_authors = set()
         if Story.active_stories(user).exists():
-            active_authors.add(user)
+            active_story_authors.add(user)
         for followed_user in user.profile.following.all():
             if Story.active_stories(followed_user.user).exists():
-                active_authors.add(followed_user.user)
-        context["active_authors"] = active_authors
+                active_story_authors.add(followed_user.user)
+        context["active_story_authors"] = active_story_authors
 
     return render(request, "apps/layouts/home.html", context)
 
@@ -123,6 +123,31 @@ def search(request):
         .distinct()
         .order_by("-date_posted")
     )
+
+    page = request.GET.get("page", 1)
+    per_page = 5
+
+    paginator = Paginator(posts, per_page)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.object_list.none()
+        has_more = False
+    else:
+        has_more = posts.has_next()
+
+    if is_ajax(request):
+        posts_html = "".join(
+            render_to_string(
+                "components/posts/post_item.html", {"post": post}, request=request
+            )
+            for post in posts
+        )
+        return JsonResponse(
+            {"posts_html": posts_html, "has_more": has_more}, status=200
+        )
 
     return render(
         request,
