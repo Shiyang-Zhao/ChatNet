@@ -7,7 +7,7 @@
         data-url="{% url 'like-post' pk=post.pk %}">
         {% csrf_token %}
         <button type="submit"
-            class="btn {% if is_user_liked_post == 1 %}btn-success{% else %}btn-outline-success{% endif %}">
+            class="btn btn-sm {% if is_user_liked_post == 1 %}btn-success{% else %}btn-outline-success{% endif %} border-0">
             <i class="fa-regular fa-thumbs-up">
                 <span>{{ post.liked_by.count }}</span>
             </i>
@@ -18,7 +18,7 @@
         data-url="{% url 'dislike-post' pk=post.pk %}">
         {% csrf_token %}
         <button type="submit"
-            class="btn {% if is_user_liked_post == -1 %}btn-danger{% else %}btn-outline-danger{% endif %}">
+            class="btn btn-sm {% if is_user_liked_post == -1 %}btn-danger{% else %}btn-outline-danger{% endif %} border-0">
             <i class="fa-regular fa-thumbs-down">
                 <span>{{ post.disliked_by.count }}</span>
             </i>

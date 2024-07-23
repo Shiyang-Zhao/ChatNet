@@ -21,36 +21,13 @@
   {% include "components/layouts/header.html" %}
 
   <div class="main d-flex">
-    <!-- Left part: Recent posts -->
-    <div class="left-part position-fixed top-5 start-0 ms-3" style="width: 20%;">
-      <h5 class="mb-3">Recent</h5>
-      <div class="list-group">
-        {% for post in recent_posts %}
-        <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
-          {{ post.title }}
-        </a>
-        {% endfor %}
-      </div>
-    </div>
-
-    <!-- Middle part: Sorting options and posts -->
-    <div class="middle-part flex-grow-1" style="margin-left: 22%; margin-right: 22%;">
+    {% include 'components/layouts/left_sidebar.html' %}
+    <div class="middle-part flex-grow-1" style="margin-left: 22%; margin-right: 27%;">
       {% block content %}
       <!-- Child templates can insert their content here -->
       {% endblock %}
     </div>
-
-    <!-- Right part: Recent posts -->
-    <div class="right-part position-fixed top-5 end-0 me-3" style="width: 20%;">
-      <h5 class="mb-3">Recent</h5>
-      <div class="list-group">
-        {% for post in recent_posts %}
-        <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
-          {{ post.title }}
-        </a>
-        {% endfor %}
-      </div>
-    </div>
+    {% include 'components/layouts/right_sidebar.html' %}
   </div>
 
   {% include 'apps/users/auth.html' %}

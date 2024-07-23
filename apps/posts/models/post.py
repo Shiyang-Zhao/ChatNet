@@ -41,6 +41,9 @@ class Post(models.Model):
         return self.comments.filter(parent_comment__isnull=True)
 
     @property
+    def file_name(self):
+        return Path(self.file.name).name
+    @property
     def file_extension(self):
         return Path(self.file.name).suffix
 

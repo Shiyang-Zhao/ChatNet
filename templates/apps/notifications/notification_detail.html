@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container">
     <h2 class="mb-4">Your Notifications</h2>
     <form class="mark-all-as-read-form mb-3" data-url="{% url 'mark-all-as-read' %}">
         {% csrf_token %}

@@ -1,0 +1,44 @@
+<div class="right-part position-fixed border text-start h-100 top-5 end-0 overflow-y-auto" style="width: 25%;">
+    <div class="h-100 pt-4 bg-light">
+        <a class="text-decoration-none text-muted mb-2" data-bs-toggle="collapse" href="#recent_posts" role="button"
+            aria-expanded="false" aria-controls="recent_posts">
+            RECENT POSTS
+        </a>
+        <div class="collapse show" id="recent_posts">
+            <div class="list-group bg-light">
+                {% for post in recent_posts %}
+                <div
+                    class="list-group-item d-flex justify-content-between align-items-start bg-transparent border-0 my-2 py-0">
+                    <div class="d-flex flex-column">
+                        <a class="text-decoration-none"
+                            href="{% url 'user-profile-detail' username=post.author.username %}">
+                            <div class="d-flex justify-content-center align-items-center text-decoration-none">
+                                <img src="{{ post.author.profile.profile_image.url }}" alt=""
+                                    class="rounded-circle me-1" style="width: 30px;">
+                                <span class="text-muted small text-break">{{ post.author }}</span>
+                            </div>
+                        </a>
+                        <a class="text-decoration-none" href="{% url 'post-detail' pk=post.pk %}">
+                            <div>{{ post.title }}</div>
+                            <div>
+                                <span class="text-muted small">
+                                    {{ post.liked_by.count }} likes · {{ post.views }} views
+                                </span>
+                                <div class="text-muted small">
+                                    {{post.comments.count }} comments
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div {% if post.file %} class="w-50" {% endif %}>
+                        <a class="text-decoration-none text-reset text-start" href="{% url 'post-detail' pk=post.pk %}">
+                            {% include 'components/posts/post_file_detail.html' with post=post %}
+                        </a>
+                    </div>
+                </div>
+                <hr class="my-1">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
