@@ -58,15 +58,21 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
 
 # Custom user model
 AUTH_USER_MODEL = "users.User"
 
 # Authentication settings
-LOGIN_URL = "/?modal=auth"
+LOGIN_URL = "/?modal=login"
 LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/?modal=auth"
+LOGOUT_REDIRECT_URL = "/?modal=login"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # django-allauth settings
@@ -124,6 +130,7 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     # Your custom middleware
     "apps.users.middleware.UpdateUserLastActivityMiddleware",
+    "apps.users.middleware.UpdateSiteMiddleware",
 ]
 
 ROOT_URLCONF = "metasphere.urls"

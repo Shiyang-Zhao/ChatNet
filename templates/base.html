@@ -21,17 +21,19 @@
   {% include "components/layouts/header.html" %}
 
   <div class="main d-flex">
+    {% if user.is_authenticated %}
     {% include 'components/layouts/left_sidebar.html' %}
+    {% endif %}
     <div class="middle-part flex-grow-1" style="margin-left: 22%; margin-right: 27%;">
       {% block content %}
       <!-- Child templates can insert their content here -->
       {% endblock %}
     </div>
+    {% if user.is_authenticated %}
     {% include 'components/layouts/right_sidebar.html' %}
+    {% endif %}
   </div>
-
   {% include 'apps/users/auth.html' %}
-
   {% block javascripts %}
   <!-- Child javascripts can insert their content here -->
   {% endblock %}

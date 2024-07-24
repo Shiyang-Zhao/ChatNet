@@ -1,6 +1,11 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    AuthenticationForm,
+    PasswordResetForm,
+    SetPasswordForm,
+)
 
 User = get_user_model()
 
@@ -36,7 +41,7 @@ class UserSignUpForm(UserCreationForm):
 
 
 class UserLoginForm(AuthenticationForm):
-    remember_me = forms.BooleanField(required=False, label="Remember me")
+    remember_me = forms.BooleanField(required=False, label_suffix="")
 
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
@@ -48,6 +53,31 @@ class UserLoginForm(AuthenticationForm):
         self.fields["password"].widget.attrs.update(
             {"placeholder": "Password", "autocomplete": "current-password"}
         )
+        self.fields["remember_me"].label = "Remember me"
+
+
+class UserPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        max_length=254,
+        widget=forms.EmailInput(
+            attrs={"autocomplete": "email", "class": "form-control"}
+        ),
+    )
+
+
+class UserSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={"autocomplete": "new-password", "class": "form-control"}
+        ),
+        strip=False,
+    )
+    new_password2 = forms.CharField(
+        strip=False,
+        widget=forms.PasswordInput(
+            attrs={"autocomplete": "new-password", "class": "form-control"}
+        ),
+    )
 
 
 class UserUpdateForm(forms.ModelForm):
