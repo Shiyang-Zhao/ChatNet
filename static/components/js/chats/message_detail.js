@@ -14,12 +14,12 @@ const sendMessage = (pk, messageInput, sendButtonPopover) => {
 };
 
 const showMessageDetail = (pk, container) => {
-    const messageList = container.querySelector('.message-list');
+    const messagesContainer = container.querySelector('.message-list');
     const messageFormContainer = container.querySelector('.message-form-container');
     const messageForm = messageFormContainer.querySelector('form');
     const messageInput = messageFormContainer.querySelector('textarea');
     const sendButton = messageFormContainer.querySelector('button');
-    scrollToLatestMessage(messageList);
+    scrollToLatestMessage(messagesContainer);
 
     const sendButtonPopover = new bootstrap.Popover(sendButton, {
         trigger: 'manual',
@@ -49,7 +49,7 @@ const showMessageDetail = (pk, container) => {
     });
 
     messageInput.addEventListener('focus', () => {
-        scrollToLatestMessage(messageList);
+        scrollToLatestMessage(messagesContainer);
     });
 };
 

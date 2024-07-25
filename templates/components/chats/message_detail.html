@@ -36,7 +36,7 @@
     {% if chat.messages.all %}
     {% for message in chat.messages.all %}
     {% if message.sender == user %}
-    <div class="d-flex flex-row-reverse p-1">
+    <div class="d-flex flex-row-reverse bg-primary p-1">
       {% include 'components/chats/message_item.html' with user=user message=message %}
     </div>
     {% else %}

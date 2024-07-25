@@ -1,3 +1,5 @@
+import { scrollToLatestMessage } from "../../../apps/js/base/base.js";
+
 let socket;
 let retryInterval = 1000;
 let maxRetryInterval = 60000;
@@ -78,11 +80,14 @@ function displayMessageItem(message) {
     const tempDiv = document.createElement('div');
     tempDiv.classList.add("d-flex", "p-1");
     if (isSentByCurrentUser) {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
         tempDiv.classList.add("flex-row-reverse");
+        tempDiv.classList.add("bg-primary");
     }
     tempDiv.innerHTML = messageHtml.trim();
     messagesContainer.appendChild(tempDiv);
+    if (isSentByCurrentUser) {
+        scrollToLatestMessage(messagesContainer);
+    }
 }
 
 export { establishChatWebSocket, sendChatMessage }
