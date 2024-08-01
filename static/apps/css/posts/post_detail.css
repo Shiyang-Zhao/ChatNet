@@ -7,7 +7,7 @@
     cursor: pointer;
 }
 
-.reply-link:hover,
+.comment-reply-link:hover,
 .reply-toggle-btn:hover,
 .comment-like-btn:hover,
 .comment-dislike-btn:hover {

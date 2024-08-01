@@ -18,14 +18,14 @@
 </p>
 
 <p align="center">
-  • <a href="#-Features">Features</a> 
-  • <a href="#-Technologies">Technologies</a> 
-  • <a href="#-Usage">Usage</a>
-  • <a href="#-Contributing">Contributing</a>
-  • <a href="#-License">License</a>
-  • <a href="#-Status">Status</a>
-  • <a href="#-Social-Media">Social Media</a>
-  • <a href="#-Contact">Contact</a>
+  • <a href="#-features">Features</a> 
+  • <a href="#-technologies">Technologies</a> 
+  • <a href="#-usage">Usage</a>
+  • <a href="#-contributing">Contributing</a>
+  • <a href="#-license">License</a>
+  • <a href="#-status">Status</a>
+  • <a href="#-social-media">Social Media</a>
+  • <a href="#-contact">Contact</a>
 </p>
 
 ---
@@ -33,24 +33,32 @@
 # 🚀 Features
 
 - **User Profiles:** Create detailed profiles with customizable features.
-- **Interactive Feed:** Post updates, photos, and videos, interact through likes and comments.
+- **Interactive Feed:** Post updates, photos, and videos; interact through likes and comments.
 - **Real-time Chat:** Messaging capabilities for individual and group conversations.
 - **Events and Groups:** Organize and join groups for events and discussions.
 - **Privacy Controls:** Manage who can view and interact with your content.
-- **Multi-Platform Support:** Accessible on various devices with seamless experience.
+- **Multi-Platform Support:** Accessible on various devices with a seamless experience.
+- **Notifications:** Stay updated with real-time notifications.
+- **Stories:** Share ephemeral content with followers.
 
 # 💻 Technologies
 
-- **Front-end:** React.js, HTML, CSS, JavaScript
-- **Back-end:** Django, Channels for real-time communication
+- **Full-stack Framework:** Django for both front-end and back-end development
+- **Front-end:** Django templates, HTML, CSS, JavaScript
+- **Back-end:** Django, Django Channels for real-time communication
 - **Database:** PostgreSQL
-- **Authentication:** JWT for secure authentication
+- **Authentication:** Django allauth for authentication
+- **WebSockets:** Real-time features with WebSocket and Django Channels
+- **Task Management:** Celery for asynchronous task management
+- **CI/CD:** Jenkins for continuous integration and deployment
+- **Testing:** Selenium for automated testing
 - **Deployment:** Deployed on Heroku with static assets on AWS S3
 
 # 📝 Usage
 
 ### Features in Action
-Explore functionalities like posting updates, participating in discussions, and managing your privacy settings through an intuitive interface.
+
+Explore functionalities like posting updates, participating in discussions, chatting in real-time, and managing privacy settings through an intuitive interface.
 
 # 🤝 Contributing
 
@@ -83,4 +91,4 @@ Connect with us on social media:
 
 For any inquiries or feedback, please contact the project maintainer:
 
-Shiyang Zhao: [shiyang2575326696@gmail.com](shiyang2575326696@gmail.com)
+Shiyang Zhao: [shiyang2575326696@gmail.com](mailto:shiyang2575326696@gmail.com)
